@@ -1,14 +1,12 @@
 package com.kosarict.entity;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 /**
  * Created by Sadegh-Pc on 11/28/2016.
  */
 @Entity
+@Table(name = "Shift", schema = "dbo", catalog = "Monitoring")
 public class Shift {
     private short shiftId;
     private String title;
@@ -35,7 +33,7 @@ public class Shift {
     }
 
     @Basic
-    @Column(name = "Eanble")
+    @Column(name = "Enable")
     public boolean isEnable() {
         return enable;
     }
