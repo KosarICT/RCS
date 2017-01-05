@@ -1,0 +1,120 @@
+
+.k-dropzone {
+    background-color: #eeeeee;
+}
+
+.grid-add {
+    background: url("/static/icon/add1.png") no-repeat;
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    overflow: hidden;
+    font-size: 0;
+    line-height: 0;
+    text-align: center;
+}
+
+.grid-add:hover {
+    background: url("/static/icon/add1.png") no-repeat;
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    overflow: hidden;
+    font-size: 0;
+    line-height: 0;
+    text-align: center;
+}
+
+#electricWindowToolbar.fixed {
+    position: fixed;
+    left: 15px;
+    z-index: 1;
+    width: 98%;
+    margin-bottom: 45px;
+}
+
+div.k-window-content {
+    padding: 0 !important;
+}
+
+#turbineWindowToolbar.fixed {
+    position: fixed;
+    left: 16px;
+    z-index: 1;
+    width: 98%;
+    margin-bottom: 45px;
+}
+
+#fuelWindowToolbar.fixed {
+    position: fixed;
+    left: 15px;
+    z-index: 1;
+    width: 98%;
+    margin-bottom: 45px;
+}
+
+.k-rtl .k-checkbox-label, .k-rtl .k-radio-label {
+    padding-right: 0;
+}
+
+#boilerWindowToolbar.fixed {
+    position: fixed;
+    left: 16px;
+    z-index: 1;
+    width: 98%;
+    margin-bottom: 45px;
+}
+
+#heatingCoolingWindowToolbar.fixed {
+    position: fixed;
+    left: 16px;
+    z-index: 1;
+    width: 98%;
+    margin-bottom: 45px;
+}
+
+#compressorWindowToolbar.fixed {
+    position: fixed;
+    left: 16px;
+    z-index: 1;
+    width: 98%;
+    margin-bottom: 45px;
+}
+
+.disabledbutton {
+    pointer-events: none;
+    opacity: 0.4;
+}
+
+.size-a4 {
+    width: 8.3in;
+    height: 11.7in;
+}
+
+.pdf-page {
+    font-family: "AdobeArabic", "Tahoma", sans-serif;
+    font-size: 13px;
+}
+
+.pdf-page {
+    margin: 0 auto;
+    box-sizing: border-box;
+    box-shadow: 0 5px 10px 0 rgba(0, 0, 0, .3);
+    background-color: #fff;
+    color: #333;
+    position: relative;
+    padding: 5px;
+}
+
+.pdf-body {
+    position: absolute;
+    top: 3.7in;
+    bottom: 1.2in;
+    left: .5in;
+    right: .5in;
+}
+
+.entryDir {
+    direction: ltr;
+    unicode-bidi: bidi-override;
+}

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="http://java.sun.com/xml/ns/persistence" version="2.0">
+    <persistence-unit name="persistenceUnit">
+        <class>com.kosarict.entity.Appreciation</class>
+        <class>com.kosarict.entity.Complain</class>
+        <class>com.kosarict.entity.Complainant</class>
+        <class>com.kosarict.entity.ComplainantRelation</class>
+        <class>com.kosarict.entity.ComplaintType</class>
+        <class>com.kosarict.entity.Criticize</class>
+        <class>com.kosarict.entity.Hospital</class>
+        <class>com.kosarict.entity.HospitalSection</class>
+        <class>com.kosarict.entity.HospitalShift</class>
+        <class>com.kosarict.entity.Offer</class>
+        <class>com.kosarict.entity.Relation</class>
+        <class>com.kosarict.entity.Role</class>
+        <class>com.kosarict.entity.Section</class>
+        <class>com.kosarict.entity.Shift</class>
+        <class>com.kosarict.entity.Tab</class>
+        <class>com.kosarict.entity.Users</class>
+        <class>com.kosarict.entity.UsersHospitalSection</class>
+        <class>com.kosarict.entity.SendType</class>
+        <class>com.kosarict.entity.ComplainAttachment</class>
+        <class>com.kosarict.entity.ComplainErrand</class>
+        <class>com.kosarict.entity.Ticket</class>
+        <class>com.kosarict.entity.TicketAttachment</class>
+        <properties>
+            <property name="hibernate.connection.url"
+                      value="jdbc:sqlserver://91.108.158.4:1433;databaseName=Monitoring"/>
+            <property name="hibernate.connection.driver_class" value="com.microsoft.sqlserver.jdbc.SQLServerDriver"/>
+            <property name="hibernate.connection.username" value="kosar"/>
+            <property name="hibernate.connection.password" value="Kosar123"/>
+            <property name="dialect" value="org.hibernate.dialect.SQLServer2012Dialect"/>
+
+            <property name="hibernate.show_sql" value="false" />
+
+            <property name="hibernate.c3p0.min_size" value="5"/>
+            <property name="hibernate.c3p0.max_size" value="20"/>
+            <property name="hibernate.c3p0.timeout" value="300"/>
+            <property name="hibernate.c3p0.max_statements" value="50"/>
+            <property name="hibernate.c3p0.idle_test_period" value="3000"/>
+        </properties>
+    </persistence-unit>
+</persistence>

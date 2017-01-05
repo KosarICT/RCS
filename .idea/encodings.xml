@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding" defaultCharsetForPropertiesFiles="UTF-8">
+    <file url="file://$PROJECT_DIR$" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/kosarict/config/CustomUserDetailsService.java" charset="windows-1256" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/kosarict/dao/UserDao.java" charset="windows-1256" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/kosarict/dao/UserDaoImpl.java" charset="windows-1256" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/logback.xml" charset="windows-1256" />
+    <file url="file://$PROJECT_DIR$/src/main/webapp/pages/user.jsp" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/webapp/static/icon" charset="windows-1256" />
+    <file url="file://$PROJECT_DIR$/src/main/webapp/static/icon/captcha.JPG" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/webapp/static/icon/ic_sadegh.jpg" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/webapp/static/icon/logouu.png" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/webapp/static/icon/notifications.png" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/webapp/static/js/jquery.min.js" charset="windows-1256" />
+    <file url="file://$PROJECT_DIR$/src/main/webapp/static/js/kendo.all.min.js" charset="windows-1256" />
+    <file url="PROJECT" charset="UTF-8" />
+  </component>
+</project>

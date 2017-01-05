@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
+    <data-source source="LOCAL" name="SQL Server (Microsoft) - Monitoring@DESKTOP-U8GC0G4" uuid="a9a82507-d95c-4ed7-829b-aec85e73e06a">
+      <driver-ref>sqlserver.ms</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>com.microsoft.sqlserver.jdbc.SQLServerDriver</jdbc-driver>
+      <jdbc-url>jdbc:sqlserver://DESKTOP-U8GC0G4\SQLEXPRESS:1433;databaseName=Monitoring</jdbc-url>
+    </data-source>
+    <data-source source="LOCAL" name="Monitoring@91.108.158.4" uuid="4165b16a-ca32-4377-9595-3b19162b85de">
+      <driver-ref>sqlserver.ms</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>com.microsoft.sqlserver.jdbc.SQLServerDriver</jdbc-driver>
+      <jdbc-url>jdbc:sqlserver://91.108.158.4:1433;databaseName=Monitoring</jdbc-url>
+    </data-source>
+  </component>
+</project>
