@@ -21,7 +21,7 @@ public class ShiftDaoImpl implements ShiftDao {
 
     @Override
     public List<Shift> getAllShiftList() {
-        String queryString = "SELECT shift FROM Shift shift  WHERE shift.eanble = true ";
+        String queryString = "SELECT shift FROM Shift shift  WHERE shift.enable = true ";
 
         Query query = entityManager.createQuery(queryString);
 
@@ -43,7 +43,7 @@ public class ShiftDaoImpl implements ShiftDao {
     @Override
     public boolean deleteShift(short shiftId) {
         Shift shift = findShiftById(shiftId);
-        shift.setEanble(false);
+        shift.setEnable(false);
         entityManager.merge(shift);
         return true;
     }

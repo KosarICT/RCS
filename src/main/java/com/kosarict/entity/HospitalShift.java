@@ -22,23 +22,24 @@ public class HospitalShift {
         this.hospitalShiftId = hospitalShiftId;
     }
 
-    @Basic
-    @Column(name = "Hospital_Id")
+
+    @ManyToOne
+    @JoinColumn(name = "Hospital_Id")
     public Hospital getHospital() {
         return hospital;
     }
 
-    public void setHospitalId(Hospital hospital) {
+    public void setHospital(Hospital hospital) {
         this.hospital = hospital;
     }
 
-    @Basic
-    @Column(name = "Shift_Id")
+    @ManyToOne
+    @JoinColumn(name = "Shift_Id")
     public Shift getShift() {
         return shift;
     }
 
-    public void setShiftId(Shift shift) {
+    public void setShift(Shift shift) {
         this.shift = shift;
     }
 
