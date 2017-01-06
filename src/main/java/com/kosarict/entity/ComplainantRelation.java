@@ -9,7 +9,6 @@ import javax.persistence.*;
 public class ComplainantRelation {
     private long complainantRelationId;
     private short relationId;
-    private long complainId;
     private String firstName;
     private String lastName;
     private String nationalCode;
@@ -36,15 +35,6 @@ public class ComplainantRelation {
         this.relationId = relationId;
     }
 
-    @Basic
-    @Column(name = "Complain_Id")
-    public long getComplainId() {
-        return complainId;
-    }
-
-    public void setComplainId(long complainId) {
-        this.complainId = complainId;
-    }
 
     @Basic
     @Column(name = "FirstName")
