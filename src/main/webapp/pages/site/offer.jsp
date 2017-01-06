@@ -389,7 +389,7 @@
             dataType: 'json',
             data: hospitalId.toString(),
             success: function (data) {
-
+                debugger;
                 if (!data) {
                     Materialize.toast('خطا درانجام عملیات', 4000, 'error-toast');
                 } else {
@@ -403,7 +403,7 @@
 
                     $("#ddlSection").append(defaultOption);
 
-                    $.each(data, function (index, dataItem) {
+                    $.each(data[0].sections, function (index, dataItem) {
                         var option = $("<option>");
                         option.text(dataItem.title).attr("value", dataItem.sectionId);
 

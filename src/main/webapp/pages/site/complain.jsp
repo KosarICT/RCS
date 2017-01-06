@@ -647,21 +647,34 @@
             data: hospitalId.toString(),
             success: function (data) {
                 $("#ddlSection option").remove();
+                $("#ddlShift option").remove();
 
-                var defaultOption = $("<option>");
-                defaultOption.text("بخش موردنظر را انتخاب نمائید")
+                var defaultSection = $("<option>");
+                defaultSection.text("بخش موردنظر را انتخاب نمائید")
                     .prop("disabled", true)
                     .prop("selected", true)
                     .attr("value", "");
 
-                $("#ddlSection").append(defaultOption);
-                debugger;
+                var defaultShifit = $("<option>");
+                defaultShifit.text("بخش موردنظر را انتخاب نمائید")
+                    .prop("disabled", true)
+                    .prop("selected", true)
+                    .attr("value", "");
+                $("#ddlSection").append(defaultSection);
+                $("#ddlShift").append(defaultShifit);
                 if (data.length > 0) {
-                    $.each(data, function (index, dataItem) {
+                    $.each(data[0].sections, function (index, dataItem) {
                         var option = $("<option>");
                         option.text(dataItem.title).attr("value", dataItem.sectionId);
 
                         $("#ddlSection").append(option);
+                    });
+
+                    $.each(data[0].shifits, function (index, dataItem) {
+                        var option = $("<option>");
+                        option.text(dataItem.title).attr("value", dataItem.shiftId);
+
+                        $("#ddlShift").append(option);
                     });
                 }
             }

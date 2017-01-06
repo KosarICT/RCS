@@ -172,7 +172,8 @@ public class OfferController {
 //            }*/
 
             mainObject.put("sections",sectionList);
-
+            mainObject.put("shifits",shiftList);
+            jsonArray.put(mainObject);
             return jsonArray.toString();
         } catch (Exception ex) {
             return String.valueOf(false);
