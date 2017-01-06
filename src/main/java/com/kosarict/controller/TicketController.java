@@ -152,7 +152,7 @@ public class TicketController {
                     ComplainantRelation complainantRelation = new ComplainantRelation();
 
                     complainantRelation.setRelationId(relationId.shortValue());
-                    complainantRelation.setComplainId(newTicketId);
+                    complainantRelation.setTicketId(newTicketId);
                     complainantRelation.setFirstName(compalainerName);
                     complainantRelation.setLastName(compalainerFamily);
                     complainantRelation.setNationalCode(registerNationalCode);
