@@ -33,7 +33,7 @@ public class HospitalSectionDaoImpl implements HospitalSectionDao {
     @Override
     public List<HospitalSection> getHospitalSectionsListByHospitalId(int hospitalId) {
         String queryString = "SELECT hs FROM HospitalSection hs " +
-                "WHERE hs.hospital.hospitalId =:hospitalId ";
+                "WHERE hs.hospital.hospitalId =:hospitalId and hs.enable=true ";
 
         Query query = entityManager.createQuery(queryString);
         query.setParameter("hospitalId", hospitalId);
