@@ -13,6 +13,7 @@ public class ComplainantRelation {
     private String firstName;
     private String lastName;
     private String nationalCode;
+    private long ticketId;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -101,5 +102,15 @@ public class ComplainantRelation {
         result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
         result = 31 * result + (nationalCode != null ? nationalCode.hashCode() : 0);
         return result;
+    }
+
+    @Basic
+    @Column(name = "Ticket_Id")
+    public long getTicketId() {
+        return ticketId;
+    }
+
+    public void setTicketId(long ticketId) {
+        this.ticketId = ticketId;
     }
 }

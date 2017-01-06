@@ -30,6 +30,7 @@ public class Ticket {
     private Complainant complainant;
     private String persnolFirstName;
     private String persnolLastName;
+    private Integer raiting;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -262,5 +263,15 @@ public class Ticket {
         int result = persnolFirstName != null ? persnolFirstName.hashCode() : 0;
         result = 31 * result + (persnolLastName != null ? persnolLastName.hashCode() : 0);
         return result;
+    }
+
+    @Basic
+    @Column(name = "Raiting")
+    public Integer getRaiting() {
+        return raiting;
+    }
+
+    public void setRaiting(Integer raiting) {
+        this.raiting = raiting;
     }
 }

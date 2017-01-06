@@ -56,27 +56,4 @@ public class Role {
         this.enable = enable;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Role role = (Role) o;
-
-        if (roleId != role.roleId) return false;
-        if (enable != role.enable) return false;
-        if (name != null ? !name.equals(role.name) : role.name != null) return false;
-        if (!Arrays.equals(description, role.description)) return false;
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = (int) roleId;
-        result = 31 * result + (name != null ? name.hashCode() : 0);
-        result = 31 * result + Arrays.hashCode(description);
-        result = 31 * result + (enable ? 1 : 0);
-        return result;
-    }
 }
