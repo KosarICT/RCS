@@ -1,13 +1,7 @@
 package com.kosarict.controller;
 
-import com.kosarict.dao.HospitalDao;
-import com.kosarict.dao.HospitalSectionDao;
-import com.kosarict.dao.UserDao;
-import com.kosarict.dao.UserSectionDao;
-import com.kosarict.entity.Hospital;
-import com.kosarict.entity.HospitalSection;
-import com.kosarict.entity.Users;
-import com.kosarict.entity.UsersHospitalSection;
+import com.kosarict.dao.*;
+import com.kosarict.entity.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,13 +36,18 @@ public class UserController {
     @Autowired
     private UserSectionDao userSectionDao;
 
+    @Autowired
+    private RoleDao roleDao;
+
+    @Autowired
+    private UserRoleDao userRoleDao;
 
     @RequestMapping(value = "/user", method = RequestMethod.GET)
     public ModelAndView user() {
         ModelAndView model = new ModelAndView("user");
         model.addObject("lists", getUsersList());
         model.addObject("hospitalList", getHospitalLists());
-
+        model.addObject("roleList",getRols());
         return model;
     }
 
@@ -86,7 +85,6 @@ public class UserController {
             String mobile = jsonObject.getString("mobile");
             String imageName = jsonObject.getString("imageName");
             short locked = Short.parseShort(String.valueOf(jsonObject.getInt("locked")));
-            int hospitalSectionId = jsonObject.getInt("hospitalSectionId");
 
 
             Users user;
@@ -113,16 +111,42 @@ public class UserController {
 
             int newUserId = userDao.saveUser(user);
 
-            userSectionDao.deleteUserSectionByUserId(newUserId);
 
-            UsersHospitalSection userHospitalSection = new UsersHospitalSection();
+            List<UserRole> userRoles=userRoleDao.getUserRole(newUserId);
+            JSONArray roles=jsonObject.getJSONArray("roles");
 
-            userHospitalSection.setUsersHospitalSectionId(0);
-            userHospitalSection.setUser(userDao.findUserById(newUserId));
-            HospitalSection hospitalSection = hospitalSectionDao.findHospitalSectionById(hospitalSectionId);
-            userHospitalSection.setHospitalSection(hospitalSection);
+            for (UserRole userRole :userRoles){
+                int length=roles.length();
+                int i=0;
+                for (;i<length;i++){
+                    JSONObject userRoleJSONObject = roles.getJSONObject(i);
 
-            userSectionDao.saveUserHospitalSection(userHospitalSection);
+                    int roleId = userRoleJSONObject.getInt("roleId");
+
+                    if (roleId == userRole.getRole().getRoleId()) {
+                        roles.remove(i);
+                        break;
+                    }
+                }
+
+                if(i==length){
+                    userRoleDao.deleteUserRole(userRole.getUserRoleId());
+                }
+            }
+
+            int j=0;
+            Users users=userDao.findUserById(newUserId);
+            for (;j<roles.length();j++){
+                UserRole userRole=new UserRole();
+                JSONObject userRoleJSONObject = roles.getJSONObject(j);
+
+                Integer roleId = userRoleJSONObject.getInt("roleId");
+                Role role=roleDao.getRole(roleId.shortValue());
+                userRole.setUsers(users);
+                userRole.setRole(role);
+
+                userRoleDao.save(userRole);
+            }
 
 
             return String.valueOf(true);
@@ -144,8 +168,9 @@ public class UserController {
             int id = Integer.parseInt(userId);
 
             Users user = userDao.findUserById(id);
-            List<UsersHospitalSection> usersHospitalSection = userSectionDao.findUserHospitalSectionByUserId(id);
+            //List<UsersHospitalSection> usersHospitalSection = userSectionDao.findUserHospitalSectionByUserId(id);
 
+            List<UserRole> rolesUser=userRoleDao.getUserRole(id);
             if (user != null) {
                 JSONObject jsonObject = new JSONObject();
 
@@ -159,7 +184,8 @@ public class UserController {
                 jsonObject.put("tel", user.getTel());
                 jsonObject.put("mobile", user.getMobile());
                 jsonObject.put("locked", user.getLocked());
-                jsonObject.put("hospitalSection", usersHospitalSection);
+                //jsonObject.put("hospitalSection", usersHospitalSection);
+                jsonObject.put("roles",rolesUser);
 
                 jsonArray.put(jsonObject);
             }
@@ -221,6 +247,10 @@ public class UserController {
 
     private List<Hospital> getHospitalLists() {
         return hospitalDao.getAllHospitalList();
+    }
+
+    private List<Role> getRols(){
+        return roleDao.getRoles();
     }
 
     @RequestMapping(value = "/user/api/uploadImage", method = RequestMethod.POST)
