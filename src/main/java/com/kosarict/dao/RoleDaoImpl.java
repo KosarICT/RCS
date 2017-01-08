@@ -2,6 +2,8 @@ package com.kosarict.dao;
 
 import com.kosarict.entity.Role;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -29,5 +31,13 @@ public class RoleDaoImpl implements RoleDao {
     @Override
     public Role getRole(short roleId) {
         return entityManager.find(Role.class,roleId);
+    }
+
+    @Transactional(isolation = Isolation.SERIALIZABLE)
+    @Override
+    public short saveRole(Role roleModel){
+        Role role=entityManager.merge(roleModel);
+
+        return role.getRoleId();
     }
 }

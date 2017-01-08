@@ -13,7 +13,7 @@ import java.util.Arrays;
 public class Role {
     private short roleId;
     private String name;
-    private byte[] description;
+    private String description;
     private boolean enable;
 
     @Id
@@ -38,11 +38,11 @@ public class Role {
 
     @Basic
     @Column(name = "Description")
-    public byte[] getDescription() {
+    public String getDescription() {
         return description;
     }
 
-    public void setDescription(byte[] description) {
+    public void setDescription(String description) {
         this.description = description;
     }
 

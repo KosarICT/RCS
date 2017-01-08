@@ -13,6 +13,8 @@ public interface UserRoleDao {
 
     List<UserRole> getUserRole(int userId);
 
+    List<UserRole> getUserRole(short roleId);
+
     @Transactional(isolation = Isolation.SERIALIZABLE)
     int save(UserRole userRole);
 

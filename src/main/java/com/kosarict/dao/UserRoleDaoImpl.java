@@ -32,6 +32,15 @@ public class UserRoleDaoImpl implements UserRoleDao {
         return query.getResultList();
     }
 
+    @Override
+    public List<UserRole> getUserRole(short roleId){
+        String queryString = "SELECT userRole FROM UserRole userRole  WHERE userRole.users.userId=:roleId ";
+
+        Query query = entityManager.createQuery(queryString);
+        query.setParameter("roleId", roleId);
+        return query.getResultList();
+    }
+
     @Transactional(isolation = Isolation.SERIALIZABLE)
     @Override
     public int save(UserRole userRoleModel) {

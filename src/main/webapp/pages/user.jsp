@@ -258,13 +258,13 @@
 
         var pTag = $('<p>');
 
-        var lblSectionName = $("<label>").attr("for", "${entry.roleId}").css("width", "0");
-        var chkSection = $("<input>").attr("type", "checkBox").attr("value", "${entry.roleId}").attr("id", "${entry.roleId}");
-        var lblSectionText = $("<label>").text("${entry.name}").attr("for", "${entry.roleId}").css("vertical-align", "top").css("margin-right", "8px");
+        var lblRoleName = $("<label>").attr("for", "${entry.roleId}").css("width", "0");
+        var chkRole = $("<input>").attr("type", "checkBox").attr("value", "${entry.roleId}").attr("id", "${entry.roleId}");
+        var lblRoleText = $("<label>").text("${entry.name}").attr("for", "${entry.roleId}").css("vertical-align", "top").css("margin-right", "8px");
 
-        pTag.append(chkSection);
-        pTag.append(lblSectionName);
-        pTag.append(lblSectionText);
+        pTag.append(chkRole);
+        pTag.append(lblRoleName);
+        pTag.append(lblRoleText);
 
         div.append(pTag);
 
