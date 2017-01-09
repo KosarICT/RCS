@@ -24,7 +24,7 @@ import java.util.List;
 @Controller
 public class ADCriticismController {
     @Autowired
-    private UserDao userDao;
+    private TicketDao ticketDao;
 
     @Autowired
     private ADCriticismDao criticismDao;
@@ -53,132 +53,30 @@ public class ADCriticismController {
     String getCriticismData() {
         JSONArray jsonArray = new JSONArray();
 
-        for (Criticize criticize : getCriticismList()) {
+        for (Ticket ticket : getCriticismList()) {
 
             JSONObject jsonObject = new JSONObject();
 
-            jsonObject.put("criticizeId", criticize.getCriticizeId());
-            jsonObject.put("name", criticize.getFirstName() + " " + criticize.getLastName());
-            jsonObject.put("nationalCode", criticize.getNationalCode());
-            jsonObject.put("subject", criticize.getSubject());
-            jsonObject.put("hospitalName", criticize.getHospital().getName());
-            jsonObject.put("sectionTitle", criticize.getSection().getTitle());
-            jsonObject.put("submitDate", criticize.getSubmitDate());
-            jsonObject.put("sendTypeTitle", criticize.getSendType().getTitle());
+            jsonObject.put("ticketId", ticket.getTicketId());
+            jsonObject.put("name", ticket.getFirstName() + " " + ticket.getLastName());
+            jsonObject.put("nationalCode", ticket.getNationalCode());
+            jsonObject.put("subject", ticket.getSubject());
+            jsonObject.put("hospitalName", ticket.getHospital().getName());
+            jsonObject.put("sectionTitle", ticket.getSection().getTitle());
+            jsonObject.put("submitDate", ticket.getSubmitDate());
+            jsonObject.put("sendTypeTitle", ticket.getSendType().getTitle());
             jsonArray.put(jsonObject);
         }
 
         return jsonArray.toString();
     }
 
-    @RequestMapping(value = "/adCriticism/api/findCriticismById", method = RequestMethod.POST)
-    public
-    @ResponseBody
-    String findCriticismById(@RequestBody String complainId) {
-        long id = Long.parseLong(complainId);
-
-        Criticize criticize = criticismDao.findCriticizeById(id);
-        List<CriticizeAttachment> criticizeAttachmentList = criticizeAttachmentDao.getCriticizeAttachmentListByCriticizeId(id);
-
-        JSONArray jsonArray = new JSONArray();
-
-        JSONObject jsonObject = new JSONObject();
-
-        jsonObject.put("criticizeId", criticize.getCriticizeId());
-        jsonObject.put("name", criticize.getFirstName() + " " + criticize.getLastName());
-        jsonObject.put("nationalCode", criticize.getNationalCode());
-        jsonObject.put("phoneNumber", criticize.getPhoneNumber());
-        jsonObject.put("mobile", criticize.getMobile());
-        jsonObject.put("tel", criticize.getPhoneNumber());
-        jsonObject.put("subject", criticize.getSubject());
-        jsonObject.put("description", criticize.getDescription());
-        jsonObject.put("submitDate", criticize.getSubmitDate());
-        jsonObject.put("email", criticize.getEmail());
-        jsonObject.put("trackingCode", criticize.getTrackingCode());
-        jsonObject.put("sectionTitle", criticize.getSection().getTitle());
-        jsonObject.put("hospitalName", criticize.getHospital().getName());
-        jsonObject.put("attachList", criticizeAttachmentList);
-
-        jsonArray.put(jsonObject);
-
-        return jsonArray.toString();
-    }
-
-//    @RequestMapping(value = "/adCriticism/api/saveCriticismErrand", method = RequestMethod.POST)
-//    public
-//    @ResponseBody
-//    String saveCriticismErrand(@RequestBody String model) {
-//        try {
-//            JSONArray jsonArray = new JSONArray(model);
-//            JSONObject jsonObject = jsonArray.getJSONObject(0);
-//
-//            long criticizeId = jsonObject.getLong("criticizeId");
-//            int userId = jsonObject.getInt("userId");
-//            String description = jsonObject.getString("description");
-//
-//            PersianCalendar persianCalendar = new PersianCalendar();
-//            String currentDate = persianCalendar.getIranianSimpleDate();
-//
-//            Criticize criticize = criticismDao.findCriticizeById(criticizeId);
-//            Users user = userDao.findUserById(userId);
-//
-//            Criti complainErrand = new ComplainErrand();
-//
-//            complainErrand.setComplainErrandId(0);
-//            complainErrand.setComplain(criticize);
-//            complainErrand.setCreateUser(getCurrentUser());
-//            complainErrand.setAssignedUser(user);
-//            complainErrand.setSubmitDate(currentDate);
-//            complainErrand.setView(false);
-//            complainErrand.setDescription(description);
-//
-//            complainErrandDao.saveComplainErrand(complainErrand);
-//
-//            return String.valueOf(true);
-//
-//        } catch (Exception ex) {
-//            return String.valueOf(false);
-//        }
-//    }
-//
-//    @RequestMapping(value = "/adCriticism/api/getUserOfSection", method = RequestMethod.POST)
-//    public
-//    @ResponseBody
-//    String getUserOfSection(@RequestBody String sectionId) {
-//        int id = Integer.parseInt(sectionId);
-//
-//        List<UsersHospitalSection> userSectionList = userSectionDao.getUserSectionBySectionId(id);
-//
-//        JSONArray jsonArray = new JSONArray();
-//
-//        for (UsersHospitalSection userSection : userSectionList) {
-//            JSONObject jsonObject = new JSONObject();
-//
-//            Users user = userDao.findUserById(userSection.getUser().getUserId());
-//
-//            jsonObject.put("userId", user.getUserId());
-//            jsonObject.put("name", user.getFirstName() + " " + user.getLastName());
-//
-//            jsonArray.put(jsonObject);
-//        }
-//
-//        return jsonArray.toString();
-//    }
-
-    private List<Criticize> getCriticismList() {
-        return criticismDao.getAllCriticizeList();
+    private List<Ticket> getCriticismList() {
+        return ticketDao.getTicketListByTicketTypeId(Constant.CriticismTicketTypeId);
     }
 
     private List<HospitalSection> getSectionList() {
         return hospitalSectionDao.getHospitalSectionsListByHospitalId(Constant.hospitalId);
     }
 
-    private Users getCurrentUser() {
-        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        String userName = userDetails.getUsername();
-        Users user = userDao.findUserByUserName(userName);
-
-        return user;
-    }
 }

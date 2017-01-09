@@ -1,16 +1,13 @@
 package com.kosarict.controller;
-import com.kosarict.dao.ADAppreciationDao;
-import com.kosarict.dao.AppreciationAttachmentDao;
+
 import com.kosarict.dao.HospitalSectionDao;
-import com.kosarict.entity.Appreciation;
-import com.kosarict.entity.AppreciationAttachment;
+import com.kosarict.dao.TicketDao;
 import com.kosarict.entity.HospitalSection;
 import com.kosarict.model.Constant;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -23,20 +20,18 @@ import java.util.List;
  */
 @Controller
 public class ADAppreciationController {
+
     @Autowired
-    private ADAppreciationDao appreciationDao;
+    private TicketDao ticketDao;
 
     @Autowired
     private HospitalSectionDao hospitalSectionDao;
-
-    @Autowired
-    private AppreciationAttachmentDao appreciationAttachmentDao;
 
     @RequestMapping(value = "/adAppreciation", method = RequestMethod.GET)
     public ModelAndView getAppreciationView() {
         ModelAndView model = new ModelAndView("adAppreciation");
 
-        model.addObject("appreciationListList", getAppreciationList());
+        model.addObject("appreciationList", getAppreciationList());
         model.addObject("hospitalSectionList", getSectionList());
         return model;
     }
@@ -47,18 +42,18 @@ public class ADAppreciationController {
     String getAllAppreciationData() {
         JSONArray jsonArray = new JSONArray();
 
-        for (Appreciation appreciation : getAppreciationList()) {
+        for (com.kosarict.entity.Ticket ticket : getAppreciationList()) {
 
             JSONObject jsonObject = new JSONObject();
 
-            jsonObject.put("appreciationId", appreciation.getAppreciationId());
-            jsonObject.put("name", appreciation.getFirstName() + " " + appreciation.getLastName());
-            jsonObject.put("nationalCode", appreciation.getNationalCode());
-            jsonObject.put("rating", appreciation.getRaiting());
-            jsonObject.put("hospitalName", appreciation.getHospital().getName());
-            jsonObject.put("sectionName", appreciation.getSection().getTitle());
-            jsonObject.put("personnelName", appreciation.getPersnolFirstName() + " " + appreciation.getPersnolLastName());
-
+            jsonObject.put("ticketId", ticket.getTicketId());
+            jsonObject.put("name", ticket.getFirstName() + " " + ticket.getLastName());
+            jsonObject.put("personnelName", ticket.getPersnolFirstName() + " " + ticket.getPersnolLastName());
+            jsonObject.put("nationalCode", ticket.getNationalCode());
+            jsonObject.put("hospitalName", ticket.getHospital().getName());
+            jsonObject.put("sectionName", ticket.getSection().getTitle());
+            jsonObject.put("submitDate", ticket.getSubmitDate());
+            jsonObject.put("sendTypeTitle", ticket.getSendType().getTitle());
 
             jsonArray.put(jsonObject);
         }
@@ -66,44 +61,12 @@ public class ADAppreciationController {
         return jsonArray.toString();
     }
 
-    @RequestMapping(value = "/adAppreciation/api/findAppreciationById", method = RequestMethod.POST)
-    public
-    @ResponseBody
-    String findComplainById(@RequestBody String complainId) {
-        long id = Long.parseLong(complainId);
-        Appreciation appreciation = appreciationDao.findAppreciationById(id);
-
-        List<AppreciationAttachment> appreciationAttachmentList = appreciationAttachmentDao.getAppreciationAttachmentListByAppreciationId(id);
-
-        JSONArray jsonArray = new JSONArray();
-        JSONObject jsonObject = new JSONObject();
-
-        jsonObject.put("appreciationId", appreciation.getAppreciationId());
-        jsonObject.put("name", appreciation.getFirstName() + " " + appreciation.getLastName());
-        jsonObject.put("personnelName", appreciation.getPersnolFirstName() + " " + appreciation.getPersnolLastName());
-        jsonObject.put("rating", appreciation.getRaiting());
-        jsonObject.put("nationalCode", appreciation.getNationalCode());
-        jsonObject.put("phoneNumber", appreciation.getPhoneNumber());
-        jsonObject.put("mobile", appreciation.getMobile());
-        jsonObject.put("subject", appreciation.getSubject());
-        jsonObject.put("description", appreciation.getDescription());
-        jsonObject.put("email", appreciation.getEmail());
-        jsonObject.put("sectionTitle", appreciation.getSection().getTitle());
-        jsonObject.put("hospitalName", appreciation.getHospital().getName());
-        jsonObject.put("attachList", appreciationAttachmentList);
-
-        jsonArray.put(jsonObject);
-
-        return jsonArray.toString();
-    }
-
-    private List<Appreciation> getAppreciationList() {
-        return appreciationDao.getAllAppreciationList();
+    private List<com.kosarict.entity.Ticket> getAppreciationList() {
+        return ticketDao.getTicketListByTicketTypeId(Constant.AppereciationTicketTypeId);
     }
 
     private List<HospitalSection> getSectionList() {
         return hospitalSectionDao.getHospitalSectionsListByHospitalId(Constant.hospitalId);
     }
-
 
 }

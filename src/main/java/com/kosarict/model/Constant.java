@@ -14,5 +14,10 @@ public class Constant {
     public static int Criticize = 4;
     public static int Offer = 2;
 
-    public static short SendTypeSite=1;
+    public static short AppereciationTicketTypeId = 1;
+    public static short ComplainTicketTypeId = 3;
+    public static short OfferTicketTypeId = 2;
+    public static short CriticismTicketTypeId = 4;
+
+    public static short SendTypeSite = 1;
 }

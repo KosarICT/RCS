@@ -29,6 +29,18 @@ public class TicketDaoImpl implements TicketDao {
     }
 
     @Override
+    public List<Ticket> getTicketListByTicketTypeId(short ticketTypeId)
+
+    {
+        String queryString = "SELECT ticket FROM Ticket ticket WHERE ticket.ticketType.ticketTypeId =:ticketTypeId " +
+                "and ticket.enable = true ";
+
+        Query query = entityManager.createQuery(queryString);
+        query.setParameter("ticketTypeId", ticketTypeId);
+        return query.getResultList();
+    }
+
+    @Override
     public List<TicketErrand> getTicketListByUserId(int userId) {
         String queryString = "SELECT DISTINCT ticketErrand FROM TicketErrand ticketErrand " +
                 "JOIN ticketErrand.ticket ticket " +

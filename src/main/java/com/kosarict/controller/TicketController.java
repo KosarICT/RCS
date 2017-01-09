@@ -64,7 +64,7 @@ public class TicketController {
     private TicketAttachmentDao ticketAttachmentDao;
 
     @Autowired
-    private  TicketTypeDao ticketTypeDao;
+    private TicketTypeDao ticketTypeDao;
 
     @RequestMapping(value = "/ticket/api/saveTicket", method = RequestMethod.POST)
     public
@@ -78,10 +78,10 @@ public class TicketController {
             Integer ticketTypeId = jsonObject.getInt("ticketTypeId");
             int hospitalId = jsonObject.getInt("hospitalId");
             int sectionId = jsonObject.getInt("sectionId");
-            String shiftId="0";
-            if(ticketTypeId!=Constant.Offer)
+            String shiftId = "0";
+            if (ticketTypeId != Constant.Offer)
                 shiftId = jsonObject.getString("shiftId").matches("") ? "0" : jsonObject.getString("shiftId");
-            Integer compainer=0;
+            Integer compainer = 0;
 
             String sickName = jsonObject.getString("name");
             String sickFamily = jsonObject.getString("family");
@@ -127,14 +127,14 @@ public class TicketController {
             ticket.setTicketType(ticketType);
             ticket.setEnable(true);
 
-            if(ticketTypeId== Constant.Complaint){
+            if (ticketTypeId == Constant.Complaint) {
                 compainer = jsonObject.getInt("compainer");
                 Complainant complainant = complainantDao.findComplainantById(compainer.shortValue());
                 Integer complaintTypeId = jsonObject.getInt("complaintTypeId");
                 ComplaintType complaintType = complainTypeDao.findComplaintTypeById(complaintTypeId.shortValue());
                 ticket.setComplaintType(complaintType);
                 ticket.setComplainant(complainant);
-            }else if(ticketTypeId==Constant.Appereciation){
+            } else if (ticketTypeId == Constant.Appereciation) {
                 String appreciationUserName = jsonObject.getString("appreciationUserName");
                 String appreciationUserFamily = jsonObject.getString("appreciationUserFamily");
                 ticket.setPersnolFirstName(appreciationUserName);
@@ -143,7 +143,7 @@ public class TicketController {
 
             long newTicketId = ticketDao.saveTicket(ticket);
 
-            if(ticketTypeId==Constant.Complaint) {
+            if (ticketTypeId == Constant.Complaint) {
                 if (compainer == 2) {
                     String compalainerName = jsonObject.getString("compalainerName");
                     String compalainerFamily = jsonObject.getString("compalainerFamily");
@@ -192,6 +192,57 @@ public class TicketController {
         }
     }
 
+
+    @RequestMapping(value = "/ticket/api/findTicketByTicketId", method = RequestMethod.POST)
+    public
+    @ResponseBody
+    String findTicketByTicketId(@RequestBody String ticketId) {
+        try {
+            Long id = Long.parseLong(ticketId);
+            Ticket ticket = ticketDao.findTicketById(id);
+
+            List<TicketAttachment> ticketAttachmentList = ticketAttachmentDao.getTicketAttachmentListByTicketId(id);
+
+            JSONObject ticketJson = new JSONObject();
+            short ticketTypeId = ticket.getTicketType().getTicketTypeId();
+
+            ticketJson.put("ticket_Id", ticket.getTicketId());
+            ticketJson.put("ticketType_Id", ticketTypeId);
+            if (ticketTypeId == Constant.ComplainTicketTypeId) {
+                ticketJson.put("complainType_Id", ticket.getComplaintType().getComplaintTypeId());
+                ticketJson.put("complainant_Id", ticket.getComplainant().getComplainantId());
+            }
+            if (ticketTypeId != Constant.OfferTicketTypeId) {
+                ticketJson.put("shift_Id", ticket.getShift().getShiftId());
+                ticketJson.put("persnolFirstName", ticket.getPersnolFirstName());
+                ticketJson.put("persnolLastName", ticket.getPersnolLastName());
+                ticketJson.put("rating", ticket.getRaiting());
+            }
+
+            ticketJson.put("hospitalName", ticket.getHospital().getName());
+
+            ticketJson.put("sectionTitle", ticket.getSection().getTitle());
+            ticketJson.put("sendType_Id", ticket.getSendType().getSendTypeId());
+
+            ticketJson.put("firstName", ticket.getFirstName());
+            ticketJson.put("lastName", ticket.getLastName());
+
+            ticketJson.put("nationalCode", ticket.getNationalCode());
+            ticketJson.put("phoneNumber", ticket.getPhoneNumber());
+            ticketJson.put("mobile", ticket.getMobile());
+            ticketJson.put("subject", ticket.getSubject());
+            ticketJson.put("description", ticket.getDescription());
+            ticketJson.put("submitDate", ticket.getSubmitDate());
+            ticketJson.put("email", ticket.getEmail());
+            ticketJson.put("trackingCode", ticket.getTrackingCode());
+            ticketJson.put("trackingCode", ticket.getTrackingCode());
+            ticketJson.put("ticketAttachmentList", ticketAttachmentList);
+
+            return ticketJson.toString();
+        } catch (Exception ex) {
+            return String.valueOf(false);
+        }
+    }
 
     private int trackingNumber() {
         Integer trackingNumber = 0;
