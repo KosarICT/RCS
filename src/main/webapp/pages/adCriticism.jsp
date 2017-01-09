@@ -42,7 +42,7 @@
             <tbody class="data-wrapper">
             <c:forEach var="entry" items="${criticismLists}">
 
-                <tr data-uid="${entry.criticizeId}">
+                <tr data-uid="${entry.ticketId}">
 
                     <td class="center counter"><c:out value="${row}"/></td>
 
@@ -111,6 +111,11 @@
                 <label for="txtTrackingCode" style="font-size: 13px; font-weight: 500; color: #707070">کد رهگیری
                     :</label>
                 <input disabled id="txtTrackingCode" type="text" class="validate notification-text">
+            </div>
+            <div class="row">
+                <label for="txtAttachmentName" style="font-size: 13px; font-weight: 500; color: #707070">مستندات
+                    :</label>
+                <input disabled id="txtAttachmentName" type="text" class="validate notification-text">
             </div>
         </div>
         <div class="row"></div>
@@ -223,22 +228,22 @@
 
             $.ajax({
                 type: "POST",
-                url: "/adCriticism/api/findCriticismById",
+                url: "/ticket/api/findTicketByTicketId",
                 contentType: "application/json; charset=utf-8",
                 dataType: 'json',
                 data: criticizeId.toString(),
                 success: function (data) {
-                    var dataItem = data[0];
 
-                    $("#txtName").val(dataItem.name);
-                    $("#txtNationalCode").val(dataItem.nationalCode);
-                    $("#txtMobile").val(dataItem.mobile);
-                    $("#txtSectionTitle").val(dataItem.sectionTitle);
-                    $("#txtSubject").val(dataItem.subject);
-                    $("#txtDescription").val(dataItem.description);
-                    $("#txtEmail").val(dataItem.email);
-                    $("#txtTrackingCode").val(dataItem.trackingCode);
-                    $("#txtSubmitDate").val(dataItem.trackingCode);
+                    $("#txtName").val(data.name);
+                    $("#txtNationalCode").val(data.nationalCode);
+                    $("#txtMobile").val(data.mobile);
+                    $("#txtSectionTitle").val(data.sectionTitle);
+                    $("#txtSubject").val(data.subject);
+                    $("#txtDescription").val(data.description);
+                    $("#txtEmail").val(data.email);
+                    $("#txtTrackingCode").val(data.trackingCode);
+                    $("#txtSubmitDate").val(data.trackingCode);
+                    $("#txtAttachmentName").val(data.attachList[0].fileName);
 
                 }
             });
@@ -261,7 +266,7 @@
                 if (data.length > 0) {
                     $.each(data, function (index, dataItem) {
 
-                        var tr = $("<tr>").attr("data-uid", dataItem.criticizeId);
+                        var tr = $("<tr>").attr("data-uid", dataItem.ticketId);
 
                         var tdCounter = $("<td>").addClass("center").text(index + 1);
                         var tdName = $("<td>").addClass("center").text(dataItem.name);
@@ -302,6 +307,7 @@
             case "btnStop":
                 break;
             case "btnErrand":
+                clearErrandWindow();
                 $('#criticismErrandWindow').modal('open');
                 break;
         }
@@ -312,7 +318,7 @@
 
         switch (id) {
             case "btnErrandOk":
-//                saveErrandCriticism();
+                saveErrandCriticism();
                 break;
             case "btnErrandCancel":
                 $('#criticismErrandWindow').modal('close');
@@ -382,6 +388,12 @@
                 }
             }
         });
+    }
+
+    function clearErrandWindow() {
+        $("#ddlSection").val("0");
+        $("#ddlUser").prop("disabled", false).val("0");
+        $("#txtErrandDescription").val("");
     }
 </script>
 

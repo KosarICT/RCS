@@ -30,17 +30,19 @@
             <th class="center"> نام و نام خانوادگی پرسنل</th>
             <th class="center">کد ملی</th>
             <th class="center">بیمارستان</th>
-            <th class="center"> بخش</th>
+            <th class="center">نام بخش بیمارستان</th>
+            <th class="center">تاریخ قدردانی</th>
+            <th class="center">ارسال شده از طریق</th>
         </tr>
         </thead>
 
-        <c:if test="${not empty appreciationListList}">
+        <c:if test="${not empty appreciationList}">
             <c:set var="row" value="1" scope="page"/>
 
             <tbody class="data-wrapper">
-            <c:forEach var="entry" items="${appreciationListList}">
+            <c:forEach var="entry" items="${appreciationList}">
 
-                <tr data-uid="${entry.appreciationId}">
+                <tr data-uid="${entry.ticketId}">
 
                     <td class="center counter"><c:out value="${row}"/></td>
                     <td class="center">${entry.firstName} ${entry.lastName}</td>
@@ -48,6 +50,8 @@
                     <td class="center">${entry.nationalCode}</td>
                     <td class="center">${entry.hospital.name}</td>
                     <td class="center">${entry.section.title}</td>
+                    <td class="center">${entry.submitDate}</td>
+                    <td class="center">${entry.sendType.title}</td>
 
                 </tr>
 
@@ -77,14 +81,14 @@
 
             </div>
             <div class="row">
-                <label for="txtPersonnelName" style="font-size: 13px; font-weight: 500; color: #707070">نام پرسنل
-                    :</label>
-                <input disabled id="txtPersonnelName" type="text" class="validate notification-text">
+                <label for="txtMobile" style="font-size: 13px; font-weight: 500; color: #707070">تلفن همراه:</label>
+                <input disabled id="txtMobile" type="text" class="validate notification-text">
 
             </div>
             <div class="row">
-                <label for="txtMobile" style="font-size: 13px; font-weight: 500; color: #707070">تلفن همراه:</label>
-                <input disabled id="txtMobile" type="text" class="validate notification-text">
+                <label for="txtPersonnelName" style="font-size: 13px; font-weight: 500; color: #707070">نام پرسنل
+                    :</label>
+                <input disabled id="txtPersonnelName" type="text" class="validate notification-text">
 
             </div>
             <div class="row">
@@ -104,6 +108,23 @@
                     قدردانی:</label>
                 <textarea class="materialize-textarea validate notification-text" disabled id="txtDescription"
                           length="4000"></textarea>
+            </div>
+
+            <div class="row">
+                <label for="txtSubmitDate" style="font-size: 13px; font-weight: 500; color: #707070">تاریخ
+                    قدردانی:</label>
+                <input disabled id="txtSubmitDate" type="text" class="validate notification-text">
+            </div>
+
+            <div class="row">
+                <label for="txtTrackingNumber" style="font-size: 13px; font-weight: 500; color: #707070">کد
+                    رهگیری:</label>
+                <input disabled id="txtTrackingNumber" type="text" class="validate notification-text">
+            </div>
+            <div class="row">
+                <label for="ticketAttachmentList"
+                       style="font-size: 13px; font-weight: 500; color: #707070">مستندات</label>
+                <input disabled id="ticketAttachmentList" type="text" class="validate notification-text">
             </div>
         </div>
         <div class="row"></div>
@@ -153,20 +174,22 @@
 
             $.ajax({
                 type: "POST",
-                url: "/adAppreciation/api/findAppreciationById",
+                url: "/ticket/api/findTicketByTicketId",
                 contentType: "application/json; charset=utf-8",
                 dataType: 'json',
                 data: appreciationId.toString(),
                 success: function (data) {
-                    var dataItem = data[0];
 
-                    $("#txtName").val(dataItem.name);
-                    $("#txtNationalCode").val(dataItem.nationalCode);
-                    $("#txtPersonnelName").val(dataItem.personnelName);
-                    $("#txtMobile").val(dataItem.mobile);
-                    $("#txtHospitalName").val(dataItem.hospitalName);
-                    $("#txtSectionTitle").val(dataItem.sectionTitle);
-                    $("#txtDescription").val(dataItem.description);
+                    $("#txtName").val(data.firstName + " " + data.lastName);
+                    $("#txtNationalCode").val(data.nationalCode);
+                    $("#txtPersonnelName").val(data.persnolFirstName + " " + data.persnolLastName);
+                    $("#txtMobile").val(data.mobile);
+                    $("#txtHospitalName").val(data.hospitalName);
+                    $("#txtSectionTitle").val(data.sectionTitle);
+                    $("#txtDescription").val(data.description);
+                    $("#txtSubmitDate").val(data.submitDate);
+                    $("#txtTrackingNumber").val(data.trackingCode);
+                    $("#ticketAttachmentList").val(data.ticketAttachmentList);
                 }
             });
 
@@ -188,7 +211,7 @@
                 if (data.length > 0) {
                     $.each(data, function (index, dataItem) {
 
-                        var tr = $("<tr>").attr("data-uid", dataItem.appreciationId);
+                        var tr = $("<tr>").attr("data-uid", dataItem.ticketId);
 
                         var tdCounter = $("<td>").addClass("center").text(index + 1);
                         var tdName = $("<td>").addClass("center").text(dataItem.name);
@@ -196,6 +219,8 @@
                         var tdNationalCode = $("<td>").addClass("center").text(dataItem.nationalCode);
                         var tdHospitalName = $("<td>").addClass("center").text(dataItem.hospitalName);
                         var tdSectionName = $("<td>").addClass("center").text(dataItem.sectionName);
+                        var tdSubmitDate = $("<td>").addClass("center").text(dataItem.submitDate);
+                        var tdSendTypeTitle = $("<td>").addClass("center").text(dataItem.sendTypeTitle);
 
                         tr.append(tdCounter);
                         tr.append(tdName);
@@ -203,6 +228,8 @@
                         tr.append(tdNationalCode);
                         tr.append(tdHospitalName);
                         tr.append(tdSectionName);
+                        tr.append(tdSubmitDate);
+                        tr.append(tdSendTypeTitle);
 
                         $("#tblAppreciation tbody").append(tr);
                     });

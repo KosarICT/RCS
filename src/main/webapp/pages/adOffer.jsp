@@ -30,7 +30,9 @@
             <th class="center">کد ملی</th>
             <th class="center">موضوع</th>
             <th class="center">نام بیمارستان</th>
-            <th class="center">بخش بیمارستان</th>
+            <th class="center"> نام بخش بیمارستان</th>
+            <th class="center"> تاریخ پیشنهاد</th>
+            <th class="center">طریقه ارتباط</th>
         </tr>
         </thead>
 
@@ -40,7 +42,7 @@
             <tbody class="data-wrapper">
             <c:forEach var="entry" items="${offerList}">
 
-                <tr data-uid="${entry.offerId}">
+                <tr data-uid="${entry.ticketId}">
 
                     <td class="center counter"><c:out value="${row}"/></td>
                     <td class="center">${entry.firstName} ${entry.lastName}</td>
@@ -48,6 +50,8 @@
                     <td class="center">${entry.subject}</td>
                     <td class="center">${entry.hospital.name}</td>
                     <td class="center">${entry.section.title}</td>
+                    <td class="center">${entry.submitDate}</td>
+                    <td class="center">${entry.sendType.title}</td>
 
                 </tr>
 
@@ -110,9 +114,19 @@
                 <input disabled id="txtEmail" type="text" class="validate notification-text">
             </div>
             <div class="row">
+                <label for="txtSubmitDate" style="font-size: 13px; font-weight: 500; color: #707070">تاریخ
+                    پیشنهاد:</label>
+                <input disabled id="txtSubmitDate" type="text" class="validate notification-text">
+            </div>
+            <div class="row">
                 <label for="txtTrackingCode" style="font-size: 13px; font-weight: 500; color: #707070">کد
                     رهگیری:</label>
                 <input disabled id="txtTrackingCode" type="text" class="validate notification-text">
+            </div>
+            <div class="row">
+                <label for="txtAttachmentName" style="font-size: 13px; font-weight: 500; color: #707070">مستندات
+                    :</label>
+                <input disabled id="txtAttachmentName" type="text" class="validate notification-text">
             </div>
         </div>
         <div class="row"></div>
@@ -123,6 +137,7 @@
             <img src="/static/icon/cancel2.png" class="windowToolbarImage">انصراف
         </a>
     </div>
+
 </div>
 
 <script>
@@ -161,22 +176,23 @@
 
             $.ajax({
                 type: "POST",
-                url: "/adOffer/api/findOfferById",
+                url: "/ticket/api/findTicketByTicketId",
                 contentType: "application/json; charset=utf-8",
                 dataType: 'json',
                 data: offerId.toString(),
                 success: function (data) {
                     var dataItem = data[0];
-
-                    $("#txtName").val(dataItem.name);
-                    $("#txtNationalCode").val(dataItem.nationalCode);
-                    $("#txtMobile").val(dataItem.mobile);
-                    $("#txtSubject").val(dataItem.subject);
-                    $("#txtHospitalName").val(dataItem.hospitalName);
-                    $("#txtSectionTitle").val(dataItem.sectionTitle);
-                    $("#txtDescription").val(dataItem.description);
-                    $("#txtTrackingCode").val(dataItem.trackingCode);
-                    $("#txtEmail").val(dataItem.email);
+                    $("#txtName").val(data.firstName + " " + data.lastName);
+                    $("#txtNationalCode").val(data.nationalCode);
+                    $("#txtMobile").val(data.mobile);
+                    $("#txtSubject").val(data.subject);
+                    $("#txtHospitalName").val(data.hospitalName);
+                    $("#txtSectionTitle").val(data.sectionTitle);
+                    $("#txtDescription").val(data.description);
+                    $("#txtSubmitDate").val(data.submitDate);
+                    $("#txtTrackingCode").val(data.trackingCode);
+                    $("#txtEmail").val(data.email);
+                    $("#txtAttachmentName").val(data.ticketAttachmentList[0].fileName);
                 }
             });
 
@@ -198,7 +214,7 @@
                 if (data.length > 0) {
                     $.each(data, function (index, dataItem) {
 
-                        var tr = $("<tr>").attr("data-uid", dataItem.offerId);
+                        var tr = $("<tr>").attr("data-uid", dataItem.ticketId);
 
                         var tdCounter = $("<td>").addClass("center").text(index + 1);
                         var tdName = $("<td>").addClass("center").text(dataItem.name);
@@ -206,6 +222,8 @@
                         var tdsubject = $("<td>").addClass("center").text(dataItem.subject);
                         var tdHospitalName = $("<td>").addClass("center").text(dataItem.hospitalName);
                         var tdSectionName = $("<td>").addClass("center").text(dataItem.sectionName);
+                        var tdSubmitDate = $("<td>").addClass("center").text(dataItem.submitDate);
+                        var tdSendTypeTitle = $("<td>").addClass("center").text(dataItem.sendTypeTitle);
 
                         tr.append(tdCounter);
                         tr.append(tdName);
@@ -213,6 +231,8 @@
                         tr.append(tdsubject);
                         tr.append(tdHospitalName);
                         tr.append(tdSectionName);
+                        tr.append(tdSubmitDate);
+                        tr.append(tdSendTypeTitle);
 
                         $("#tblOffer tbody").append(tr);
                     });

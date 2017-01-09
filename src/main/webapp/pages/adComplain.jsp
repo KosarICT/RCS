@@ -156,14 +156,14 @@
         <div class="row">
             <div class="row">
                 <label style="font-size: 13px; font-weight: 500; color: #707070">انتخاب بخش:</label>
-                <%--<select id="ddlSection" onchange="ddlSectionChange();">--%>
-                    <%--<option value="" disabled selected>بخش موردنظر انتخاب نمائید</option>--%>
-                    <%--<c:if test="${not empty hospitalSectionList}">--%>
-                        <%--<c:forEach var="hospitalSectionEntry" items="${hospitalSectionList}">--%>
-                            <%--<option value="${hospitalSectionEntry.section.sectionId}">${hospitalSectionEntry.section.title}</option>--%>
-                        <%--</c:forEach>--%>
-                    <%--</c:if>--%>
-                <%--</select>--%>
+                <select id="ddlSection" onchange="ddlSectionChange();">
+                    <option value="" disabled selected>بخش موردنظر انتخاب نمائید</option>
+                    <c:if test="${not empty hospitalSectionList}">
+                        <c:forEach var="hospitalSectionEntry" items="${hospitalSectionList}">
+                            <option value="${hospitalSectionEntry.section.sectionId}">${hospitalSectionEntry.section.title}</option>
+                        </c:forEach>
+                    </c:if>
+                </select>
             </div>
             <div class="row">
                 <label style="font-size: 13px; font-weight: 500; color: #707070">انتخاب کاربر:</label>
