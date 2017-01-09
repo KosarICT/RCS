@@ -1,9 +1,6 @@
 package com.kosarict.entity;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Arrays;
 
 /**
@@ -17,6 +14,7 @@ public class Role {
     private boolean enable;
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "Role_Id")
     public short getRoleId() {
         return roleId;

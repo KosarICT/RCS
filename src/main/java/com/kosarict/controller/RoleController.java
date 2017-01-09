@@ -10,6 +10,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -22,6 +23,7 @@ import java.util.List;
 /**
  * Created by Ali-Pc on 1/7/2017.
  */
+@Controller
 public class RoleController {
 
     @Autowired
@@ -76,7 +78,7 @@ public class RoleController {
 
             role.setName(roleName);
             role.setDescription(description);
-
+            role.setEnable(true);
             short newRoleId = roleDao.saveRole(role);
 
 
@@ -126,5 +128,37 @@ public class RoleController {
 
     }
 
+    @RequestMapping(value = "/role/api/getRoleForEdit", method = RequestMethod.POST)
+    public
+    @ResponseBody
+    String getRoleForEdit(@RequestBody String roleId) {
+
+        try {
+            JSONArray jsonArray = new JSONArray();
+            Integer id = Integer.parseInt(roleId);
+
+            Role role=roleDao.getRole(id.shortValue());
+            //List<UsersHospitalSection> usersHospitalSection = userSectionDao.findUserHospitalSectionByUserId(id);
+
+            List<UserRole> rolesUser=userRoleDao.getUserRole(id.shortValue());
+            if (role != null) {
+                JSONObject jsonObject = new JSONObject();
+
+                jsonObject.put("roleId", role.getRoleId());
+                jsonObject.put("name", role.getName());
+                jsonObject.put("description", role.getDescription());
+                //jsonObject.put("hospitalSection", usersHospitalSection);
+                jsonObject.put("roles",rolesUser);
+
+                jsonArray.put(jsonObject);
+            }
+
+            return jsonArray.toString();
+        } catch (Exception ex) {
+            return String.valueOf(false);
+        }
+
+
+    }
 
 }

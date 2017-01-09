@@ -3,6 +3,7 @@
 
 <%@include file="header.jsp" %>
 
+
 <div id="tblUser" class="row">
     <table class="bordered responsive-table textColor">
         <thead>
@@ -85,17 +86,6 @@
     </div>
 </div>
 
-<div id="confirmWindow" class="modal" style="width: 290px">
-    <div class="modal-content">
-        <p id="messageDialog"></p>
-    </div>
-    <div class="divider"></div>
-    <div class="modal-footer">
-        <input type="button" class=" modal-action modal-close btn-flat" value="تایید" onclick="btnConfirmClick()">
-        <input type="button" class=" modal-action modal-close btn-flat" value="انصراف">
-    </div>
-</div>
-
 <script>
     var roleId = 0;
 
@@ -144,7 +134,7 @@
         var pTag = $('<p>');
 
         var lblUserName = $("<label>").attr("for", "${entry.userId}").css("width", "0");
-        var chkUser = $("<input>").attr("type", "checkBox").attr("value", "${entry.userId}").attr("id", "${entry.roleId}");
+        var chkUser = $("<input>").attr("type", "checkBox").attr("value", "${entry.userId}").attr("id", "${entry.userId}");
         var lblUserText = $("<label>").text("${entry.displayName}").attr("for", "${entry.userId}").css("vertical-align", "top").css("margin-right", "8px");
 
         pTag.append(chkUser);
@@ -179,7 +169,7 @@
                 dataArray.push(dataItem);
                 $.ajax({
                     type: "POST",
-                    url: "/user/api/addUser",
+                    url: "/role/api/addRole",
                     contentType: "application/json; charset=utf-8",
                     dataType: 'json',
                     data: JSON.stringify(dataArray),
@@ -210,25 +200,26 @@
     }
 
     function getRoleForEdit(sender) {
-        userId = sender.id.split("_")[1];
-
+        roleId = sender.id.split("_")[1];
+        debugger;
         $.ajax({
             type: "POST",
-            url: "/user/api/getUserForEdit",
+            url: "/role/api/getRoleForEdit",
             contentType: "application/json; charset=utf-8",
             dataType: 'json',
-            data: userId.toString(),
+            data: roleId.toString(),
             success: function (data) {
                 if (data == "false") {
                     Materialize.toast('خطا در انجام عملیات!', 4000, 'error-toast');
                 } else {
+                    debugger;
                     var role = data[0];
                     clearForm();
                     $("#txtRoleName").val(role.name);
                     $("#txtDescription").val(role.description);
 
-                    checkUsers(role.users)
-                    $('#userWindow').modal('open');
+                    checkUsers(role.roles)
+                    $('#roleWindow').modal('open');
                 }
             }
         });
@@ -239,7 +230,7 @@
         $.each(checkList, function (count, dataItem) {
             $.each(userList, function (count, user) {
 
-                if (dataItem.childNodes[0].childNodes[0].value == user.user.userId) {
+                if (dataItem.childNodes[0].childNodes[0].value == user.users.userId) {
                     dataItem.childNodes[0].childNodes[0].checked = true;
 
                 }
@@ -249,7 +240,7 @@
 
     function showRoleWindow() {
         clearForm();
-        $('#userWindow').modal('open');
+        $('#roleWindow').modal('open');
         $("#txtUserName").focus();
     }
 
