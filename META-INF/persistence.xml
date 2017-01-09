@@ -23,6 +23,7 @@
         <class>com.kosarict.entity.ComplainErrand</class>
         <class>com.kosarict.entity.Ticket</class>
         <class>com.kosarict.entity.TicketAttachment</class>
+        <class>com.kosarict.entity.UserRole</class>
         <properties>
             <property name="hibernate.connection.url"
                       value="jdbc:sqlserver://91.108.158.4:1433;databaseName=Monitoring"/>

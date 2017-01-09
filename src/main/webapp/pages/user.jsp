@@ -100,84 +100,78 @@
     <div class="modal-content">
         <div class="row">
 
-            <div class="col s12 m6 l5 right">
-                <div class="row input-field">
-                    <select id="ddlHospitalName" onchange="ddlHospitalNameChange();">
-                        <option value="" disabled selected>انتخاب بیمارستان</option>
-                        <c:if test="${not empty hospitalList}">
-                            <c:forEach var="hospitalNameEntry" items="${hospitalList}">
-                                <option value="${hospitalNameEntry.hospitalId}">${hospitalNameEntry.name}</option>
-                            </c:forEach>
-                        </c:if>
-                    </select>
-                </div>
+            <ul id="userTab" class="tabs" style="padding-right: 0">
+                <li class="tab col s3 right"><a href="#userInformation">مشخصات</a></li>
+                <li class="tab col s3 right"><a href="#rols">نقش ها</a></li>
+            </ul>
+            <div id="userInformation">
+                <div class="col s12 m6 l5 right">
 
-                <div class="row input-field">
-                    <select id="ddlHospitalSection">
-                        <option value="" disabled selected>انتخاب بخش مورد نظر</option>
-                    </select>
-                </div>
+                    <div class="input-field">
+                        <input placeholder="نام کاربری" id="txtUserName" type="text" autocomplete="false" autofocus>
+                    </div>
 
+                    <div class="input-field">
+                        <input placeholder="کلمه عبور" id="txtPassword" type="password" >
+                    </div>
 
-                <div class="input-field">
-                    <input placeholder="نام کاربری" id="txtUserName" type="text" autocomplete="false" autofocus>
-                </div>
+                    <div class="input-field">
+                        <input placeholder="تکرار کلمه عبور" id="txtRetryPassword" type="password" >
+                    </div>
 
-                <div class="input-field">
-                    <input placeholder="کلمه عبور" id="txtPassword" type="password" class="validate">
-                </div>
+                    <div class="input-field ">
+                        <input placeholder="شماره پرسنلی" id="txtPersonalNumber" type="text" maxlength="10"
+                               onkeypress="return event.charCode >=48 && event.charCode <= 57">
+                    </div>
 
-                <div class="input-field">
-                    <input placeholder="تکرار کلمه عبور" id="txtRetryPassword" type="password" class="validate">
-                </div>
+                    <div class="input-field ">
+                        <input placeholder="نام" id="txtFirstName" type="text" maxlength="255">
+                    </div>
 
-                <div class="input-field ">
-                    <input placeholder="شماره پرسنلی" id="txtPersonalNumber" type="text" maxlength="10"
-                           onkeypress="return event.charCode >=48 && event.charCode <= 57">
-                </div>
+                    <div class="input-field ">
+                        <input placeholder="نام خانوادگی" id="txtLastName" type="text" maxlength="255">
+                    </div>
 
-                <div class="input-field ">
-                    <input placeholder="نام" id="txtFirstName" type="text" maxlength="255">
-                </div>
+                    <div class="input-field ">
+                        <input placeholder="نام نمایشی" id="txtDisplayName" type="text" maxlength="255">
+                    </div>
 
-                <div class="input-field ">
-                    <input placeholder="نام خانوادگی" id="txtLastName" type="text" maxlength="255">
-                </div>
+                    <div class="input-field ">
+                        <input placeholder="تلفن" id="txtTel" type="text" maxlength="11"
+                               onkeypress="return event.charCode >=48 && event.charCode <= 57">
+                    </div>
 
-                <div class="input-field ">
-                    <input placeholder="نام نمایشی" id="txtDisplayName" type="text" maxlength="255">
-                </div>
+                    <div class="input-field ">
+                        <input placeholder="موبایل" id="txtMobile" type="text" maxlength="12"
+                               onkeypress="return event.charCode >=48 && event.charCode <= 57">
+                    </div>
 
-                <div class="input-field ">
-                    <input placeholder="تلفن" id="txtTel" type="text" maxlength="11"
-                           onkeypress="return event.charCode >=48 && event.charCode <= 57">
+                    <div>
+                        <input type="checkbox" class="filled-in" id="chkLocked"/>
+                        <label for="chkLocked">غیر فعال</label>
+                    </div>
                 </div>
-
-                <div class="input-field ">
-                    <input placeholder="موبایل" id="txtMobile" type="text" maxlength="12"
-                           onkeypress="return event.charCode >=48 && event.charCode <= 57">
-                </div>
-
-                <div>
-                    <input type="checkbox" class="filled-in" id="chkLocked"/>
-                    <label for="chkLocked">غیر فعال</label>
-                </div>
-            </div>
-            <div class="col s12 m6 l6 left">
-                <div class="center" style="margin-bottom: 10px">
-                    <img style="width: 250px; height: 250px" class="card" id="imgUser"
-                         src="../static/userImage/boy.png">
-                </div>
-                <div>
-                    <div class="file-field input-field">
-                        <div class="btn">
-                            <span>بارگذاری فایل</span>
-                            <input type="file" id="userImageUploader">
-                        </div>
-                        <div class="file-path-wrapper">
-                            <input class="file-path validate" type="text">
+                <div class="col s12 m6 l6 left">
+                    <div class="center" style="margin-bottom: 10px">
+                        <img style="width: 250px; height: 250px" class="card" id="imgUser"
+                             src="../static/userImage/boy.png">
+                    </div>
+                    <div>
+                        <div class="file-field input-field">
+                            <div class="btn">
+                                <span>بارگذاری فایل</span>
+                                <input type="file" id="userImageUploader">
+                            </div>
+                            <div class="file-path-wrapper">
+                                <input class="file-path validate" type="text">
+                            </div>
                         </div>
                     </div>
+                </div>
+            </div>
+            <div id="rols" >
+                <div class="col s12 m6  l5 right">
+                    <div id="roleListDiv"></div>
                 </div>
             </div>
         </div>
@@ -210,10 +204,14 @@
     $(document).ready(function () {
         $(".page-title").text("کاربران");
 
+        $('#userTab.tabs').tabs('select_tab', 'userInformation');
+
+
         var height = screen.height - 170;
-        $("#container").css("height", height + "px").css("overflow","auto").persiaNumber();
+        $("#container").css("height", height + "px").css("overflow", "auto").persiaNumber();
 
         initWindow();
+        creatRoleDive();
 
         $('.fixed-action-btn').openFAB();
 
@@ -243,8 +241,38 @@
                 out_duration: 200, // Transition out duration
                 starting_top: '0', // Starting top style attribute
                 ending_top: '0',
+                ready:function () {
+
+                }
             }
         );
+    }
+
+    function creatRoleDive() {
+        <c:if test="${not empty roleList}">
+        <c:forEach var="entry" items="${roleList}">
+
+        var roleListDiv = $("#roleListDiv");
+
+        var div = $("<div>").css("width", "48%").css("display", "inline-block").css("margin", "2px");
+
+        var pTag = $('<p>');
+
+        var lblRoleName = $("<label>").attr("for", "${entry.roleId}").css("width", "0");
+        var chkRole = $("<input>").attr("type", "checkBox").attr("value", "${entry.roleId}").attr("id", "${entry.roleId}");
+        var lblRoleText = $("<label>").text("${entry.name}").attr("for", "${entry.roleId}").css("vertical-align", "top").css("margin-right", "8px");
+
+        pTag.append(chkRole);
+        pTag.append(lblRoleName);
+        pTag.append(lblRoleText);
+
+        div.append(pTag);
+
+        roleListDiv.append(div);
+
+        </c:forEach>
+        </c:if>
+
     }
 
     function showConfirm(sender) {
@@ -272,10 +300,6 @@
     }
 
     function btnAddClick() {
-        var hospitalId = $("#ddlHospitalName option:selected").val();
-        var hospitalSectionId = $("#ddlHospitalSection option:selected").val();
-
-
         var pas = $("#txtPassword").val();
         var retryPas = $("#txtRetryPassword").val();
         var checkUserName = $("#txtUserName").val();
@@ -286,13 +310,13 @@
         var tel = $("#txtTel").val();
         var mobile = $("#txtMobile").val();
 
-
-        if (checkUserName == "" || personalNumber == "" || firstName == "" || lastName == "" || displayName == "" || hospitalId <= 0 || hospitalSectionId <= 0) {
+        if (checkUserName == "" || personalNumber == "" || firstName == "" || lastName == "" || displayName == "" ) {
             Materialize.toast('تمامی فیلدها اجباری می باشد', 4000, 'info-toast');
         } else if (userId <= 0 && (pas == "" || retryPas == "")) {
             Materialize.toast('تمامی فیلدها اجباری می باشد', 4000, 'info-toast');
         }
         else {
+            var roles = getCheckListArray();
             if (userId <= 0) {
                 $.ajax({
                     type: "POST",
@@ -306,6 +330,7 @@
                                 var dataArray = [];
                                 var dataItem = {};
 
+
                                 dataItem["userId"] = userId;
                                 dataItem["userName"] = $("#txtUserName").val();
                                 dataItem["password"] = $("#txtPassword").val();
@@ -317,8 +342,7 @@
                                 dataItem["mobile"] = $("#txtMobile").val();
                                 dataItem["locked"] = $("#chkLocked").is(':checked') ? 1 : 0;
                                 dataItem["imageName"] = imageName;
-                                dataItem["hospitalSectionId"] = hospitalSectionId;
-
+                                dataItem["roles"] = roles;
                                 dataArray.push(dataItem);
                                 $.ajax({
                                     type: "POST",
@@ -360,7 +384,7 @@
                 dataItem["mobile"] = $("#txtMobile").val();
                 dataItem["locked"] = $("#chkLocked").is(':checked') ? 1 : 0;
                 dataItem["imageName"] = imageName;
-                dataItem["hospitalSectionId"] = hospitalSectionId;
+                dataItem["roles"] = roles;
 
                 dataArray.push(dataItem);
                 $.ajax({
@@ -383,6 +407,21 @@
         }
     }
 
+    function getCheckListArray() {
+        var checkList = $("#roleListDiv").children();
+        var array = [];
+        $.each(checkList, function (count, dataItem) {
+            if (dataItem.childNodes[0].childNodes[0].checked) {
+
+                var item = {};
+                item["roleId"] = dataItem.childNodes[0].childNodes[0].value;
+                array.push(item);
+            }
+            ;
+        });
+        return array;
+    }
+
     function getUserForEdit(sender) {
         userId = sender.id.split("_")[1];
 
@@ -397,17 +436,7 @@
                     Materialize.toast('خطا در انجام عملیات!', 4000, 'error-toast');
                 } else {
                     var user = data[0];
-
-                    if(user.hospitalSection.length > 0) {
-                        var hospitalSection = user.hospitalSection[0].hospitalSection;
-
-                        $('#ddlHospitalName').val(hospitalSection.hospital.hospitalId.toString());
-
-                        ddlHospitalNameChange();
-
-                        $('#ddlHospitalSection').val(hospitalSection.section.sectionId);
-                    }
-
+                    clearForm();
                     $("#txtPassword").val("").prop("disabled", true);
                     $("#txtRetryPassword").val("").prop("disabled", true);
                     $("#txtUserName").val(user.userName).prop("disabled", true);
@@ -422,9 +451,23 @@
 
                     imageName = user.imageName;
 
+                    checkRoles(user.roles)
                     $('#userWindow').modal('open');
                 }
             }
+        });
+    }
+
+    function checkRoles(roleList) {
+        var checkList = $("#roleListDiv").children();
+        $.each(checkList, function (count, dataItem) {
+            $.each(roleList, function (count, role) {
+
+                if (dataItem.childNodes[0].childNodes[0].value == role.role.roleId) {
+                    dataItem.childNodes[0].childNodes[0].checked = true;
+
+                }
+            });
         });
     }
 
@@ -453,7 +496,6 @@
                 if (result) {
                     var reader = new FileReader();
                     reader.onload = function () {
-                        debugger;
                         $('#imgUser').attr("src", reader.result);
                     };
                     reader.readAsDataURL($('input[type=file]')[0].files[0]);
@@ -478,39 +520,14 @@
         $("#chkLocked").prop("checked", false)
 
         $("#imgUser").attr("src", "/static/userImage/boy.png");
-    }
 
-    function ddlHospitalNameChange() {
-        var hospitalId = $("#ddlHospitalName option:selected").val();
+        var checkList = $("#roleListDiv").children();
 
-        $.ajax({
-            type: "POST",
-            url: "/user/api/getSectionListByHospitalId",
-            contentType: "application/json; charset=utf-8",
-            dataType: 'json',
-            data: hospitalId.toString(),
-            async:false,
-            success: function (data) {
-                $("#ddlHospitalSection option").remove();
-
-                var defaultOption = $("<option>");
-                defaultOption.text("بخش موردنظر را انتخاب نمائید")
-                    .prop("disabled", true)
-                    .prop("selected", true)
-                    .attr("value", "");
-
-                $("#ddlHospitalSection").append(defaultOption);
-
-                if (data.length > 0) {
-                    $.each(data, function (index, dataItem) {
-                        var option = $("<option>");
-                        option.text(dataItem.title).attr("value", dataItem.sectionId);
-
-                        $("#ddlHospitalSection").append(option);
-                    });
-                }
-            }
+        $.each(checkList, function (count, dataItem) {
+            dataItem.childNodes[0].childNodes[0].checked = false;
         });
+
+        $('ul.tabs').tabs('select_tab', 'userInfo');
     }
 
     function pagination() {
@@ -558,7 +575,7 @@
             }
         });
     }
-    
+
     function nextPage() {
         var currentPage = $(".pagination .active").text();
 
