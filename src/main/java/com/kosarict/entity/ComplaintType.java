@@ -12,6 +12,7 @@ public class ComplaintType {
     private String title;
     private String description;
     private boolean enable;
+    private Integer responceTime;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -53,4 +54,15 @@ public class ComplaintType {
     public void setEnable(boolean enable) {
         this.enable = enable;
     }
+
+    @Basic
+    @Column(name = "ResponceTime")
+    public Integer getResponceTime() {
+        return responceTime;
+    }
+
+    public void setResponceTime(Integer responceTime) {
+        this.responceTime = responceTime;
+    }
+
 }

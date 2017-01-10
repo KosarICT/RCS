@@ -22,6 +22,8 @@
         <tr>
             <th class="center">ردیف</th>
             <th class="center">عنوان</th>
+            <th class="center">زمان پاسخگویی</th>
+            <th class="center">توضیحات</th>
             <th class="center"></th>
         </tr>
         </thead>
@@ -35,6 +37,7 @@
                     <td class="center" style="display: none">${entry.complaintTypeId}</td>
                     <td class="center counter"><c:out value="${row}"/></td>
                     <td class="center">${entry.title}</td>
+                    <td class="center">${entry.responceTime}</td>
                     <td class="center">${entry.description}</td>
                     <td class="center">
                         <a id="btnEdit_${entry.complaintTypeId}" href="#" class="mainTextColor"
@@ -78,6 +81,10 @@
                 <div class="input-field ">
                     <textarea id="txtDescription" placeholder="توضیحات" class="materialize-textarea"
                               length="4000"></textarea>
+                </div>
+                <div>
+                    <input maxlength="10" placeholder="زمان پاسخگویی" id="responsTime" type="text" class="validate"
+                           onkeypress='return event.charCode >= 48 && event.charCode <= 57;'>
                 </div>
             </div>
             <div class="col m2 l1"></div>
@@ -165,6 +172,7 @@
 
                 $("#txtTitle").val(complaintType.title);
                 $("#txtDescription").val(complaintType.description);
+                $("#responsTime").val(complaintType.responsTime);
 
                 $('#complaintTypeWindow').modal('open');
             }
@@ -174,6 +182,7 @@
     function saveComplaintType() {
         var title = $("#txtTitle").val();
         var description = $("#txtDescription").val();
+        var responsTime = $("#responsTime").val();
 
         if (title == "") {
             Materialize.toast('عنوان را وارد نمائید.', 4000, 'info-toast');
@@ -185,6 +194,7 @@
             dataItem["complaintTypeId"] = complaintTypeId;
             dataItem["title"] = title;
             dataItem["description"] = description;
+            dataItem["responsTime"] = responsTime;
 
             dataArray.push(dataItem);
 
@@ -210,6 +220,7 @@
 
         $("#txtTitle").val("");
         $("#txtDescription").val("");
+        $("#responsTime").val("")
     }
 
     function showConfirm(sender) {

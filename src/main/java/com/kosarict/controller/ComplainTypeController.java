@@ -43,6 +43,7 @@ public class ComplainTypeController {
             short complaintTypeId = (short) jsonObject.getInt("complaintTypeId");
             String title = jsonObject.getString("title");
             String description = jsonObject.getString("description");
+            Integer responsTime=jsonObject.getInt("responsTime");
 
             ComplaintType complaintType;
 
@@ -55,6 +56,7 @@ public class ComplainTypeController {
             complaintType.setTitle(title);
             complaintType.setDescription(description);
             complaintType.setEnable(true);
+            complaintType.setResponceTime(responsTime);
 
             short newComplainTypeId = complainTypeDao.saveComplaintType(complaintType);
 
@@ -79,6 +81,7 @@ public class ComplainTypeController {
             jsonObject.put("complaintTypeId",complaintType.getComplaintTypeId());
             jsonObject.put("title",complaintType.getTitle());
             jsonObject.put("description",complaintType.getDescription());
+            jsonObject.put("responsTime",complaintType.getResponceTime());
 
             jsonArray.put(jsonObject);
 

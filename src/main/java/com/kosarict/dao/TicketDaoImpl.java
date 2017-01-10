@@ -83,22 +83,24 @@ public class TicketDaoImpl implements TicketDao {
 
     @Override
     public boolean trackingCodeIsExist(String trackingCode) {
+        try {
+            boolean isExist = false;
 
-        boolean isExist = false;
-        List<Ticket> ticketList;
+            String queryString = "SELECT ticket FROM Ticket ticket WHERE ticket.trackingCode =:trackingCode AND ticket.enable = true ";
 
-        String queryString = "SELECT ticket FROM Ticket ticket where  ticket.enable=true  and ticket.trackingCode=:trackingCode";
+            Query query = entityManager.createQuery(queryString);
+            query.setParameter("trackingCode", trackingCode);
 
-        Query query = entityManager.createQuery(queryString);
-        query.setParameter("trackingCode", trackingCode);
+            List<Ticket> ticketList = query.getResultList();
 
-        ticketList = query.getResultList();
+            if (ticketList.size() > 0) {
+                isExist = true;
+            }
 
-        if (ticketList.size() > 0) {
-            isExist = true;
+            return isExist;
+        }catch (Exception ex){
+            return false;
         }
-
-        return isExist;
     }
 
 }

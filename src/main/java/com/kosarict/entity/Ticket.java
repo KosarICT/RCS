@@ -243,27 +243,6 @@ public class Ticket {
         this.persnolLastName = persnolLastName;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Ticket ticket = (Ticket) o;
-
-        if (persnolFirstName != null ? !persnolFirstName.equals(ticket.persnolFirstName) : ticket.persnolFirstName != null)
-            return false;
-        if (persnolLastName != null ? !persnolLastName.equals(ticket.persnolLastName) : ticket.persnolLastName != null)
-            return false;
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = persnolFirstName != null ? persnolFirstName.hashCode() : 0;
-        result = 31 * result + (persnolLastName != null ? persnolLastName.hashCode() : 0);
-        return result;
-    }
 
     @Basic
     @Column(name = "Raiting")
