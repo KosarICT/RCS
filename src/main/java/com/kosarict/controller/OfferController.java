@@ -100,7 +100,6 @@ public class OfferController {
             offer.setEmail(email);
             offer.setHospital(hospital);
             offer.setSection(section);
-            offer.setView(false);
             offer.setEnable(true);
             offer.setSubmitDate(currentDate);
             offer.setSendTypeId(Constant.SendTypeSite);

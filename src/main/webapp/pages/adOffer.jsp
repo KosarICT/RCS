@@ -7,10 +7,28 @@
     .modal select {
         display: block;
     }
+
+    table {
+        font-size: 13px !important;
+    }
+
+    tbody tr {
+        height: 59px !important;
+    }
+
+    tr td {
+        text-align: right !important;
+        border-bottom: 1px solid #c8c8c8 !important;
+    }
+
+    #grvOffer th input[type=text]:focus:not([readonly]) {
+        border-bottom: none !important;
+        box-shadow: none !important;
+    }
 </style>
 
 <div class="row">
-    <nav>
+<%--    <nav>
         <div class="nav-wrapper grey lighten-4" style="border: 1px solid #e0e0e0">
             <ul class="left ">
                 <li>
@@ -56,7 +74,11 @@
             </tbody>
 
         </c:if>
-    </table>
+    </table>--%>
+
+    <div class="k-rtl">
+        <div id="grvOffer"></div>
+    </div>
 </div>
 
 <div id="offerWindow" class="modal modal-fixed-footer modalHeight">
@@ -136,8 +158,90 @@
             $(this).addClass('selected').siblings().removeClass("selected");
         });
 
+        initGrid();
         initWindow();
     });
+
+    function initGrid() {
+        $("#grvOffer").kendoGrid({
+            dataSource: {
+                transport: {
+                    read: {
+                        url: "/adOffer/api/getAllOfferData",
+                        type: "GET",
+                        contentType: "application/json",
+                        dataType: "json",
+                    }
+                },
+            },
+            sortable: {
+                mode: "single",
+                allowUnsort: false
+            },
+            toolbar: [{name: "excel", text: "دریافت فایل اکسل"}],
+            excel: {
+                fileName: "پیشنهادات.xlsx",
+                filterable: true
+            },
+            filterable: {
+                mode: "row"
+            },
+            selectable: "single",
+            columns: [
+                {field: "offerId", title: "UserId", hidden: true},
+                {
+                    field: "name", title: "نام و نام خانوادگی", filterable: {
+                    cell: {
+                        showOperators: false
+                    }
+                }
+                },
+                {
+                    field: "nationalCode", title: "کدملی", width: "120px", filterable: {
+                    cell: {
+                        showOperators: false
+                    }
+                }
+                },
+                {
+                    field: "mobile", title: "موبایل", width: "120px", filterable: {
+                    cell: {
+                        showOperators: false
+                    }
+                }
+                },
+                {
+                    field: "hospitalName", title: "بیمارستان", filterable: {
+                    cell: {
+                        showOperators: false
+                    }
+                }
+                },
+                {
+                    field: "sectionName", title: "بخش", filterable: {
+                    cell: {
+                        showOperators: false
+                    }
+                }
+                },
+                {
+                    field: "sendTypeTitle", title: "طریقه ارتباط", width: "100px", filterable: {
+                    cell: {
+                        showOperators: false
+                    }
+                }
+                },
+                {
+                    field: "submitDate", title: "تاریخ", width: "100px", filterable: {
+                    cell: {
+                        showOperators: false
+                    }
+                }
+                },
+                {command: {text: "مشاهده", click: btnViewClick}, title: "&nbsp;", width: "120px"}
+            ]
+        });
+    }
 
     function initWindow() {
         $('#offerWindow').modal({
@@ -233,6 +337,10 @@
                 $('#offerWindow').modal('close');
                 break;
         }
+    }
+
+    function btnViewClick() {
+
     }
 
 </script>

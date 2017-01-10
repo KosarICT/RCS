@@ -19,10 +19,7 @@ public class Criticize {
     private String description;
     private String email;
     private boolean enable;
-    private boolean isView;
     private String trackingCode;
-    private String submitDate;
-    private SendType sendType;
 
     @Id
     @Column(name = "Criticize_Id")
@@ -149,16 +146,6 @@ public class Criticize {
     }
 
     @Basic
-    @Column(name = "IsView")
-    public boolean isView() {
-        return isView;
-    }
-
-    public void setView(boolean isView) {
-        this.isView = isView;
-    }
-
-    @Basic
     @Column(name = "TrackingCode")
     public String getTrackingCode() {
         return trackingCode;
@@ -168,23 +155,4 @@ public class Criticize {
         this.trackingCode = trackingCode;
     }
 
-    @Basic
-    @Column(name = "SubmitDate")
-    public String getSubmitDate() {
-        return submitDate;
-    }
-
-    public void setSubmitDate(String submitDate) {
-        this.submitDate = submitDate;
-    }
-
-    @ManyToOne
-    @JoinColumn(name = "SendType_Id")
-    public SendType getSendType() {
-        return sendType;
-    }
-
-    public void setSendType(SendType sendType) {
-        this.sendType = sendType;
-    }
 }

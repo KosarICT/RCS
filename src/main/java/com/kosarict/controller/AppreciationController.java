@@ -126,10 +126,8 @@ public class AppreciationController {
             appreciation.setTrackingCode(trackingNumber.toString());
             appreciation.setPersnolFirstName(appreciationUserName);
             appreciation.setPersnolLastName(appreciationUserFamily);
-            appreciation.setView(false);
             appreciation.setEnable(true);
             appreciation.setRaiting(0);
-            appreciation.setSubmitDate(currentDate);
 
             long newAppreciationId = appreciationDao.saveAppreciation(appreciation);
 

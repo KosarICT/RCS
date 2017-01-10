@@ -10,17 +10,18 @@ import java.util.List;
  * Created by Ali-Pc on 1/2/2017.
  */
 public interface TicketDao {
+
     List<Ticket> getAllTicketList();
 
-    @Transactional(isolation = Isolation.SERIALIZABLE)
+    List<Ticket> getTicketListByTicketTypeId(short ticketTypeId);
+
     long saveTicket(Ticket ticketModel);
 
     Ticket findTicketById(long ticketId);
 
-    @Transactional
     boolean deleteTicket(long ticketId);
 
-     List<TicketErrand> getTicketListByUserId(int userId);
+    List<TicketErrand> getTicketListByUserId(int userId);
 
     List<UsersHospitalSection> forwardTicket(int hospitalId, int sectionId);
 

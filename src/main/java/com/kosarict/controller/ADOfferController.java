@@ -1,17 +1,14 @@
 package com.kosarict.controller;
 
-import com.kosarict.dao.ADOfferDao;
 import com.kosarict.dao.HospitalSectionDao;
-import com.kosarict.dao.OfferAttachmentDao;
+import com.kosarict.dao.TicketDao;
 import com.kosarict.entity.HospitalSection;
-import com.kosarict.entity.Offer;
-import com.kosarict.entity.OfferAttachment;
+import com.kosarict.entity.Ticket;
 import com.kosarict.model.Constant;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -24,14 +21,12 @@ import java.util.List;
  */
 @Controller
 public class ADOfferController {
-    @Autowired
-    private ADOfferDao offerDao;
 
     @Autowired
     private HospitalSectionDao hospitalSectionDao;
 
     @Autowired
-    private OfferAttachmentDao offerAttachmentDao;
+    private TicketDao ticketDao;
 
     @RequestMapping(value = "/adOffer", method = RequestMethod.GET)
     public ModelAndView getAppreciationView() {
@@ -48,18 +43,18 @@ public class ADOfferController {
     String getAllOfferData() {
         JSONArray jsonArray = new JSONArray();
 
-        for (Offer offer : getOfferList()) {
+        for (Ticket ticket : getOfferList()) {
 
             JSONObject jsonObject = new JSONObject();
 
-            jsonObject.put("offerId", offer.getOfferId());
-            jsonObject.put("name", offer.getFirstName() + " " + offer.getLastName());
-            jsonObject.put("nationalCode", offer.getNationalCode());
-            jsonObject.put("mobile", offer.getMobile());
-            jsonObject.put("hospitalName", offer.getHospital().getName());
-            jsonObject.put("sectionName", offer.getSection().getTitle());
-            jsonObject.put("email", offer.getEmail());
-            jsonObject.put("trackingCode", offer.getTrackingCode());
+            jsonObject.put("ticketId", ticket.getTicketId());
+            jsonObject.put("name", ticket.getFirstName() + " " + ticket.getLastName());
+            jsonObject.put("nationalCode", ticket.getNationalCode());
+            jsonObject.put("subject", ticket.getSubject());
+            jsonObject.put("hospitalName", ticket.getHospital().getName());
+            jsonObject.put("sectionName", ticket.getSection().getTitle());
+            jsonObject.put("submitDate", ticket.getSubmitDate());
+            jsonObject.put("sendTypeTitle", ticket.getSendType().getTitle());
 
             jsonArray.put(jsonObject);
         }
@@ -67,38 +62,8 @@ public class ADOfferController {
         return jsonArray.toString();
     }
 
-    @RequestMapping(value = "/adOffer/api/findOfferById", method = RequestMethod.POST)
-    public
-    @ResponseBody
-    String findOfferById(@RequestBody String offerId) {
-        long id = Long.parseLong(offerId);
-        Offer offer = offerDao.findOfferById(id);
-
-        List<OfferAttachment> offerAttachments = offerAttachmentDao.getOfferAttachmentListByOfferId(id);
-
-        JSONArray jsonArray = new JSONArray();
-        JSONObject jsonObject = new JSONObject();
-
-        jsonObject.put("appreciationId", offer.getOfferId());
-        jsonObject.put("name", offer.getFirstName() + " " + offer.getLastName());
-        jsonObject.put("nationalCode", offer.getNationalCode());
-        jsonObject.put("phoneNumber", offer.getPhoneNumber());
-        jsonObject.put("mobile", offer.getMobile());
-        jsonObject.put("subject", offer.getSubject());
-        jsonObject.put("description", offer.getDescription());
-        jsonObject.put("email", offer.getEmail());
-        jsonObject.put("trackingCode", offer.getTrackingCode());
-        jsonObject.put("sectionTitle", offer.getSection().getTitle());
-        jsonObject.put("hospitalName", offer.getHospital().getName());
-        jsonObject.put("attachList", offerAttachments);
-
-        jsonArray.put(jsonObject);
-
-        return jsonArray.toString();
-    }
-
-    private List<Offer> getOfferList() {
-        return offerDao.getAllOfferList();
+    private List<Ticket> getOfferList() {
+        return ticketDao.getTicketListByTicketTypeId(Constant.OfferTicketTypeId);
     }
 
     private List<HospitalSection> getSectionList() {

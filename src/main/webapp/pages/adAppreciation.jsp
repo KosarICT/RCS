@@ -7,56 +7,78 @@
     .modal select {
         display: block;
     }
+
+    table {
+        font-size: 13px !important;
+    }
+
+    tbody tr {
+        height: 59px !important;
+    }
+
+    tr td {
+        text-align: right !important;
+        border-bottom: 1px solid #c8c8c8 !important;
+    }
+
+    #grvAppreciation th input[type=text]:focus:not([readonly]) {
+        border-bottom: none !important;
+        box-shadow: none !important;
+    }
 </style>
 
 <div class="row">
-    <nav>
-        <div class="nav-wrapper grey lighten-4" style="border: 1px solid #e0e0e0">
-            <ul class="left ">
-                <li>
-                    <a href="#" class="notification-text" onclick="btnViewClick()">
-                        <i class="material-icons right notification-text">visibility</i>مشاهده
-                    </a>
-                </li>
-            </ul>
-        </div>
-    </nav>
+    <%--    <nav>
+            <div class="nav-wrapper grey lighten-4" style="border: 1px solid #e0e0e0">
+                <ul class="left ">
+                    <li>
+                        <a href="#" class="notification-text" onclick="btnViewClick()">
+                            <i class="material-icons right notification-text">visibility</i>مشاهده
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
 
-    <table id="tblAppreciation" class="left bordered responsive-table textColor">
-        <thead>
-        <tr>
-            <th class="center">ردیف</th>
-            <th class="center">نام و نام خانوادگی</th>
-            <th class="center"> نام و نام خانوادگی پرسنل</th>
-            <th class="center">کد ملی</th>
-            <th class="center">بیمارستان</th>
-            <th class="center"> بخش</th>
-        </tr>
-        </thead>
+        <table id="tblAppreciation" class="left bordered responsive-table textColor">
+            <thead>
+            <tr>
+                <th class="center">ردیف</th>
+                <th class="center">نام و نام خانوادگی</th>
+                <th class="center"> نام و نام خانوادگی پرسنل</th>
+                <th class="center">کد ملی</th>
+                <th class="center">بیمارستان</th>
+                <th class="center"> بخش</th>
+            </tr>
+            </thead>
 
-        <c:if test="${not empty appreciationListList}">
-            <c:set var="row" value="1" scope="page"/>
+            <c:if test="${not empty appreciationListList}">
+                <c:set var="row" value="1" scope="page"/>
 
-            <tbody class="data-wrapper">
-            <c:forEach var="entry" items="${appreciationListList}">
+                <tbody class="data-wrapper">
+                <c:forEach var="entry" items="${appreciationListList}">
 
-                <tr data-uid="${entry.appreciationId}">
+                    <tr data-uid="${entry.appreciationId}">
 
-                    <td class="center counter"><c:out value="${row}"/></td>
-                    <td class="center">${entry.firstName} ${entry.lastName}</td>
-                    <td class="center">${entry.persnolFirstName} ${entry.persnolLastName}</td>
-                    <td class="center">${entry.nationalCode}</td>
-                    <td class="center">${entry.hospital.name}</td>
-                    <td class="center">${entry.section.title}</td>
+                        <td class="center counter"><c:out value="${row}"/></td>
+                        <td class="center">${entry.firstName} ${entry.lastName}</td>
+                        <td class="center">${entry.persnolFirstName} ${entry.persnolLastName}</td>
+                        <td class="center">${entry.nationalCode}</td>
+                        <td class="center">${entry.hospital.name}</td>
+                        <td class="center">${entry.section.title}</td>
 
-                </tr>
+                    </tr>
 
-                <c:set var="row" value="${row + 1}" scope="page"/>
-            </c:forEach>
-            </tbody>
+                    <c:set var="row" value="${row + 1}" scope="page"/>
+                </c:forEach>
+                </tbody>
 
-        </c:if>
-    </table>
+            </c:if>
+        </table>--%>
+
+    <div class="k-rtl">
+        <div id="grvAppreciation"></div>
+    </div>
 </div>
 
 <div id="appreciationWindow" class="modal modal-fixed-footer modalHeight">
@@ -128,8 +150,90 @@
             $(this).addClass('selected').siblings().removeClass("selected");
         });
 
+        initGrid();
         initWindow();
     });
+
+    function initGrid() {
+        $("#grvAppreciation").kendoGrid({
+            dataSource: {
+                transport: {
+                    read: {
+                        url: "/adAppreciation/api/getAllAppreciationData",
+                        type: "GET",
+                        contentType: "application/json",
+                        dataType: "json",
+                    }
+                },
+            },
+            sortable: {
+                mode: "single",
+                allowUnsort: false
+            },
+            toolbar: [{name: "excel", text: "دریافت فایل اکسل"}],
+            excel: {
+                fileName: "قدردانی.xlsx",
+                filterable: true
+            },
+            filterable: {
+                mode: "row"
+            },
+            selectable: "single",
+            columns: [
+                {field: "appreciationId", title: "UserId", hidden: true},
+                {
+                    field: "name", title: "نام و نام خانوادگی", filterable: {
+                    cell: {
+                        showOperators: false
+                    }
+                }
+                },
+                {
+                    field: "personnelName", title: "نام و نام خانوادگی پرسنل", filterable: {
+                    cell: {
+                        showOperators: false
+                    }
+                }
+                },
+                {
+                    field: "nationalCode", title: "کدملی", width: "120px", filterable: {
+                    cell: {
+                        showOperators: false
+                    }
+                }
+                },
+                {
+                    field: "hospitalName", title: "بیمارستان", filterable: {
+                    cell: {
+                        showOperators: false
+                    }
+                }
+                },
+                {
+                    field: "sectionName", title: "بخش", filterable: {
+                    cell: {
+                        showOperators: false
+                    }
+                }
+                },
+                {
+                    field: "sendTypeTitle", title: "طریقه ارتباط", width: "100px", filterable: {
+                    cell: {
+                        showOperators: false
+                    }
+                }
+                },
+                {
+                    field: "submitDate", title: "تاریخ", width: "100px", filterable: {
+                    cell: {
+                        showOperators: false
+                    }
+                }
+                },
+                {command: {text: "مشاهده", click: btnViewClick}, title: "&nbsp;", width: "120px"}
+            ]
+        });
+    }
 
     function initWindow() {
         $('#appreciationWindow').modal({

@@ -13,11 +13,9 @@ public interface ADAppreciationDao {
 
     List<Appreciation> getAllAppreciationList();
 
-    @Transactional(isolation = Isolation.SERIALIZABLE)
     long saveAppreciation(Appreciation appreciationModel);
 
     Appreciation findAppreciationById(long appreciationId);
 
-    @Transactional
     boolean deleteAppreciation(long appreciationId);
 }

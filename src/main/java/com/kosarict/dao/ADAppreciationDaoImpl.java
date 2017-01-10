@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * Created by Younes on 16/12/2016.
  */
-@Repository
+@Repository("ADAppreciationDao")
 public class ADAppreciationDaoImpl implements ADAppreciationDao {
     @PersistenceContext(unitName = "persistenceUnit", type = PersistenceContextType.TRANSACTION)
     EntityManager entityManager;
