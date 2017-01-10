@@ -7,10 +7,28 @@
     .modal select {
         display: block;
     }
+
+    table {
+        font-size: 13px !important;
+    }
+
+    tbody tr {
+        height: 59px !important;
+    }
+
+    tr td {
+        text-align: right !important;
+        border-bottom: 1px solid #c8c8c8 !important;
+    }
+
+    #grvOffer th input[type=text]:focus:not([readonly]) {
+        border-bottom: none !important;
+        box-shadow: none !important;
+    }
 </style>
 
 <div class="row">
-    <nav>
+<%--    <nav>
         <div class="nav-wrapper grey lighten-4" style="border: 1px solid #e0e0e0">
             <ul class="left ">
                 <li>
@@ -30,9 +48,7 @@
             <th class="center">کد ملی</th>
             <th class="center">موضوع</th>
             <th class="center">نام بیمارستان</th>
-            <th class="center"> نام بخش بیمارستان</th>
-            <th class="center"> تاریخ پیشنهاد</th>
-            <th class="center">طریقه ارتباط</th>
+            <th class="center">بخش بیمارستان</th>
         </tr>
         </thead>
 
@@ -42,7 +58,7 @@
             <tbody class="data-wrapper">
             <c:forEach var="entry" items="${offerList}">
 
-                <tr data-uid="${entry.ticketId}">
+                <tr data-uid="${entry.offerId}">
 
                     <td class="center counter"><c:out value="${row}"/></td>
                     <td class="center">${entry.firstName} ${entry.lastName}</td>
@@ -50,8 +66,6 @@
                     <td class="center">${entry.subject}</td>
                     <td class="center">${entry.hospital.name}</td>
                     <td class="center">${entry.section.title}</td>
-                    <td class="center">${entry.submitDate}</td>
-                    <td class="center">${entry.sendType.title}</td>
 
                 </tr>
 
@@ -60,7 +74,11 @@
             </tbody>
 
         </c:if>
-    </table>
+    </table>--%>
+
+    <div class="k-rtl">
+        <div id="grvOffer"></div>
+    </div>
 </div>
 
 <div id="offerWindow" class="modal modal-fixed-footer modalHeight">
@@ -114,19 +132,9 @@
                 <input disabled id="txtEmail" type="text" class="validate notification-text">
             </div>
             <div class="row">
-                <label for="txtSubmitDate" style="font-size: 13px; font-weight: 500; color: #707070">تاریخ
-                    پیشنهاد:</label>
-                <input disabled id="txtSubmitDate" type="text" class="validate notification-text">
-            </div>
-            <div class="row">
                 <label for="txtTrackingCode" style="font-size: 13px; font-weight: 500; color: #707070">کد
                     رهگیری:</label>
                 <input disabled id="txtTrackingCode" type="text" class="validate notification-text">
-            </div>
-            <div class="row">
-                <label for="txtAttachmentName" style="font-size: 13px; font-weight: 500; color: #707070">مستندات
-                    :</label>
-                <input disabled id="txtAttachmentName" type="text" class="validate notification-text">
             </div>
         </div>
         <div class="row"></div>
@@ -137,7 +145,6 @@
             <img src="/static/icon/cancel2.png" class="windowToolbarImage">انصراف
         </a>
     </div>
-
 </div>
 
 <script>
@@ -151,8 +158,90 @@
             $(this).addClass('selected').siblings().removeClass("selected");
         });
 
+        initGrid();
         initWindow();
     });
+
+    function initGrid() {
+        $("#grvOffer").kendoGrid({
+            dataSource: {
+                transport: {
+                    read: {
+                        url: "/adOffer/api/getAllOfferData",
+                        type: "GET",
+                        contentType: "application/json",
+                        dataType: "json",
+                    }
+                },
+            },
+            sortable: {
+                mode: "single",
+                allowUnsort: false
+            },
+            toolbar: [{name: "excel", text: "دریافت فایل اکسل"}],
+            excel: {
+                fileName: "پیشنهادات.xlsx",
+                filterable: true
+            },
+            filterable: {
+                mode: "row"
+            },
+            selectable: "single",
+            columns: [
+                {field: "offerId", title: "UserId", hidden: true},
+                {
+                    field: "name", title: "نام و نام خانوادگی", filterable: {
+                    cell: {
+                        showOperators: false
+                    }
+                }
+                },
+                {
+                    field: "nationalCode", title: "کدملی", width: "120px", filterable: {
+                    cell: {
+                        showOperators: false
+                    }
+                }
+                },
+                {
+                    field: "mobile", title: "موبایل", width: "120px", filterable: {
+                    cell: {
+                        showOperators: false
+                    }
+                }
+                },
+                {
+                    field: "hospitalName", title: "بیمارستان", filterable: {
+                    cell: {
+                        showOperators: false
+                    }
+                }
+                },
+                {
+                    field: "sectionName", title: "بخش", filterable: {
+                    cell: {
+                        showOperators: false
+                    }
+                }
+                },
+                {
+                    field: "sendTypeTitle", title: "طریقه ارتباط", width: "100px", filterable: {
+                    cell: {
+                        showOperators: false
+                    }
+                }
+                },
+                {
+                    field: "submitDate", title: "تاریخ", width: "100px", filterable: {
+                    cell: {
+                        showOperators: false
+                    }
+                }
+                },
+                {command: {text: "مشاهده", click: btnViewClick}, title: "&nbsp;", width: "120px"}
+            ]
+        });
+    }
 
     function initWindow() {
         $('#offerWindow').modal({
@@ -176,23 +265,22 @@
 
             $.ajax({
                 type: "POST",
-                url: "/ticket/api/findTicketByTicketId",
+                url: "/adOffer/api/findOfferById",
                 contentType: "application/json; charset=utf-8",
                 dataType: 'json',
                 data: offerId.toString(),
                 success: function (data) {
                     var dataItem = data[0];
-                    $("#txtName").val(data.firstName + " " + data.lastName);
-                    $("#txtNationalCode").val(data.nationalCode);
-                    $("#txtMobile").val(data.mobile);
-                    $("#txtSubject").val(data.subject);
-                    $("#txtHospitalName").val(data.hospitalName);
-                    $("#txtSectionTitle").val(data.sectionTitle);
-                    $("#txtDescription").val(data.description);
-                    $("#txtSubmitDate").val(data.submitDate);
-                    $("#txtTrackingCode").val(data.trackingCode);
-                    $("#txtEmail").val(data.email);
-                    $("#txtAttachmentName").val(data.ticketAttachmentList[0].fileName);
+
+                    $("#txtName").val(dataItem.name);
+                    $("#txtNationalCode").val(dataItem.nationalCode);
+                    $("#txtMobile").val(dataItem.mobile);
+                    $("#txtSubject").val(dataItem.subject);
+                    $("#txtHospitalName").val(dataItem.hospitalName);
+                    $("#txtSectionTitle").val(dataItem.sectionTitle);
+                    $("#txtDescription").val(dataItem.description);
+                    $("#txtTrackingCode").val(dataItem.trackingCode);
+                    $("#txtEmail").val(dataItem.email);
                 }
             });
 
@@ -214,7 +302,7 @@
                 if (data.length > 0) {
                     $.each(data, function (index, dataItem) {
 
-                        var tr = $("<tr>").attr("data-uid", dataItem.ticketId);
+                        var tr = $("<tr>").attr("data-uid", dataItem.offerId);
 
                         var tdCounter = $("<td>").addClass("center").text(index + 1);
                         var tdName = $("<td>").addClass("center").text(dataItem.name);
@@ -222,8 +310,6 @@
                         var tdsubject = $("<td>").addClass("center").text(dataItem.subject);
                         var tdHospitalName = $("<td>").addClass("center").text(dataItem.hospitalName);
                         var tdSectionName = $("<td>").addClass("center").text(dataItem.sectionName);
-                        var tdSubmitDate = $("<td>").addClass("center").text(dataItem.submitDate);
-                        var tdSendTypeTitle = $("<td>").addClass("center").text(dataItem.sendTypeTitle);
 
                         tr.append(tdCounter);
                         tr.append(tdName);
@@ -231,8 +317,6 @@
                         tr.append(tdsubject);
                         tr.append(tdHospitalName);
                         tr.append(tdSectionName);
-                        tr.append(tdSubmitDate);
-                        tr.append(tdSendTypeTitle);
 
                         $("#tblOffer tbody").append(tr);
                     });
@@ -253,6 +337,10 @@
                 $('#offerWindow').modal('close');
                 break;
         }
+    }
+
+    function btnViewClick() {
+
     }
 
 </script>

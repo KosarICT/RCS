@@ -37,6 +37,7 @@ public class TicketDaoImpl implements TicketDao {
 
         Query query = entityManager.createQuery(queryString);
         query.setParameter("ticketTypeId", ticketTypeId);
+
         return query.getResultList();
     }
 

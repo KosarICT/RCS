@@ -102,10 +102,6 @@
         creatRoleDive();
 
         $('.fixed-action-btn').openFAB();
-
-        $('.modal').modal();
-
-
     });
 
     function initWindow() {
@@ -114,7 +110,7 @@
                 opacity: .5, // Opacity of modal background
                 in_duration: 300, // Transition in duration
                 out_duration: 200, // Transition out duration
-                starting_top: '0', // Starting top style attribute
+                starting_top: '5%', // Starting top style attribute
                 ending_top: '0',
                 ready:function () {
 

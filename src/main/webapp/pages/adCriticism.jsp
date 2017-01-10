@@ -7,10 +7,28 @@
     .modal select {
         display: block;
     }
+
+    table {
+        font-size: 13px !important;
+    }
+
+    tbody tr {
+        height: 59px !important;
+    }
+
+    tr td {
+        text-align: right !important;
+        border-bottom: 1px solid #c8c8c8 !important;
+    }
+
+    #grvCriticism th input[type=text]:focus:not([readonly]) {
+        border-bottom: none !important;
+        box-shadow: none !important;
+    }
 </style>
 
 <div class="row">
-    <nav>
+<%--    <nav>
         <div class="nav-wrapper grey lighten-4" style="border: 1px solid #e0e0e0">
             <ul class="left ">
                 <li>
@@ -42,7 +60,7 @@
             <tbody class="data-wrapper">
             <c:forEach var="entry" items="${criticismLists}">
 
-                <tr data-uid="${entry.ticketId}">
+                <tr data-uid="${entry.criticizeId}">
 
                     <td class="center counter"><c:out value="${row}"/></td>
 
@@ -60,7 +78,11 @@
             </tbody>
 
         </c:if>
-    </table>
+    </table>--%>
+
+    <div class="k-rtl">
+        <div id="grvCriticism"></div>
+    </div>
 </div>
 
 <div id="criticismWindow" class="modal modal-fixed-footer modalHeight">
@@ -111,11 +133,6 @@
                 <label for="txtTrackingCode" style="font-size: 13px; font-weight: 500; color: #707070">کد رهگیری
                     :</label>
                 <input disabled id="txtTrackingCode" type="text" class="validate notification-text">
-            </div>
-            <div class="row">
-                <label for="txtAttachmentName" style="font-size: 13px; font-weight: 500; color: #707070">مستندات
-                    :</label>
-                <input disabled id="txtAttachmentName" type="text" class="validate notification-text">
             </div>
         </div>
         <div class="row"></div>
@@ -193,8 +210,90 @@
             $(this).addClass('selected').siblings().removeClass("selected");
         });
 
+        initGrid();
         initWindow();
     });
+
+    function initGrid() {
+        $("#grvCriticism").kendoGrid({
+            dataSource: {
+                transport: {
+                    read: {
+                        url: "/adCriticism/api/getCriticismData",
+                        type: "GET",
+                        contentType: "application/json",
+                        dataType: "json",
+                    }
+                },
+            },
+            sortable: {
+                mode: "single",
+                allowUnsort: false
+            },
+            toolbar: [{name: "excel", text: "دریافت فایل اکسل"}],
+            excel: {
+                fileName: "انتقادات.xlsx",
+                filterable: true
+            },
+            filterable: {
+                mode: "row"
+            },
+            selectable: "single",
+            columns: [
+                {field: "criticizeId", title: "UserId", hidden: true},
+                {
+                    field: "name", title: "نام و نام خانوادگی", filterable: {
+                    cell: {
+                        showOperators: false
+                    }
+                }
+                },
+                {
+                    field: "nationalCode", title: "کدملی", width: "120px", filterable: {
+                    cell: {
+                        showOperators: false
+                    }
+                }
+                },
+                {
+                    field: "subject", title: "موضوع", width: "120px", filterable: {
+                    cell: {
+                        showOperators: false
+                    }
+                }
+                },
+                {
+                    field: "hospitalName", title: "بیمارستان", filterable: {
+                    cell: {
+                        showOperators: false
+                    }
+                }
+                },
+                {
+                    field: "sectionName", title: "بخش", filterable: {
+                    cell: {
+                        showOperators: false
+                    }
+                }
+                },
+                {
+                    field: "sendTypeTitle", title: "طریقه ارتباط", width: "100px", filterable: {
+                    cell: {
+                        showOperators: false
+                    }
+                }
+                },
+                {
+                    field: "submitDate", title: "تاریخ", width: "100px", filterable: {
+                    cell: {
+                        showOperators: false
+                    }
+                }
+                },
+                {command: {text: "مشاهده", click: btnViewClick}, title: "&nbsp;", width: "120px"}
+            ]
+        });
+    }
 
     function initWindow() {
         $('#criticismWindow').modal({
@@ -228,22 +327,22 @@
 
             $.ajax({
                 type: "POST",
-                url: "/ticket/api/findTicketByTicketId",
+                url: "/adCriticism/api/findCriticismById",
                 contentType: "application/json; charset=utf-8",
                 dataType: 'json',
                 data: criticizeId.toString(),
                 success: function (data) {
+                    var dataItem = data[0];
 
-                    $("#txtName").val(data.name);
-                    $("#txtNationalCode").val(data.nationalCode);
-                    $("#txtMobile").val(data.mobile);
-                    $("#txtSectionTitle").val(data.sectionTitle);
-                    $("#txtSubject").val(data.subject);
-                    $("#txtDescription").val(data.description);
-                    $("#txtEmail").val(data.email);
-                    $("#txtTrackingCode").val(data.trackingCode);
-                    $("#txtSubmitDate").val(data.trackingCode);
-                    $("#txtAttachmentName").val(data.attachList[0].fileName);
+                    $("#txtName").val(dataItem.name);
+                    $("#txtNationalCode").val(dataItem.nationalCode);
+                    $("#txtMobile").val(dataItem.mobile);
+                    $("#txtSectionTitle").val(dataItem.sectionTitle);
+                    $("#txtSubject").val(dataItem.subject);
+                    $("#txtDescription").val(dataItem.description);
+                    $("#txtEmail").val(dataItem.email);
+                    $("#txtTrackingCode").val(dataItem.trackingCode);
+                    $("#txtSubmitDate").val(dataItem.trackingCode);
 
                 }
             });
@@ -266,7 +365,7 @@
                 if (data.length > 0) {
                     $.each(data, function (index, dataItem) {
 
-                        var tr = $("<tr>").attr("data-uid", dataItem.ticketId);
+                        var tr = $("<tr>").attr("data-uid", dataItem.criticizeId);
 
                         var tdCounter = $("<td>").addClass("center").text(index + 1);
                         var tdName = $("<td>").addClass("center").text(dataItem.name);
@@ -307,7 +406,6 @@
             case "btnStop":
                 break;
             case "btnErrand":
-                clearErrandWindow();
                 $('#criticismErrandWindow').modal('open');
                 break;
         }
@@ -318,7 +416,7 @@
 
         switch (id) {
             case "btnErrandOk":
-                saveErrandCriticism();
+//                saveErrandCriticism();
                 break;
             case "btnErrandCancel":
                 $('#criticismErrandWindow').modal('close');
@@ -390,10 +488,8 @@
         });
     }
 
-    function clearErrandWindow() {
-        $("#ddlSection").val("0");
-        $("#ddlUser").prop("disabled", false).val("0");
-        $("#txtErrandDescription").val("");
+    function btnViewClick() {
+
     }
 </script>
 

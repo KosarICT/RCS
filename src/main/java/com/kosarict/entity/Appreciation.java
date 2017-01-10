@@ -20,12 +20,9 @@ public class Appreciation {
     private String description;
     private String email;
     private boolean enable;
-    private boolean isView;
     private Hospital hospital;
     private Section section;
-    private String submitDate;
     private String trackingCode;
-    private SendType sendType;
 
     @Id
     @Column(name = "Appreciation_Id")
@@ -175,36 +172,6 @@ public class Appreciation {
 
     public void setEnable(boolean enable) {
         this.enable = enable;
-    }
-
-    @Basic
-    @Column(name = "IsView")
-    public boolean isView() {
-        return isView;
-    }
-
-    public void setView(boolean isView) {
-        this.isView = isView;
-    }
-
-    @ManyToOne
-    @JoinColumn(name = "SendType_Id")
-    public SendType getSendType() {
-        return sendType;
-    }
-
-    public void setSendType(SendType sendType) {
-        this.sendType = sendType;
-    }
-
-    @Basic
-    @Column(name = "SubmitDate")
-    public String getSubmitDate() {
-        return submitDate;
-    }
-
-    public void setSubmitDate(String submitDate) {
-        this.submitDate = submitDate;
     }
 
 

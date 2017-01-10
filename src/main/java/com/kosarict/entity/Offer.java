@@ -18,7 +18,6 @@ public class Offer {
     private String description;
     private String email;
     private boolean enable;
-    private boolean isView;
     private String trackingCode;
     private String submitDate;
     private Hospital hospital;
@@ -134,16 +133,6 @@ public class Offer {
 
     public void setEnable(boolean enable) {
         this.enable = enable;
-    }
-
-    @Basic
-    @Column(name = "IsView")
-    public boolean isView() {
-        return isView;
-    }
-
-    public void setView(boolean view) {
-        isView = view;
     }
 
     @Basic

@@ -66,6 +66,48 @@ public class TicketController {
     @Autowired
     private TicketTypeDao ticketTypeDao;
 
+
+    @RequestMapping(value = "/ticket/api/getData", method = RequestMethod.POST)
+    public
+    @ResponseBody
+    String getData(@RequestBody String model) {
+        JSONArray jsonArray = new JSONArray(model);
+        JSONObject jsonObject = jsonArray.getJSONObject(0);
+
+        int ticketTypeId = jsonObject.getInt("ticketTypeId");
+
+        List<Ticket> ticketList = ticketDao.getTicketListByTicketTypeId((short) ticketTypeId);
+
+        JSONArray dataArray = new JSONArray();
+
+        for (Ticket ticket : ticketList) {
+
+            JSONObject dataItem = new JSONObject();
+
+            dataItem.put("ticketId", ticket.getTicketId());
+            dataItem.put("name", ticket.getFirstName() + " " + ticket.getLastName());
+            dataItem.put("nationalCode", ticket.getNationalCode());
+            dataItem.put("hospitalName", ticket.getHospital().getName());
+            dataItem.put("sendTypeTitle", ticket.getSendType().getTitle());
+            dataItem.put("submitDate", ticket.getSubmitDate());
+
+            if (ticketTypeId == Constant.AppreciationTicketTypeId) {
+
+            } else if (ticketTypeId == Constant.ComplainTicketTypeId) {
+                dataItem.put("complainantTitle", ticket.getComplainant().getTitle());
+                dataItem.put("complaintTypeTitle", ticket.getComplaintType().getTitle());
+            } else if (ticketTypeId == Constant.OfferTicketTypeId) {
+
+            } else {
+
+            }
+
+            dataArray.put(dataItem);
+        }
+
+        return dataArray.toString();
+    }
+
     @RequestMapping(value = "/ticket/api/saveTicket", method = RequestMethod.POST)
     public
     @ResponseBody
@@ -191,7 +233,6 @@ public class TicketController {
             return String.valueOf(false);
         }
     }
-
 
     @RequestMapping(value = "/ticket/api/findTicketByTicketId", method = RequestMethod.POST)
     public

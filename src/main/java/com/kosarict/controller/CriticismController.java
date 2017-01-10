@@ -122,9 +122,7 @@ public class CriticismController {
             criticize.setDescription(criticismDescription);
             criticize.setEmail(criticismEmail);
             criticize.setTrackingCode(trackingNumber.toString());
-            criticize.setView(false);
             criticize.setEnable(true);
-            criticize.setSubmitDate(currentDate);
 
              long newCriticizeId = criticismsDao.saveCriticize(criticize);
 

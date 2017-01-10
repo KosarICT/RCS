@@ -15,12 +15,10 @@ public interface TicketDao {
 
     List<Ticket> getTicketListByTicketTypeId(short ticketTypeId);
 
-    @Transactional(isolation = Isolation.SERIALIZABLE)
     long saveTicket(Ticket ticketModel);
 
     Ticket findTicketById(long ticketId);
 
-    @Transactional
     boolean deleteTicket(long ticketId);
 
     List<TicketErrand> getTicketListByUserId(int userId);
