@@ -10,9 +10,9 @@ import java.util.List;
 public interface UserSectionDao {
     List<UsersHospitalSection> getUserSectionByUserId(int userId);
 
-    UsersHospitalSection findUserRoleById(int userSectionId);
+    UsersHospitalSection findUserHospitalSectionById(int userSectionId);
 
-    boolean deleteUserSection(int userRoleId);
+    boolean deleteUserHospitalSection(int userHospitalSectionId);
 
     List<UsersHospitalSection> getUserSectionBySectionId(int sectionId);
 

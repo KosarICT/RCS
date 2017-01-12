@@ -27,13 +27,18 @@ public class UserSectionDaoImpl implements UserSectionDao {
     }
 
     @Override
-    public UsersHospitalSection findUserRoleById(int userSectionId) {
-        return null;
+    public UsersHospitalSection findUserHospitalSectionById(int userHospitalSectionId) {
+        UsersHospitalSection usersHospitalSection=entityManager.find(UsersHospitalSection.class,userHospitalSectionId);
+        return usersHospitalSection;
+
     }
 
+    @Transactional
     @Override
-    public boolean deleteUserSection(int userRoleId) {
-        return false;
+    public boolean deleteUserHospitalSection(int userHospitalSectionId) {
+        UsersHospitalSection usersHospitalSection=findUserHospitalSectionById(userHospitalSectionId);
+        entityManager.remove(usersHospitalSection);
+        return true;
     }
 
     @Override

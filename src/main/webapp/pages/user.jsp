@@ -170,7 +170,24 @@
                 </div>
             </div>
             <div id="rols" >
-                <div class="col s12 m6  l5 right">
+                <div class="col right ">
+                    <div class="row">
+                        <div class="col s12 m4 l4 right">
+                            <label for="ddlHospital">انتخاب بیمارستان:</label>
+                        </div>
+
+                        <div class="col s12 m8 l8 left">
+                            <select id="ddlHospital" onchange="ddlHospitalChange(this)">
+                                <option value="" disabled selected>بیمارستان موردنظر انتخاب نمائید</option>
+                                <c:if test="${not empty hospitalList}">
+                                    <c:forEach var="entry" items="${hospitalList}">
+                                        <option value="${entry.hospitalId}">${entry.name}</option>
+                                    </c:forEach>
+                                </c:if>
+                            </select>
+                        </div>
+                    </div>
+
                     <div id="roleListDiv"></div>
                 </div>
             </div>
@@ -211,7 +228,6 @@
         $("#container").css("height", height + "px").css("overflow", "auto").persiaNumber();
 
         initWindow();
-        creatRoleDive();
 
         $('.fixed-action-btn').openFAB();
 
@@ -248,30 +264,45 @@
         );
     }
 
-    function creatRoleDive() {
-        <c:if test="${not empty roleList}">
-        <c:forEach var="entry" items="${roleList}">
+    function ddlHospitalChange() {
+        var hospitalId = $("#ddlHospital option:selected").val();
+        $.ajax({
+            type: "POST",
+            url: "/hospitalSection/api/getHospitalSectionDataByHospitalId",
+            contentType: "application/json; charset=utf-8",
+            dataType: 'json',
+            data: hospitalId.toString(),
+            success: function (data) {
+                $("#roleListDiv").empty();
+                if (data.length > 0) {
+                    createHospitalSectionDiv(data);
+                }
+            }
+        });
+    }
+
+    function createHospitalSectionDiv(data) {
 
         var roleListDiv = $("#roleListDiv");
+        $.each(data, function (index, dataItem) {
 
-        var div = $("<div>").css("width", "48%").css("display", "inline-block").css("margin", "2px");
+            var div = $("<div>").css("width", "48%").css("display", "inline-block").css("margin", "2px");
 
-        var pTag = $('<p>');
+            var pTag = $('<p>');
 
-        var lblRoleName = $("<label>").attr("for", "${entry.roleId}").css("width", "0");
-        var chkRole = $("<input>").attr("type", "checkBox").attr("value", "${entry.roleId}").attr("id", "${entry.roleId}");
-        var lblRoleText = $("<label>").text("${entry.name}").attr("for", "${entry.roleId}").css("vertical-align", "top").css("margin-right", "8px");
+            var lblRoleName = $("<label>").attr("for", dataItem.hospitalSectionId).css("width", "0");
+            var chkRole = $("<input>").attr("type", "checkBox").attr("value", dataItem.hospitalSectionId).attr("id", dataItem.hospitalSectionId.toString());
+            var lblRoleText = $("<label>").text(dataItem.section.title).attr("for", dataItem.hospitalSectionId.toString()).css("vertical-align", "top").css("margin-right", "8px");
 
-        pTag.append(chkRole);
-        pTag.append(lblRoleName);
-        pTag.append(lblRoleText);
+            pTag.append(chkRole);
+            pTag.append(lblRoleName);
+            pTag.append(lblRoleText);
 
-        div.append(pTag);
+            div.append(pTag);
 
-        roleListDiv.append(div);
+            roleListDiv.append(div);
 
-        </c:forEach>
-        </c:if>
+        });
 
     }
 
@@ -342,7 +373,7 @@
                                 dataItem["mobile"] = $("#txtMobile").val();
                                 dataItem["locked"] = $("#chkLocked").is(':checked') ? 1 : 0;
                                 dataItem["imageName"] = imageName;
-                                dataItem["roles"] = roles;
+                                dataItem["hospitalSections"] = roles;
                                 dataArray.push(dataItem);
                                 $.ajax({
                                     type: "POST",
@@ -384,7 +415,7 @@
                 dataItem["mobile"] = $("#txtMobile").val();
                 dataItem["locked"] = $("#chkLocked").is(':checked') ? 1 : 0;
                 dataItem["imageName"] = imageName;
-                dataItem["roles"] = roles;
+                dataItem["hospitalSections"] = roles;
 
                 dataArray.push(dataItem);
                 $.ajax({
@@ -414,7 +445,7 @@
             if (dataItem.childNodes[0].childNodes[0].checked) {
 
                 var item = {};
-                item["roleId"] = dataItem.childNodes[0].childNodes[0].value;
+                item["hospitalSectionId"] = dataItem.childNodes[0].childNodes[0].value;
                 array.push(item);
             }
             ;
@@ -449,9 +480,14 @@
                     $("#chkLocked").prop('checked', user.locked);
                     $("#imgUser").attr("src", "/static/userImage/" + user.imageName);
 
+                    if(user.hospitalSection!= undefined &&user.hospitalSection.length>0)
+                    {
+                        $("#ddlHospital").val(user.hospitalSection[0].hospital.hospitalId.toString()).prop("disabled",true);
+                        createHospitalSectionDiv(user.hospitalSection);
+                        checkRoles(user.usershospitalSection);
+                    }
                     imageName = user.imageName;
 
-                    checkRoles(user.roles)
                     $('#userWindow').modal('open');
                 }
             }
@@ -461,9 +497,9 @@
     function checkRoles(roleList) {
         var checkList = $("#roleListDiv").children();
         $.each(checkList, function (count, dataItem) {
-            $.each(roleList, function (count, role) {
+            $.each(roleList, function (count, hospitalSection) {
 
-                if (dataItem.childNodes[0].childNodes[0].value == role.role.roleId) {
+                if (dataItem.childNodes[0].childNodes[0].value == hospitalSection.hospitalSection.hospitalSectionId) {
                     dataItem.childNodes[0].childNodes[0].checked = true;
 
                 }

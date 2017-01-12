@@ -62,7 +62,7 @@ public class ADAppreciationController {
     }
 
     private List<com.kosarict.entity.Ticket> getAppreciationList() {
-        return ticketDao.getTicketListByTicketTypeId(Constant.AppereciationTicketTypeId);
+        return ticketDao.getTicketListByTicketTypeId(Constant.AppreciationTicketTypeId);
     }
 
     private List<HospitalSection> getSectionList() {

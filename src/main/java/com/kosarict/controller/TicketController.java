@@ -168,7 +168,7 @@ public class TicketController {
             ticket.setTrackingCode(trackingNumber.toString());
             ticket.setTicketType(ticketType);
             ticket.setEnable(true);
-
+            JSONObject result=new JSONObject();
             if (ticketTypeId == Constant.Complaint) {
                 compainer = jsonObject.getInt("compainer");
                 Complainant complainant = complainantDao.findComplainantById(compainer.shortValue());
@@ -176,6 +176,7 @@ public class TicketController {
                 ComplaintType complaintType = complainTypeDao.findComplaintTypeById(complaintTypeId.shortValue());
                 ticket.setComplaintType(complaintType);
                 ticket.setComplainant(complainant);
+                result.put("responceTime",complaintType.getResponceTime());
             } else if (ticketTypeId == Constant.Appereciation) {
                 String appreciationUserName = jsonObject.getString("appreciationUserName");
                 String appreciationUserFamily = jsonObject.getString("appreciationUserFamily");
@@ -184,6 +185,7 @@ public class TicketController {
             }
 
             long newTicketId = ticketDao.saveTicket(ticket);
+
 
             if (ticketTypeId == Constant.Complaint) {
                 if (compainer == 2) {
@@ -200,6 +202,8 @@ public class TicketController {
                     complainantRelation.setNationalCode(registerNationalCode);
 
                     complainantRelationDao.saveComplainantRelation(complainantRelation);
+
+
                 }
 
 
@@ -227,7 +231,8 @@ public class TicketController {
                     ticketAttachmentDao.saveTicketAttachment(ticketAttachment);
                 }
             }
-            return trackingNumber.toString();
+            result.put("trackingNumber",trackingNumber);
+            return result.toString();
 
         } catch (Exception ex) {
             return String.valueOf(false);

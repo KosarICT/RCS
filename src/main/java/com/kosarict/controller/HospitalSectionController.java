@@ -111,6 +111,14 @@ public class HospitalSectionController {
         return getHospitalSectionData().toString();
     }
 
+    @RequestMapping(value = "/hospitalSection/api/getHospitalSectionDataByHospitalId", method = RequestMethod.POST)
+    public
+    @ResponseBody
+    List<HospitalSection> getHospitalSectionByHospitalId(@RequestBody String hospitalId){
+        int id = Integer.parseInt(hospitalId);
+        return hospitalSectionDao.getHospitalSectionsListByHospitalId(id);
+    }
+
     @RequestMapping(value = "/hospitalSection/api/findHospitalSectionByHospitalId", method = RequestMethod.POST)
     public
     @ResponseBody

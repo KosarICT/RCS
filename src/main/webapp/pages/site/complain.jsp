@@ -336,6 +336,8 @@
         <label id="lblTrackingNumber"></label>
         <br/>
         <br/>
+        <label id="lblresponceTime"></label>
+        <label>روز</label>
     </div>
     <div class="divider"></div>
     <div class="modal-footer">
@@ -589,8 +591,9 @@
             data: JSON.stringify(dataArray),
             success: function (data) {
                 debugger;
-                if (data > 0) {
-                    $("#lblTrackingNumber").text("کد رهگیری شکایت شما:" + data);
+                if (data != false) {
+                    $("#lblTrackingNumber").text("کد رهگیری شکایت شما:" + data.trackingNumber);
+                    $("#lblresponceTime").text("زمان پاسخگویی به شکایت شما"+data.responceTime);
                     $('#trackingNumberWindow').modal('open');
                 } else {
                     Materialize.toast('خطا درانجام عملیات', 4000, 'error-toast');
@@ -638,7 +641,6 @@
     function ddlHospitalChange() {
         var hospitalId = $("#ddlHospital option:selected").val();
 
-        debugger;
         $.ajax({
             type: "POST",
             url: "/offer/api/getSection",

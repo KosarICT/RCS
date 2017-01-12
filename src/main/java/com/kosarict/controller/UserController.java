@@ -112,40 +112,40 @@ public class UserController {
             int newUserId = userDao.saveUser(user);
 
 
-            List<UserRole> userRoles=userRoleDao.getUserRole(newUserId);
-            JSONArray roles=jsonObject.getJSONArray("roles");
+            List<UsersHospitalSection> usersHospitalSectionList=userSectionDao.findUserHospitalSectionByUserId(newUserId);
+            JSONArray hospitalSection = jsonObject.getJSONArray("hospitalSections");
 
-            for (UserRole userRole :userRoles){
-                int length=roles.length();
+            for (UsersHospitalSection usersHospitalSection :usersHospitalSectionList){
+                int length=hospitalSection.length();
                 int i=0;
                 for (;i<length;i++){
-                    JSONObject userRoleJSONObject = roles.getJSONObject(i);
+                    JSONObject userHospitalSectionJSONObject = hospitalSection.getJSONObject(i);
 
-                    int roleId = userRoleJSONObject.getInt("roleId");
+                    int hospitalSectionId = userHospitalSectionJSONObject.getInt("hospitalSectionId");
 
-                    if (roleId == userRole.getRole().getRoleId()) {
-                        roles.remove(i);
+                    if (hospitalSectionId == usersHospitalSection.getHospitalSection().getHospitalSectionId()) {
+                        hospitalSection.remove(i);
                         break;
                     }
                 }
 
                 if(i==length){
-                    userRoleDao.deleteUserRole(userRole.getUserRoleId());
+                    userSectionDao.deleteUserHospitalSection(usersHospitalSection.getUsersHospitalSectionId());
                 }
             }
 
             int j=0;
             Users users=userDao.findUserById(newUserId);
-            for (;j<roles.length();j++){
-                UserRole userRole=new UserRole();
-                JSONObject userRoleJSONObject = roles.getJSONObject(j);
+            for (;j<hospitalSection.length();j++){
+                UsersHospitalSection usersHospitalSection = new UsersHospitalSection();
+                JSONObject userRoleJSONObject = hospitalSection.getJSONObject(j);
 
-                Integer roleId = userRoleJSONObject.getInt("roleId");
-                Role role=roleDao.getRole(roleId.shortValue());
-                userRole.setUsers(users);
-                userRole.setRole(role);
+                Integer hospitalSectionId = userRoleJSONObject.getInt("hospitalSectionId");
+                HospitalSection hospitalSection1=hospitalSectionDao.findHospitalSectionById(hospitalSectionId);
+                usersHospitalSection.setUser(users);
+                usersHospitalSection.setHospitalSection(hospitalSection1);
 
-                userRoleDao.save(userRole);
+                userSectionDao.saveUserHospitalSection(usersHospitalSection);
             }
 
 
@@ -168,9 +168,12 @@ public class UserController {
             int id = Integer.parseInt(userId);
 
             Users user = userDao.findUserById(id);
-            //List<UsersHospitalSection> usersHospitalSection = userSectionDao.findUserHospitalSectionByUserId(id);
+            List<UsersHospitalSection> usersHospitalSection = userSectionDao.findUserHospitalSectionByUserId(id);
 
-            List<UserRole> rolesUser=userRoleDao.getUserRole(id);
+
+
+
+            //List<UserRole> rolesUser=userRoleDao.getUserRole(id);
             if (user != null) {
                 JSONObject jsonObject = new JSONObject();
 
@@ -184,8 +187,12 @@ public class UserController {
                 jsonObject.put("tel", user.getTel());
                 jsonObject.put("mobile", user.getMobile());
                 jsonObject.put("locked", user.getLocked());
-                //jsonObject.put("hospitalSection", usersHospitalSection);
-                jsonObject.put("roles",rolesUser);
+                jsonObject.put("usershospitalSection", usersHospitalSection);
+                if(usersHospitalSection.size()>0){
+                    List<HospitalSection> hospitalSections=hospitalSectionDao.getHospitalSectionsListByHospitalId(usersHospitalSection.get(0).getHospitalSection().getHospital().getHospitalId());
+                    jsonObject.put("hospitalSection", hospitalSections);
+                }
+                //jsonObject.put("roles",rolesUser);
 
                 jsonArray.put(jsonObject);
             }
