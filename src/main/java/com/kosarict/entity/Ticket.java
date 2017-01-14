@@ -31,6 +31,7 @@ public class Ticket {
     private String persnolFirstName;
     private String persnolLastName;
     private Integer raiting;
+    private TicketStatus ticketStatus;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -243,7 +244,6 @@ public class Ticket {
         this.persnolLastName = persnolLastName;
     }
 
-
     @Basic
     @Column(name = "Raiting")
     public Integer getRaiting() {
@@ -253,4 +253,15 @@ public class Ticket {
     public void setRaiting(Integer raiting) {
         this.raiting = raiting;
     }
+
+    @ManyToOne
+    @Column(name = "TicketStatus_Id")
+    public TicketStatus getTicketStatus() {
+        return ticketStatus;
+    }
+
+    public void setTicketStatus(TicketStatus ticketStatus) {
+        this.ticketStatus = ticketStatus;
+    }
+
 }

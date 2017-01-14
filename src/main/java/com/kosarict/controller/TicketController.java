@@ -66,6 +66,8 @@ public class TicketController {
     @Autowired
     private TicketTypeDao ticketTypeDao;
 
+    @Autowired
+    private TicketStatusDao ticketStatusDao;
 
     @RequestMapping(value = "/ticket/api/getData", method = RequestMethod.POST)
     public
@@ -146,6 +148,8 @@ public class TicketController {
 
             TicketType ticketType = ticketTypeDao.getTicketType(ticketTypeId.shortValue());
             SendType sendType = sendTypeDao.findSendTypeById((short) Constant.SendTypeSite);
+            TicketStatus ticketStatus= ticketStatusDao.findTicketStatusById(Constant.Pending);
+
 
             Integer trackingNumber = trackingNumber();
 
@@ -167,6 +171,7 @@ public class TicketController {
             ticket.setEmail(complainEmail);
             ticket.setTrackingCode(trackingNumber.toString());
             ticket.setTicketType(ticketType);
+            ticket.setTicketStatus(ticketStatus);
             ticket.setEnable(true);
             JSONObject result=new JSONObject();
             if (ticketTypeId == Constant.Complaint) {

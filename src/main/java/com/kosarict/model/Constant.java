@@ -20,4 +20,6 @@ public class Constant {
     public static short CriticismTicketTypeId = 4;
 
     public static short SendTypeSite = 1;
+
+    public static short Pending=1;
 }
