@@ -28,9 +28,6 @@ public class TicketController {
     private TicketDao ticketDao;
 
     @Autowired
-    private RelationDao relationDao;
-
-    @Autowired
     private ComplainTypeDao complainTypeDao;
 
     @Autowired
@@ -54,8 +51,6 @@ public class TicketController {
     @Autowired
     private UserDao userDao;
 
-    @Autowired
-    private ServletContext servletContext;
 
     @Autowired
     private TicketErrandDao ticketErrandDao;
@@ -66,17 +61,14 @@ public class TicketController {
     @Autowired
     private TicketTypeDao ticketTypeDao;
 
-
     @RequestMapping(value = "/ticket/api/getData", method = RequestMethod.POST)
     public
     @ResponseBody
-    String getData(@RequestBody String model) {
-        JSONArray jsonArray = new JSONArray(model);
-        JSONObject jsonObject = jsonArray.getJSONObject(0);
+    String getData(@RequestBody String ticketTypeId) {
 
-        int ticketTypeId = jsonObject.getInt("ticketTypeId");
+        short typeId = Short.parseShort(ticketTypeId);
 
-        List<Ticket> ticketList = ticketDao.getTicketListByTicketTypeId((short) ticketTypeId);
+        List<Ticket> ticketList = ticketDao.getTicketListByTicketTypeId((short) typeId);
 
         JSONArray dataArray = new JSONArray();
 
@@ -91,12 +83,12 @@ public class TicketController {
             dataItem.put("sendTypeTitle", ticket.getSendType().getTitle());
             dataItem.put("submitDate", ticket.getSubmitDate());
 
-            if (ticketTypeId == Constant.AppreciationTicketTypeId) {
+            if (typeId == Constant.AppreciationTicketTypeId) {
 
-            } else if (ticketTypeId == Constant.ComplainTicketTypeId) {
+            } else if (typeId == Constant.ComplainTicketTypeId) {
                 dataItem.put("complainantTitle", ticket.getComplainant().getTitle());
                 dataItem.put("complaintTypeTitle", ticket.getComplaintType().getTitle());
-            } else if (ticketTypeId == Constant.OfferTicketTypeId) {
+            } else if (typeId == Constant.OfferTicketTypeId) {
 
             } else {
 
@@ -168,7 +160,7 @@ public class TicketController {
             ticket.setTrackingCode(trackingNumber.toString());
             ticket.setTicketType(ticketType);
             ticket.setEnable(true);
-            JSONObject result=new JSONObject();
+
             if (ticketTypeId == Constant.Complaint) {
                 compainer = jsonObject.getInt("compainer");
                 Complainant complainant = complainantDao.findComplainantById(compainer.shortValue());
@@ -176,7 +168,6 @@ public class TicketController {
                 ComplaintType complaintType = complainTypeDao.findComplaintTypeById(complaintTypeId.shortValue());
                 ticket.setComplaintType(complaintType);
                 ticket.setComplainant(complainant);
-                result.put("responceTime",complaintType.getResponceTime());
             } else if (ticketTypeId == Constant.Appereciation) {
                 String appreciationUserName = jsonObject.getString("appreciationUserName");
                 String appreciationUserFamily = jsonObject.getString("appreciationUserFamily");
@@ -185,7 +176,6 @@ public class TicketController {
             }
 
             long newTicketId = ticketDao.saveTicket(ticket);
-
 
             if (ticketTypeId == Constant.Complaint) {
                 if (compainer == 2) {
@@ -202,8 +192,6 @@ public class TicketController {
                     complainantRelation.setNationalCode(registerNationalCode);
 
                     complainantRelationDao.saveComplainantRelation(complainantRelation);
-
-
                 }
 
 
@@ -231,8 +219,7 @@ public class TicketController {
                     ticketAttachmentDao.saveTicketAttachment(ticketAttachment);
                 }
             }
-            result.put("trackingNumber",trackingNumber);
-            return result.toString();
+            return trackingNumber.toString();
 
         } catch (Exception ex) {
             return String.valueOf(false);
@@ -254,10 +241,18 @@ public class TicketController {
 
             ticketJson.put("ticket_Id", ticket.getTicketId());
             ticketJson.put("ticketType_Id", ticketTypeId);
-            if (ticketTypeId == Constant.ComplainTicketTypeId) {
-                ticketJson.put("complainType_Id", ticket.getComplaintType().getComplaintTypeId());
-                ticketJson.put("complainant_Id", ticket.getComplainant().getComplainantId());
+
+            if (ticketTypeId != Constant.OfferTicketTypeId) {
+                ticketJson.put("shiftTitle", ticket.getShift().getTitle());
             }
+
+            if (ticketTypeId == Constant.ComplainTicketTypeId) {
+                ticketJson.put("complaintTypeTitle", ticket.getComplaintType().getTitle());
+                ticketJson.put("complainant_Id", ticket.getComplainant().getComplainantId());
+                ticketJson.put("complainantTitle", ticket.getComplainant().getTitle());
+
+            }
+
             if (ticketTypeId != Constant.OfferTicketTypeId) {
                 ticketJson.put("shift_Id", ticket.getShift().getShiftId());
                 ticketJson.put("persnolFirstName", ticket.getPersnolFirstName());
@@ -266,16 +261,15 @@ public class TicketController {
             }
 
             ticketJson.put("hospitalName", ticket.getHospital().getName());
-
+            ticketJson.put("hospitalId", ticket.getHospital().getHospitalId());
             ticketJson.put("sectionTitle", ticket.getSection().getTitle());
             ticketJson.put("sendType_Id", ticket.getSendType().getSendTypeId());
-
             ticketJson.put("firstName", ticket.getFirstName());
             ticketJson.put("lastName", ticket.getLastName());
-
             ticketJson.put("nationalCode", ticket.getNationalCode());
             ticketJson.put("phoneNumber", ticket.getPhoneNumber());
             ticketJson.put("mobile", ticket.getMobile());
+            ticketJson.put("tel", ticket.getPhoneNumber());
             ticketJson.put("subject", ticket.getSubject());
             ticketJson.put("description", ticket.getDescription());
             ticketJson.put("submitDate", ticket.getSubmitDate());
@@ -305,6 +299,5 @@ public class TicketController {
         }
         return trackingNumber;
     }
-
 
 }

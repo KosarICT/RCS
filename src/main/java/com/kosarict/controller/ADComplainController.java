@@ -28,41 +28,84 @@ public class ADComplainController {
     private UserDao userDao;
 
     @Autowired
+    private UserSectionDao userSectionDao;
+    @Autowired
     private TicketDao ticketDao;
 
     @Autowired
     private HospitalSectionDao hospitalSectionDao;
 
     @Autowired
+    private ComplainDao complainDao;
 
+    @Autowired
+    private SectionDao sectionDao;
+
+    @Autowired
+    private ComplainErrandDao complainErrandDao;
 
     @RequestMapping(value = "/adComplain", method = RequestMethod.GET)
     public ModelAndView getComplainView() {
         ModelAndView model = new ModelAndView("adComplain");
-        model.addObject("complainLists", getComplainList());
         model.addObject("hospitalSectionList", getSectionList());
 
         return model;
     }
 
-    @RequestMapping(value = "/adComplain/api/getData", method = RequestMethod.GET)
+    @RequestMapping(value = "/adComplain/api/saveComplainErrand", method = RequestMethod.POST)
     public
     @ResponseBody
-    String getData() {
+    String saveComplainErrand(@RequestBody String model) {
+        try {
+            JSONArray jsonArray = new JSONArray(model);
+            JSONObject jsonObject = jsonArray.getJSONObject(0);
+
+            long ticketId = jsonObject.getLong("ticketId");
+            int userId = jsonObject.getInt("userId");
+            String description = jsonObject.getString("description");
+
+            PersianCalendar persianCalendar = new PersianCalendar();
+            String currentDate = persianCalendar.getIranianSimpleDate();
+
+            Ticket ticket = ticketDao.findTicketById(ticketId);
+            Users user = userDao.findUserById(userId);
+
+            ComplainErrand complainErrand = new ComplainErrand();
+
+            complainErrand.setComplainErrandId(0);
+//            complainErrand.setComplain(complain);
+            complainErrand.setCreateUser(getCurrentUser());
+            complainErrand.setAssignedUser(user);
+            complainErrand.setSubmitDate(currentDate);
+            complainErrand.setView(false);
+            complainErrand.setDescription(description);
+
+            complainErrandDao.saveComplainErrand(complainErrand);
+
+            return String.valueOf(true);
+
+        } catch (Exception ex) {
+            return String.valueOf(false);
+        }
+    }
+
+    @RequestMapping(value = "/adComplain/api/getUserOfSection", method = RequestMethod.POST)
+    public
+    @ResponseBody
+    String getUserOfSection(@RequestBody String sectionId) {
+        int id = Integer.parseInt(sectionId);
+
+        List<UsersHospitalSection> userSectionList = userSectionDao.getUserSectionBySectionId(id);
+
         JSONArray jsonArray = new JSONArray();
 
-        for (Ticket ticket : getComplainList()) {
-
+        for (UsersHospitalSection userSection : userSectionList) {
             JSONObject jsonObject = new JSONObject();
 
-            jsonObject.put("ticketId", ticket.getTicketId());
-            jsonObject.put("complainantTitle", ticket.getComplainant().getTitle());
-            jsonObject.put("name", ticket.getFirstName() + " " + ticket.getLastName());
-            jsonObject.put("nationalCode", ticket.getNationalCode());
-            jsonObject.put("hospitalName", ticket.getHospital().getName());
-            jsonObject.put("complaintTypeTitle", ticket.getComplaintType().getTitle());
-            jsonObject.put("submitDate", ticket.getSubmitDate());
-            jsonObject.put("sendTypeTitle", ticket.getSendType().getTitle());
+            Users user = userDao.findUserById(userSection.getUser().getUserId());
+
+            jsonObject.put("userId", user.getUserId());
+            jsonObject.put("name", user.getFirstName() + " " + user.getLastName());
 
             jsonArray.put(jsonObject);
         }
@@ -70,12 +113,46 @@ public class ADComplainController {
         return jsonArray.toString();
     }
 
-    private List<Ticket> getComplainList() {
-        return ticketDao.getTicketListByTicketTypeId(Constant.ComplainTicketTypeId);
+    @RequestMapping(value = "/adComplain/api/getHospitalSection", method = RequestMethod.POST)
+    public
+    @ResponseBody
+    String getHospitalSection(@RequestBody String hospitalId) {
+
+        int id = Integer.parseInt(hospitalId);
+
+        List<HospitalSection> hospitalSectionList = hospitalSectionDao.getHospitalSectionsListByHospitalId(id);
+
+        JSONArray jsonArray = new JSONArray();
+
+        for (HospitalSection hospitalSection : hospitalSectionList) {
+
+            JSONObject jsonObject = new JSONObject();
+
+            Section section = sectionDao.findSectionById(hospitalSection.getSection().getSectionId());
+
+            jsonObject.put("sectionId", section.getSectionId());
+            jsonObject.put("sectionTitle", section.getTitle());
+
+            jsonArray.put(jsonObject);
+        }
+
+        return jsonArray.toString();
+    }
+
+    private List<ComplainErrand> getComplainList() {
+        return complainDao.getComplainListByUserId(getCurrentUser().getUserId());
     }
 
     private List<HospitalSection> getSectionList() {
         return hospitalSectionDao.getHospitalSectionsListByHospitalId(Constant.hospitalId);
     }
 
+    private Users getCurrentUser() {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        String userName = userDetails.getUsername();
+        Users user = userDao.findUserByUserName(userName);
+
+        return user;
+    }
 }

@@ -111,9 +111,21 @@ public class TicketDaoImpl implements TicketDao {
             }
 
             return isExist;
-        }catch (Exception ex){
+        } catch (Exception ex) {
             return false;
         }
+    }
+
+    @Override
+    public List<Ticket> getTop10Ticket()
+
+    {
+        String queryString = "SELECT ticket FROM Ticket ticket WHERE ticket.enable = true order by ticket.id desc ";
+
+
+        Query query = entityManager.createQuery(queryString);
+
+        return query.setMaxResults(10).getResultList();
     }
 
 }

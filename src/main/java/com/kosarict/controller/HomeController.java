@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -45,7 +46,8 @@ public class HomeController {
     @Autowired
     private ComplainantDao complainantDao;
 
-
+    @Autowired
+    private TicketDao ticketDao;
 
 
     @RequestMapping(value = "/admin", method = RequestMethod.GET)
@@ -101,6 +103,32 @@ public class HomeController {
         Users user = userDao.findUserByUserName(userName);
 
         return user;
+    }
+
+    @RequestMapping(value = "/admin/api/getTop10Ticket", method = RequestMethod.GET)
+    public
+    @ResponseBody
+    String getTop10Ticket() {
+
+        List<Ticket> ticketList = ticketDao.getTop10Ticket();
+
+        JSONArray dataArray = new JSONArray();
+
+        for (Ticket ticket : ticketList) {
+
+            JSONObject dataItem = new JSONObject();
+
+            dataItem.put("ticketTypeTitle", ticket.getTicketType().getTitle());
+            dataItem.put("ticketSubject", ticket.getSubject());
+            dataItem.put("sectionTitle", ticket.getSection().getTitle());
+            dataItem.put("sendTypeTitle", ticket.getSendType().getTitle());
+            dataItem.put("submitDate", ticket.getSubmitDate());
+            dataItem.put("hospitalName", ticket.getHospital().getName());
+
+            dataArray.put(dataItem);
+        }
+
+        return dataArray.toString();
     }
 
     private List<Relation> getRelationLists() {
