@@ -18,6 +18,7 @@ public class TicketErrand {
     private Users assignedUser;
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "TicketErrand_Id")
     public long getTicketErrandId() {
         return ticketErrandId;

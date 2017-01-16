@@ -66,6 +66,11 @@ public class TicketController {
     @Autowired
     private TicketTypeDao ticketTypeDao;
 
+    @Autowired
+    private TicketUserSeenDao ticketUserSeenDao;
+
+    @Autowired
+    private  TicketStatusDao ticketStatusDao;
 
     @RequestMapping(value = "/ticket/api/getData", method = RequestMethod.POST)
     public
@@ -116,7 +121,6 @@ public class TicketController {
             JSONArray jsonArray = new JSONArray(model);
             JSONObject jsonObject = jsonArray.getJSONObject(0);
 
-            
             long ticketId = jsonObject.getLong("ticketId");
             Integer ticketTypeId = jsonObject.getInt("ticketTypeId");
             int hospitalId = jsonObject.getInt("hospitalId");
@@ -148,6 +152,8 @@ public class TicketController {
             TicketType ticketType = ticketTypeDao.getTicketType(ticketTypeId.shortValue());
             SendType sendType = sendTypeDao.findSendTypeById((short) Constant.SendTypeSite);
 
+            TicketStatus ticketStatus=ticketStatusDao.findTicketStatusById(Constant.Pending);
+
             Integer trackingNumber = trackingNumber();
 
             ticket.setTicketId(ticketId);
@@ -166,9 +172,11 @@ public class TicketController {
             ticket.setDescription(complainDescription);
             ticket.setSubmitDate(currentDate);
             ticket.setEmail(complainEmail);
+            ticket.setTicketStatus(ticketStatus);
             ticket.setTrackingCode(trackingNumber.toString());
             ticket.setTicketType(ticketType);
             ticket.setEnable(true);
+
             JSONObject result=new JSONObject();
             if (ticketTypeId == Constant.Complaint) {
                 compainer = jsonObject.getInt("compainer");
@@ -186,6 +194,13 @@ public class TicketController {
             }
 
             long newTicketId = ticketDao.saveTicket(ticket);
+
+            Ticket ticket1 = ticketDao.findTicketById(newTicketId);
+            List<UsersHospitalSection> userAdminSections = ticketDao.forwardTicket(hospitalId, Constant.AdminSection);
+            TicketUserSeen ticketUserSeen=new TicketUserSeen();
+            ticketUserSeen.setTicket(ticket1);
+            ticketUserSeen.setUser(userAdminSections.get(0).getUser());
+            ticketUserSeenDao.saveTicketUserSeen(ticketUserSeen);
 
 
             if (ticketTypeId == Constant.Complaint) {
@@ -213,7 +228,7 @@ public class TicketController {
                     UsersHospitalSection userSection = userSections.get(0);
                     Users users = userDao.findUserById(userSection.getUser().getUserId());
                     TicketErrand ticketErrand = new TicketErrand();
-                    Ticket ticket1 = ticketDao.findTicketById(newTicketId);
+
 
                     ticketErrand.setTicket(ticket1);
                     ticketErrand.setAssignedUser(users);
