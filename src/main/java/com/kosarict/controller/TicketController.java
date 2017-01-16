@@ -116,6 +116,7 @@ public class TicketController {
             JSONArray jsonArray = new JSONArray(model);
             JSONObject jsonObject = jsonArray.getJSONObject(0);
 
+            
             long ticketId = jsonObject.getLong("ticketId");
             Integer ticketTypeId = jsonObject.getInt("ticketTypeId");
             int hospitalId = jsonObject.getInt("hospitalId");
