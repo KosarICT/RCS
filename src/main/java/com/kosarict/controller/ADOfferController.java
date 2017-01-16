@@ -32,41 +32,38 @@ public class ADOfferController {
     public ModelAndView getAppreciationView() {
         ModelAndView model = new ModelAndView("adOffer");
 
-        model.addObject("offerList", getOfferList());
-        model.addObject("hospitalSectionList", getSectionList());
         return model;
     }
 
-    @RequestMapping(value = "/adOffer/api/getAllOfferData", method = RequestMethod.GET)
+    @RequestMapping(value = "/adOffer/api/getAllAppreciationData", method = RequestMethod.GET)
     public
     @ResponseBody
-    String getAllOfferData() {
-        JSONArray jsonArray = new JSONArray();
+    String getAllAppreciationData() {
+        try {
 
-        for (Ticket ticket : getOfferList()) {
+            JSONArray ticketArray = new JSONArray();
 
-            JSONObject jsonObject = new JSONObject();
+            List<Ticket> ticketList = ticketDao.getTicketListByTicketTypeId(Constant.AppreciationTicketTypeId);
 
-            jsonObject.put("ticketId", ticket.getTicketId());
-            jsonObject.put("name", ticket.getFirstName() + " " + ticket.getLastName());
-            jsonObject.put("nationalCode", ticket.getNationalCode());
-            jsonObject.put("subject", ticket.getSubject());
-            jsonObject.put("hospitalName", ticket.getHospital().getName());
-            jsonObject.put("sectionName", ticket.getSection().getTitle());
-            jsonObject.put("submitDate", ticket.getSubmitDate());
-            jsonObject.put("sendTypeTitle", ticket.getSendType().getTitle());
+            for (Ticket ticket : ticketList) {
 
-            jsonArray.put(jsonObject);
+                JSONObject ticketJson = new JSONObject();
+
+                ticketJson.put("ticketId", ticket.getTicketId());
+                ticketJson.put("name", ticket.getFirstName() + " " + ticket.getLastName());
+                ticketJson.put("personnelName", ticket.getPersnolFirstName() + " " + ticket.getPersnolLastName());
+                ticketJson.put("nationalCode", ticket.getNationalCode());
+                ticketJson.put("hospitalName", ticket.getHospital().getName());
+                ticketJson.put("sectionName", ticket.getSection().getTitle());
+                ticketJson.put("sendTypeTitle", ticket.getSendType().getTitle());
+                ticketJson.put("submitDate", ticket.getSubmitDate());
+
+                ticketArray.put(ticketJson);
+            }
+            return ticketArray.toString();
+        } catch (Exception ex) {
+            return "";
         }
-
-        return jsonArray.toString();
     }
 
-    private List<Ticket> getOfferList() {
-        return ticketDao.getTicketListByTicketTypeId(Constant.OfferTicketTypeId);
-    }
-
-    private List<HospitalSection> getSectionList() {
-        return hospitalSectionDao.getHospitalSectionsListByHospitalId(Constant.hospitalId);
-    }
 }

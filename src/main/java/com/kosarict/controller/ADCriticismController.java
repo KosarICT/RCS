@@ -41,42 +41,8 @@ public class ADCriticismController {
     @RequestMapping(value = "/adCriticism", method = RequestMethod.GET)
     public ModelAndView getComplainView() {
         ModelAndView model = new ModelAndView("adCriticism");
-        model.addObject("criticismLists", getCriticismList());
-        model.addObject("hospitalSectionList", getSectionList());
 
         return model;
-    }
-
-    @RequestMapping(value = "/adCriticism/api/getCriticismData", method = RequestMethod.GET)
-    public
-    @ResponseBody
-    String getCriticismData() {
-        JSONArray jsonArray = new JSONArray();
-
-        for (Ticket ticket : getCriticismList()) {
-
-            JSONObject jsonObject = new JSONObject();
-
-            jsonObject.put("ticketId", ticket.getTicketId());
-            jsonObject.put("name", ticket.getFirstName() + " " + ticket.getLastName());
-            jsonObject.put("nationalCode", ticket.getNationalCode());
-            jsonObject.put("subject", ticket.getSubject());
-            jsonObject.put("hospitalName", ticket.getHospital().getName());
-            jsonObject.put("sectionTitle", ticket.getSection().getTitle());
-            jsonObject.put("submitDate", ticket.getSubmitDate());
-            jsonObject.put("sendTypeTitle", ticket.getSendType().getTitle());
-            jsonArray.put(jsonObject);
-        }
-
-        return jsonArray.toString();
-    }
-
-    private List<Ticket> getCriticismList() {
-        return ticketDao.getTicketListByTicketTypeId(Constant.CriticismTicketTypeId);
-    }
-
-    private List<HospitalSection> getSectionList() {
-        return hospitalSectionDao.getHospitalSectionsListByHospitalId(Constant.hospitalId);
     }
 
 }

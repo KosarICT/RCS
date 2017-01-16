@@ -26,4 +26,6 @@ public interface TicketDao {
     List<UsersHospitalSection> forwardTicket(int hospitalId, int sectionId);
 
     boolean trackingCodeIsExist(String trackingCode);
+
+    List<Ticket> getTop10Ticket();
 }
