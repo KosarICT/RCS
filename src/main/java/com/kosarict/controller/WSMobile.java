@@ -50,20 +50,22 @@ public class WSMobile {
             String userName = URLDecoder.decode(parameter.get("User").get(0), "UTF-8");
             String password = URLDecoder.decode(parameter.get("Password").get(0), "UTF-8");
 
-            List<Users> usersList = userDao.checkUser(userName, password);
+            Users user = userDao.findUserByUserName(userName);
 
             List<Tab> tabList = tabDao.getAllMobileTabList();
 
-            if (usersList.size() > 0) {
-                Users currentUser = usersList.get(0);
-
-                if (currentUser.getLocked() != 0) {
-                    jsonObject.put("status", "disable");
-                    jsonObject.put("description", "disable");
-                } else {
+            if (user !=null) {
+                if (user.getPassword()==password && user.getLocked() == 0) {
                     jsonObject.put("status", "ok");
                     jsonObject.put("description", "ok");
                     jsonObject.put("tabList", tabList);
+
+                }else if(user.getPassword()!=password){
+                    jsonObject.put("status", "disable");
+                    jsonObject.put("description", "wrong password");
+                } else {
+                    jsonObject.put("status", "disable");
+                    jsonObject.put("description", "disable");
                 }
 
                 jsonArray.put(jsonObject);

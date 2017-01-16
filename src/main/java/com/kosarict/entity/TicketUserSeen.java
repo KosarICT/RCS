@@ -1,9 +1,6 @@
 package com.kosarict.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * Created by Ali-Pc on 1/2/2017.
@@ -12,8 +9,11 @@ import javax.persistence.Table;
 @Table(name = "TicketUserSeen", schema = "dbo", catalog = "")
 public class TicketUserSeen {
     private long ticketUserSeenId;
+    private Ticket ticket;
+    private Users user;
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "TicketUserSeen_Id")
     public long getTicketUserSeenId() {
         return ticketUserSeenId;
@@ -23,20 +23,23 @@ public class TicketUserSeen {
         this.ticketUserSeenId = ticketUserSeenId;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        TicketUserSeen that = (TicketUserSeen) o;
-
-        if (ticketUserSeenId != that.ticketUserSeenId) return false;
-
-        return true;
+    @ManyToOne
+    @JoinColumn(name = "Ticket_Id")
+    public Ticket getTicket() {
+        return ticket;
     }
 
-    @Override
-    public int hashCode() {
-        return (int) (ticketUserSeenId ^ (ticketUserSeenId >>> 32));
+    public void setTicket(Ticket ticket ){
+        this.ticket = ticket;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "User_Id")
+    public Users getUser() {
+        return user;
+    }
+
+    public void setUser(Users user) {
+        this.user = user;
     }
 }

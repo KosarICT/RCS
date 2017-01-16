@@ -69,6 +69,9 @@ public class TicketController {
     @Autowired
     private TicketStatusDao ticketStatusDao;
 
+    @Autowired
+    private TicketUserSeenDao ticketUserSeenDao;
+
     @RequestMapping(value = "/ticket/api/getData", method = RequestMethod.POST)
     public
     @ResponseBody
@@ -190,6 +193,15 @@ public class TicketController {
             }
 
             long newTicketId = ticketDao.saveTicket(ticket);
+
+            List<UsersHospitalSection> userAdminSections = ticketDao.forwardTicket(hospitalId, Constant.AdminSection);
+
+            TicketUserSeen ticketUserSeen=new TicketUserSeen();
+
+            ticketUserSeen.setUser(userAdminSections.get(0).getUser());
+            ticketUserSeen.setTicket(ticket);
+
+            ticketUserSeenDao.saveTicketUserSeen(ticketUserSeen);
 
 
             if (ticketTypeId == Constant.Complaint) {

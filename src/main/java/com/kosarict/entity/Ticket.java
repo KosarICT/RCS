@@ -255,7 +255,7 @@ public class Ticket {
     }
 
     @ManyToOne
-    @Column(name = "TicketStatus_Id")
+    @JoinColumn(name = "TicketStatus_Id")
     public TicketStatus getTicketStatus() {
         return ticketStatus;
     }

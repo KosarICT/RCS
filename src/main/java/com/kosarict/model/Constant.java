@@ -22,4 +22,6 @@ public class Constant {
     public static short SendTypeSite = 1;
 
     public static short Pending=1;
+
+    public static short AdminSection=1;
 }
