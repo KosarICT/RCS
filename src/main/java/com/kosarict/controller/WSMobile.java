@@ -1,12 +1,12 @@
 package com.kosarict.controller;
 
-import com.kosarict.dao.TabDao;
-import com.kosarict.dao.UserDao;
-import com.kosarict.entity.Tab;
-import com.kosarict.entity.Users;
+import com.kosarict.dao.*;
+import com.kosarict.entity.*;
 import com.kosarict.model.Constant;
-import org.codehaus.jettison.json.JSONArray;
+import com.kosarict.tools.PersianCalendar;
+import org.json.JSONArray;
 import org.json.JSONObject;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -34,6 +34,14 @@ public class WSMobile {
     @Autowired
     private TabDao tabDao;
 
+    @Autowired
+    private TicketDao ticketDao;
+
+    @Autowired
+    private TicketStatusDao ticketStatusDao;
+
+    @Autowired
+    private TicketErrandDao ticketErrandDao;
 
     @RequestMapping(value = "/ws/api/checkUser", method = RequestMethod.POST)
     public
@@ -109,6 +117,63 @@ public class WSMobile {
         }
     }
 
+    @RequestMapping(value = "ws/api/getTicket",method = RequestMethod.POST)
+    public
+    @ResponseBody
+    String getTicket(){
+        List<Ticket> tickets=ticketDao.getAllTicketList();
+
+        JSONObject jsonObject = new JSONObject();
+        JSONArray jsonArray = new org.json.JSONArray();
+
+        jsonObject.put("tickets",tickets);
+        jsonArray.put(jsonObject);
+
+        return jsonArray.toString();
+
+    }
+
+    @RequestMapping(value = "ws/api/Ended",method = RequestMethod.POST)
+    public
+    @ResponseBody
+    void EndedTicket(@RequestBody String ticketId){
+        Long id = Long.parseLong(ticketId);
+        Ticket ticket = ticketDao.findTicketById(id);
+
+        TicketStatus ticketStatus=ticketStatusDao.findTicketStatusById(Constant.Ended);
+
+        ticket.setTicketStatus(ticketStatus);
+
+        ticketDao.saveTicket(ticket);
+    }
+
+    @RequestMapping(value = "ws/api/Errand",method = RequestMethod.POST)
+    public
+    @ResponseBody
+    void ErrandTicket(@RequestBody String model){
+        JSONArray jsonArray = new JSONArray(model);
+        JSONObject jsonObject = jsonArray.getJSONObject(0);
+
+        long ticketId = jsonObject.getLong("ticketId");
+        Integer creatorId = jsonObject.getInt("creatorId");
+        int assignedlId = jsonObject.getInt("assigneId");
+        String description = jsonObject.getString("description");
+        Ticket ticket = ticketDao.findTicketById(ticketId);
+        Users creatorUser=userDao.findUserById(creatorId);
+        Users assignedUser=userDao.findUserById(assignedlId);
+        PersianCalendar persianCalendar = new PersianCalendar();
+        String currentDate = persianCalendar.getIranianSimpleDate();
+
+        TicketErrand ticketErrand = new TicketErrand();
+        ticketErrand.setTicket(ticket);
+        ticketErrand.setAssignedUser(assignedUser);
+        ticketErrand.setCreateUser(creatorUser);
+        ticketErrand.setSubmitDate(currentDate);
+        ticketErrand.setDescription(description);
+
+        ticketErrandDao.saveTicketErrand(ticketErrand);
+
+    }
 
     private Map<String, List<String>> splitQuery(URL url) throws UnsupportedEncodingException {
         final Map<String, List<String>> query_pairs = new LinkedHashMap<String, List<String>>();
