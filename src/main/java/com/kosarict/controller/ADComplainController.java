@@ -42,7 +42,10 @@ public class ADComplainController {
     private SectionDao sectionDao;
 
     @Autowired
-    private ComplainErrandDao complainErrandDao;
+    private TicketErrandDao ticketErrandDao;
+
+    @Autowired
+    private TicketStatusDao ticketStatusDao;
 
     @RequestMapping(value = "/adComplain", method = RequestMethod.GET)
     public ModelAndView getComplainView() {
@@ -70,17 +73,17 @@ public class ADComplainController {
             Ticket ticket = ticketDao.findTicketById(ticketId);
             Users user = userDao.findUserById(userId);
 
-            ComplainErrand complainErrand = new ComplainErrand();
+            TicketErrand ticketErrand = new TicketErrand();
 
-            complainErrand.setComplainErrandId(0);
-//            complainErrand.setComplain(complain);
-            complainErrand.setCreateUser(getCurrentUser());
-            complainErrand.setAssignedUser(user);
-            complainErrand.setSubmitDate(currentDate);
-            complainErrand.setView(false);
-            complainErrand.setDescription(description);
+            ticketErrand.setTicketErrandId(0);
+            ticketErrand.setTicket(ticket);
+            ticketErrand.setCreateUser(getCurrentUser());
+            ticketErrand.setAssignedUser(user);
+            ticketErrand.setSubmitDate(currentDate);
+            ticketErrand.setView(false);
+            ticketErrand.setDescription(description);
 
-            complainErrandDao.saveComplainErrand(complainErrand);
+            ticketErrandDao.saveTicketErrand(ticketErrand);
 
             return String.valueOf(true);
 
@@ -137,6 +140,28 @@ public class ADComplainController {
         }
 
         return jsonArray.toString();
+    }
+
+    @RequestMapping(value = "/adComplain/api/finishTicket", method = RequestMethod.POST)
+    public
+    @ResponseBody
+    String finishTicket(@RequestBody String ticketId) {
+        try {
+
+            long id = Long.parseLong(ticketId);
+
+            Ticket ticket = ticketDao.findTicketById(id);
+
+            TicketStatus ticketStatus = ticketStatusDao.findTicketStatusById(Constant.finishTicketStatus);
+
+            ticket.setTicketStatus(ticketStatus);
+
+            ticketDao.saveTicket(ticket);
+
+            return String.valueOf(true);
+        } catch (Exception ex) {
+            return String.valueOf(false);
+        }
     }
 
     private List<ComplainErrand> getComplainList() {

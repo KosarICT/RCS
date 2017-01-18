@@ -28,53 +28,6 @@
 </style>
 
 <div class="row">
-    <%--    <nav>
-            <div class="nav-wrapper grey lighten-4" style="border: 1px solid #e0e0e0">
-                <ul class="left ">
-                    <li>
-                        <a href="#" class="notification-text" onclick="btnViewClick()">
-                            <i class="material-icons right notification-text">visibility</i>مشاهده
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </nav>
-
-        <table id="tblAppreciation" class="left bordered responsive-table textColor">
-            <thead>
-            <tr>
-                <th class="center">ردیف</th>
-                <th class="center">نام و نام خانوادگی</th>
-                <th class="center"> نام و نام خانوادگی پرسنل</th>
-                <th class="center">کد ملی</th>
-                <th class="center">بیمارستان</th>
-                <th class="center"> بخش</th>
-            </tr>
-            </thead>
-
-            <c:if test="${not empty appreciationListList}">
-                <c:set var="row" value="1" scope="page"/>
-
-                <tbody class="data-wrapper">
-                <c:forEach var="entry" items="${appreciationListList}">
-
-                    <tr data-uid="${entry.appreciationId}">
-
-                        <td class="center counter"><c:out value="${row}"/></td>
-                        <td class="center">${entry.firstName} ${entry.lastName}</td>
-                        <td class="center">${entry.persnolFirstName} ${entry.persnolLastName}</td>
-                        <td class="center">${entry.nationalCode}</td>
-                        <td class="center">${entry.hospital.name}</td>
-                        <td class="center">${entry.section.title}</td>
-
-                    </tr>
-
-                    <c:set var="row" value="${row + 1}" scope="page"/>
-                </c:forEach>
-                </tbody>
-
-            </c:if>
-        </table>--%>
 
     <div class="k-rtl">
         <div id="grvAppreciation"></div>
@@ -87,6 +40,7 @@
     </div>
     <div class="modal-content">
         <div class="row">
+            <input disabled id="hiddenTicketId" type="text" class="validate notification-text" hidden>
 
             <div class="row">
                 <label for="txtName" style="font-size: 13px; font-weight: 500; color: #707070">نام نام خانوادگی:</label>
@@ -135,11 +89,15 @@
            onclick="appreciationWindowToolbarClickButton(this)">
             <img src="/static/icon/cancel2.png" class="windowToolbarImage">انصراف
         </a>
+        <a href="#" id="btnStop" class="modal-action waves-effect waves-light btn-flat notification-text"
+           onclick="appreciationWindowToolbarClickButton(this)">
+            <img src="/static/icon/stop5.png" class="windowToolbarImage">خاتمه
+        </a>
     </div>
 </div>
 
 <script>
-    var appreciationId = 0;
+    var ticketTypeId = 1;
 
     $(document).ready(function () {
         $(".page-title").text("قدردانی");
@@ -159,10 +117,14 @@
             dataSource: {
                 transport: {
                     read: {
-                        url: "/adAppreciation/api/getAllAppreciationData",
-                        type: "GET",
+                        url: "/ticket/api/getData",
+                        type: "POST",
                         contentType: "application/json",
                         dataType: "json",
+                    },
+                    parameterMap: function () {
+
+                        return ticketTypeId.toString();
                     }
                 },
             },
@@ -180,7 +142,7 @@
             },
             selectable: "single",
             columns: [
-                {field: "appreciationId", title: "UserId", hidden: true},
+                {field: "ticketId", title: "UserId", hidden: true},
                 {
                     field: "name", title: "نام و نام خانوادگی", filterable: {
                     cell: {
@@ -230,7 +192,14 @@
                     }
                 }
                 },
-                {command: {text: "مشاهده", click: btnViewClick}, title: "&nbsp;", width: "120px"}
+                {
+                    command: {
+                        text: "مشاهده", click: function (e) {
+                            var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+                            btnViewClick(dataItem);
+                        }
+                    }, title: "&nbsp;", width: "120px"
+                }
             ]
         });
     }
@@ -250,27 +219,27 @@
         );
     }
 
-    function btnViewClick() {
-        if ($('.data-wrapper .selected').length > 0) {
+    function btnViewClick(dataItem) {
 
-            appreciationId = $('.data-wrapper .selected').data('uid');
+        if (dataItem != null) {
 
+            var ticketId = dataItem.ticketId;
             $.ajax({
                 type: "POST",
-                url: "/adAppreciation/api/findAppreciationById",
+                url: "/ticket/api/findTicketByTicketId",
                 contentType: "application/json; charset=utf-8",
                 dataType: 'json',
-                data: appreciationId.toString(),
+                data: ticketId.toString(),
                 success: function (data) {
-                    var dataItem = data[0];
 
-                    $("#txtName").val(dataItem.name);
-                    $("#txtNationalCode").val(dataItem.nationalCode);
-                    $("#txtPersonnelName").val(dataItem.personnelName);
-                    $("#txtMobile").val(dataItem.mobile);
-                    $("#txtHospitalName").val(dataItem.hospitalName);
-                    $("#txtSectionTitle").val(dataItem.sectionTitle);
-                    $("#txtDescription").val(dataItem.description);
+                    $("#txtName").val(data.firstName + " " + data.lastName);
+                    $("#txtNationalCode").val(data.nationalCode);
+                    $("#txtPersonnelName").val(data.persnolFirstName + " " + data.persnolLastName);
+                    $("#txtMobile").val(data.mobile);
+                    $("#txtHospitalName").val(data.hospitalName);
+                    $("#txtSectionTitle").val(data.sectionTitle);
+                    $("#txtDescription").val(data.description);
+                    $("#hiddenTicketId").val(ticketId);
                 }
             });
 
@@ -281,42 +250,8 @@
     }
 
     function refreshAppreciationTable() {
-        $.ajax({
-            type: "GET",
-            url: "/adAppreciation/api/getAllAppreciationData",
-            contentType: "application/json; charset=utf-8",
-            dataType: 'json',
-            success: function (data) {
-                $("#tblAppreciation tbody tr").remove();
-
-                if (data.length > 0) {
-                    $.each(data, function (index, dataItem) {
-
-                        var tr = $("<tr>").attr("data-uid", dataItem.appreciationId);
-
-                        var tdCounter = $("<td>").addClass("center").text(index + 1);
-                        var tdName = $("<td>").addClass("center").text(dataItem.name);
-                        var tdPersonnelName = $("<td>").addClass("center").text(dataItem.personnelName);
-                        var tdNationalCode = $("<td>").addClass("center").text(dataItem.nationalCode);
-                        var tdHospitalName = $("<td>").addClass("center").text(dataItem.hospitalName);
-                        var tdSectionName = $("<td>").addClass("center").text(dataItem.sectionName);
-
-                        tr.append(tdCounter);
-                        tr.append(tdName);
-                        tr.append(tdPersonnelName);
-                        tr.append(tdNationalCode);
-                        tr.append(tdHospitalName);
-                        tr.append(tdSectionName);
-
-                        $("#tblAppreciation tbody").append(tr);
-                    });
-                }
-
-                $(".data-wrapper tr").click(function () {
-                    $(this).addClass('selected').siblings().removeClass("selected");
-                });
-            }
-        });
+        $('#grvAppreciation').data('kendoGrid').dataSource.read();
+        $('#grvAppreciation').data('kendoGrid').refresh();
     }
 
     function appreciationWindowToolbarClickButton(sender) {
@@ -326,7 +261,30 @@
             case "btnOk":
                 $('#appreciationWindow').modal('close');
                 break;
+            case "btnStop":
+                finishAppreciation();
+                break;
         }
+    }
+    function finishAppreciation() {
+        var ticketId = $("#hiddenTicketId").val();
+
+        $.ajax({
+            type: "POST",
+            url: "/adComplain/api/finishTicket",
+            contentType: "application/json; charset=utf-8",
+            dataType: 'json',
+            data: ticketId.toString(),
+            success: function (data) {
+                if (data) {
+                    ticketId = 0;
+                    $('#appreciationWindow').modal('close');
+                    Materialize.toast('عملیات با موفقیت انجام شد', 4000, 'success-toast');
+                } else {
+                    Materialize.toast('خطا در انجام عملیات', 4000, 'error-toast');
+                }
+            }
+        });
     }
 
 </script>

@@ -70,18 +70,17 @@ public class TicketController {
     private TicketUserSeenDao ticketUserSeenDao;
 
     @Autowired
-    private  TicketStatusDao ticketStatusDao;
+    private TicketStatusDao ticketStatusDao;
 
     @RequestMapping(value = "/ticket/api/getData", method = RequestMethod.POST)
     public
     @ResponseBody
-    String getData(@RequestBody String model) {
-        JSONArray jsonArray = new JSONArray(model);
-        JSONObject jsonObject = jsonArray.getJSONObject(0);
+    String getData(@RequestBody String ticketTypeId) {
 
-        int ticketTypeId = jsonObject.getInt("ticketTypeId");
 
-        List<Ticket> ticketList = ticketDao.getTicketListByTicketTypeId((short) ticketTypeId);
+        short id = Short.parseShort(ticketTypeId);
+
+        List<Ticket> ticketList = ticketDao.getTicketListByTicketTypeId(id);
 
         JSONArray dataArray = new JSONArray();
 
@@ -96,12 +95,12 @@ public class TicketController {
             dataItem.put("sendTypeTitle", ticket.getSendType().getTitle());
             dataItem.put("submitDate", ticket.getSubmitDate());
 
-            if (ticketTypeId == Constant.AppreciationTicketTypeId) {
+            if (id == Constant.AppreciationTicketTypeId) {
 
-            } else if (ticketTypeId == Constant.ComplainTicketTypeId) {
+            } else if (id == Constant.ComplainTicketTypeId) {
                 dataItem.put("complainantTitle", ticket.getComplainant().getTitle());
                 dataItem.put("complaintTypeTitle", ticket.getComplaintType().getTitle());
-            } else if (ticketTypeId == Constant.OfferTicketTypeId) {
+            } else if (id == Constant.OfferTicketTypeId) {
 
             } else {
 
@@ -152,7 +151,7 @@ public class TicketController {
             TicketType ticketType = ticketTypeDao.getTicketType(ticketTypeId.shortValue());
             SendType sendType = sendTypeDao.findSendTypeById((short) Constant.SendTypeSite);
 
-            TicketStatus ticketStatus=ticketStatusDao.findTicketStatusById(Constant.Pending);
+            TicketStatus ticketStatus = ticketStatusDao.findTicketStatusById(Constant.Pending);
 
             Integer trackingNumber = trackingNumber();
 
@@ -177,7 +176,7 @@ public class TicketController {
             ticket.setTicketType(ticketType);
             ticket.setEnable(true);
 
-            JSONObject result=new JSONObject();
+            JSONObject result = new JSONObject();
             if (ticketTypeId == Constant.Complaint) {
                 compainer = jsonObject.getInt("compainer");
                 Complainant complainant = complainantDao.findComplainantById(compainer.shortValue());
@@ -185,7 +184,7 @@ public class TicketController {
                 ComplaintType complaintType = complainTypeDao.findComplaintTypeById(complaintTypeId.shortValue());
                 ticket.setComplaintType(complaintType);
                 ticket.setComplainant(complainant);
-                result.put("responceTime",complaintType.getResponceTime());
+                result.put("responceTime", complaintType.getResponceTime());
             } else if (ticketTypeId == Constant.Appereciation) {
                 String appreciationUserName = jsonObject.getString("appreciationUserName");
                 String appreciationUserFamily = jsonObject.getString("appreciationUserFamily");
@@ -197,7 +196,7 @@ public class TicketController {
 
             Ticket ticket1 = ticketDao.findTicketById(newTicketId);
             List<UsersHospitalSection> userAdminSections = ticketDao.forwardTicket(hospitalId, Constant.AdminSection);
-            TicketUserSeen ticketUserSeen=new TicketUserSeen();
+            TicketUserSeen ticketUserSeen = new TicketUserSeen();
             ticketUserSeen.setTicket(ticket1);
             ticketUserSeen.setUser(userAdminSections.get(0).getUser());
             ticketUserSeenDao.saveTicketUserSeen(ticketUserSeen);
@@ -247,7 +246,7 @@ public class TicketController {
                     ticketAttachmentDao.saveTicketAttachment(ticketAttachment);
                 }
             }
-            result.put("trackingNumber",trackingNumber);
+            result.put("trackingNumber", trackingNumber);
             return result.toString();
 
         } catch (Exception ex) {
@@ -270,10 +269,21 @@ public class TicketController {
 
             ticketJson.put("ticket_Id", ticket.getTicketId());
             ticketJson.put("ticketType_Id", ticketTypeId);
-            if (ticketTypeId == Constant.ComplainTicketTypeId) {
-                ticketJson.put("complainType_Id", ticket.getComplaintType().getComplaintTypeId());
-                ticketJson.put("complainant_Id", ticket.getComplainant().getComplainantId());
+
+            if (ticketTypeId != Constant.OfferTicketTypeId) {
+                ticketJson.put("shiftTitle", ticket.getShift().getTitle());
             }
+
+            if (ticketTypeId == Constant.ComplainTicketTypeId) {
+                ticketJson.put("complaintTypeTitle", ticket.getComplaintType().getTitle());
+                int complainatId = ticket.getComplainant().getComplainantId();
+                ticketJson.put("complainantTitle", ticket.getComplainant().getTitle());
+
+//                if (complainatId == 2) {
+//
+//                }
+            }
+
             if (ticketTypeId != Constant.OfferTicketTypeId) {
                 ticketJson.put("shift_Id", ticket.getShift().getShiftId());
                 ticketJson.put("persnolFirstName", ticket.getPersnolFirstName());
@@ -282,16 +292,15 @@ public class TicketController {
             }
 
             ticketJson.put("hospitalName", ticket.getHospital().getName());
-
+            ticketJson.put("hospitalId", ticket.getHospital().getHospitalId());
             ticketJson.put("sectionTitle", ticket.getSection().getTitle());
             ticketJson.put("sendType_Id", ticket.getSendType().getSendTypeId());
-
             ticketJson.put("firstName", ticket.getFirstName());
             ticketJson.put("lastName", ticket.getLastName());
-
             ticketJson.put("nationalCode", ticket.getNationalCode());
             ticketJson.put("phoneNumber", ticket.getPhoneNumber());
             ticketJson.put("mobile", ticket.getMobile());
+            ticketJson.put("tel", ticket.getPhoneNumber());
             ticketJson.put("subject", ticket.getSubject());
             ticketJson.put("description", ticket.getDescription());
             ticketJson.put("submitDate", ticket.getSubmitDate());
