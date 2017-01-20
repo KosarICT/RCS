@@ -28,57 +28,6 @@
 </style>
 
 <div class="row">
-    <%--<nav>
-    <div class="nav-wrapper grey lighten-4" style="border: 1px solid #e0e0e0">
-        <ul class="left ">
-            <li>
-                <a href="#" class="notification-text" onclick="btnViewClick()">
-                    <i class="material-icons right notification-text">visibility</i>مشاهده
-                </a>
-            </li>
-        </ul>
-    </div>
-</nav>
-
-    <table id="tblComplain" class="left bordered responsive-table textColor">
-        <thead>
-        <tr>
-            <th class="center">ردیف</th>
-            <th class="center">شکایت کننده</th>
-            <th class="center">بیمار</th>
-            <th class="center">کد ملی</th>
-            <th class="center">بیمارستان</th>
-            <th class="center">نوع شکایت</th>
-            <th class="center">تاریخ</th>
-            <th class="center">طریقه ارتباط</th>
-        </tr>
-        </thead>
-
-        <c:if test="${not empty lists}">
-            <c:set var="row" value="1" scope="page"/>
-
-            <tbody class="data-wrapper">
-            <c:forEach var="entry" items="${lists}">
-
-                <tr data-uid="${entry.complain.complainId}">
-                    <td class="center" style="display: none">${entry.complain.complainId}</td>
-                    <td class="center counter"><c:out value="${row}"/></td>
-                    <td class="center">${entry.complain.complainant.title}</td>
-                    <td class="center">${entry.complain.firstName} ${entry.complain.lastName}</td>
-                    <td class="center">${entry.complain.nationalCode}</td>
-                    <td class="center">${entry.complain.hospital.name}</td>
-                    <td class="center">${entry.complain.complaintType.title}</td>
-                    <td class="center">${entry.complain.submitDate}</td>
-                    <td class="center">${entry.complain.sendType.title}</td>
-                </tr>
-
-                <c:set var="row" value="${row + 1}" scope="page"/>
-            </c:forEach>
-            </tbody>
-
-        </c:if>
-    </table>--%>
-
     <div class="k-rtl">
         <div id="grvComplaint"></div>
     </div>
@@ -133,6 +82,10 @@
                 <input disabled id="txComplaintTypeTitle" type="text" class="validate notification-text">
 
             </div>
+
+            <input disabled id="hiddenHospitalId" type="text" class="validate notification-text" hidden>
+            <input disabled id="hiddenTicketId" type="text" class="validate notification-text" hidden>
+
             <div class="row">
                 <label for="txtShiftTitle" style="font-size: 13px; font-weight: 500; color: #707070">شیفت کاری:</label>
                 <input disabled id="txtShiftTitle" type="text" class="validate notification-text">
@@ -188,14 +141,14 @@
         <div class="row">
             <div class="row">
                 <label style="font-size: 13px; font-weight: 500; color: #707070">انتخاب بخش:</label>
-                <%--<select id="ddlSection" onchange="ddlSectionChange();">--%>
-                <%--<option value="" disabled selected>بخش موردنظر انتخاب نمائید</option>--%>
-                <%--<c:if test="${not empty hospitalSectionList}">--%>
-                <%--<c:forEach var="hospitalSectionEntry" items="${hospitalSectionList}">--%>
-                <%--<option value="${hospitalSectionEntry.section.sectionId}">${hospitalSectionEntry.section.title}</option>--%>
-                <%--</c:forEach>--%>
-                <%--</c:if>--%>
-                <%--</select>--%>
+                <select id="ddlSection" onchange="ddlSectionChange();">
+                    <option value="" disabled selected>بخش موردنظر انتخاب نمائید</option>
+                    <c:if test="${not empty hospitalSectionList}">
+                        <c:forEach var="hospitalSectionEntry" items="${hospitalSectionList}">
+                            <option value="${hospitalSectionEntry.section.sectionId}">${hospitalSectionEntry.section.title}</option>
+                        </c:forEach>
+                    </c:if>
+                </select>
             </div>
             <div class="row">
                 <label style="font-size: 13px; font-weight: 500; color: #707070">انتخاب کاربر:</label>
@@ -224,7 +177,7 @@
 </div>
 
 <script>
-    var complainId = 0;
+    var ticketTypeId = 3;
 
     $(document).ready(function () {
         $(".page-title").text("شکایات");
@@ -243,10 +196,14 @@
             dataSource: {
                 transport: {
                     read: {
-                        url: "/adComplain/api/getData",
-                        type: "GET",
+                        url: "/ticket/api/getData",
+                        type: "POST",
                         contentType: "application/json",
                         dataType: "json",
+                    },
+                    parameterMap: function () {
+
+                        return ticketTypeId.toString();
                     }
                 },
             },
@@ -264,7 +221,7 @@
             },
             selectable: "single",
             columns: [
-                {field: "complainId", title: "UserId", hidden: true},
+                {field: "ticketId", title: "UserId", hidden: true},
                 {
                     field: "complainantTitle", title: "شکایت کننده", width: "100px", filterable: {
                     cell: {
@@ -314,7 +271,14 @@
                     }
                 }
                 },
-                {command: {text: "مشاهده", click: btnViewClick}, title: "&nbsp;", width: "120px"}
+                {
+                    command: {
+                        text: "مشاهده", click: function (e) {
+                            var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+                            btnViewComplainClick(dataItem);
+                        }
+                    }, title: "&nbsp;", width: "120px"
+                }
             ]
         });
     }
@@ -344,121 +308,46 @@
         );
     }
 
-    /*    function btnViewClick() {
-     if ($('.data-wrapper .selected').length > 0) {
+    function btnViewComplainClick(dataItem) {
 
-     complainId = $('.data-wrapper .selected').data('uid');
+        if (dataItem != null) {
+            var ticketId = dataItem.ticketId;
+            $.ajax({
+                type: "POST",
+                url: "/ticket/api/findTicketByTicketId",
+                contentType: "application/json; charset=utf-8",
+                dataType: 'json',
+                data: ticketId.toString(),
+                success: function (data) {
 
-     $.ajax({
-     type: "POST",
-     url: "/adComplain/api/findComplainById",
-     contentType: "application/json; charset=utf-8",
-     dataType: 'json',
-     data: complainId.toString(),
-     success: function (data) {
-     var dataItem = data[0];
+                    $("#txtComplainantTitle").val(data.complainantTitle);
+                    $("#txtName").val(data.firstName + " " + data.lastName);
+                    $("#txtNationalCode").val(data.nationalCode);
+                    $("#txtTel").val(data.tel);
+                    $("#txtMobile").val(data.mobile);
+//                    $("#txtRelationName").val("");
+//                    $("#txtRelationNationalCode").val("");
+                    $("#txComplaintTypeTitle").val(data.complaintTypeTitle);
+                    $("#txtShiftTitle").val(data.shiftTitle);
+                    $("#hiddenHospitalId").val(data.hospitalId);
+                    $("#hiddenTicketId").val(ticketId);
+                    $("#txtSectionTitle").val(data.sectionTitle);
+                    $("#txtSubject").val(data.subject);
+                    $("#txtDescription").val(data.description);
+                    $("#txtSubmitDate").val(data.submitDate);
+                    $("#txtEmail").val(data.email);
 
-     $("#txtComplainantTitle").val(dataItem.complainantTitle);
-     $("#txtName").val(dataItem.name);
-     $("#txtNationalCode").val(dataItem.nationalCode);
-     $("#txtTel").val(dataItem.tel);
-     $("#txtMobile").val(dataItem.mobile);
-     $("#txtRelationName").val("");
-     $("#txtRelationNationalCode").val("");
-     $("#txComplaintTypeTitle").val(dataItem.complaintTypeTitle);
-     $("#txtShiftTitle").val(dataItem.shiftTitle);
-     $("#txtSectionTitle").val(dataItem.sectionTitle);
-     $("#txtSubject").val(dataItem.subject);
-     $("#txtDescription").val(dataItem.description);
-     $("#txtSubmitDate").val(dataItem.submitDate);
-     $("#txtEmail").val(dataItem.email);
-     }
-     });
-
-     $('#complainWindow').modal('open');
-     } else {
-     Materialize.toast('هیچ ردیفی انتخاب نشده است', 4000, 'error-toast');
-     }
-     }*/
-
-    function btnViewClick(e) {
-        var grid = $("#grvComplaint").data("kendoGrid");
-        var dataItem = grid.dataItem($(e.currentTarget).closest("tr"));
-
-        complainId = dataItem.complainId;
-
-        $.ajax({
-            type: "POST",
-            url: "/adComplain/api/findComplainById",
-            contentType: "application/json; charset=utf-8",
-            dataType: 'json',
-            data: complainId.toString(),
-            success: function (data) {
-                var dataItem = data[0];
-
-                $("#txtComplainantTitle").val(dataItem.complainantTitle);
-                $("#txtName").val(dataItem.name);
-                $("#txtNationalCode").val(dataItem.nationalCode);
-                $("#txtTel").val(dataItem.tel);
-                $("#txtMobile").val(dataItem.mobile);
-                $("#txtRelationName").val("");
-                $("#txtRelationNationalCode").val("");
-                $("#txComplaintTypeTitle").val(dataItem.complaintTypeTitle);
-                $("#txtShiftTitle").val(dataItem.shiftTitle);
-                $("#txtSectionTitle").val(dataItem.sectionTitle);
-                $("#txtSubject").val(dataItem.subject);
-                $("#txtDescription").val(dataItem.description);
-                $("#txtSubmitDate").val(dataItem.submitDate);
-                $("#txtEmail").val(dataItem.email);
-
-                $('#complainWindow').modal('open');
-            }
-        });
+                    $('#complainWindow').modal('open');
+                }
+            });
+        } else {
+            Materialize.toast('هیچ ردیفی انتخاب نشده است', 4000, 'error-toast');
+        }
     }
 
     function refreshTable() {
-        $.ajax({
-            type: "GET",
-            url: "/adComplain/api/getData",
-            contentType: "application/json; charset=utf-8",
-            dataType: 'json',
-            success: function (data) {
-                $("#tblComplain tbody tr").remove();
-
-                if (data.length > 0) {
-                    $.each(data, function (index, dataItem) {
-
-                        var tr = $("<tr>").attr("data-uid", dataItem.complainId);
-
-                        var tdComplainId = $("<td>").addClass("center").text(dataItem.complainId).css("display", "none");
-                        var tdCounter = $("<td>").addClass("center").text(index + 1);
-                        var tdComplainantTitle = $("<td>").addClass("center").text(dataItem.complainantTitle);
-                        var tdName = $("<td>").addClass("center").text(dataItem.name);
-                        var tdNationalCode = $("<td>").addClass("center").text(dataItem.nationalCode);
-                        var tdHospitalName = $("<td>").addClass("center").text(dataItem.hospitalName);
-                        var tdComplaintTypeTitle = $("<td>").addClass("center").text(dataItem.complaintTypeTitle);
-                        var tdSubmitDate = $("<td>").addClass("center").text(dataItem.submitDate);
-                        var tdSendTypeTitle = $("<td>").addClass("center").text(dataItem.sendTypeTitle);
-
-                        tr.append(tdComplainId);
-                        tr.append(tdCounter);
-                        tr.append(tdComplainantTitle);
-                        tr.append(tdName);
-                        tr.append(tdNationalCode);
-                        tr.append(tdHospitalName);
-                        tr.append(tdComplaintTypeTitle);
-                        tr.append(tdSubmitDate);
-                        tr.append(tdSendTypeTitle);
-
-                        $("#tblComplain tbody").append(tr);
-                    });
-                }
-
-                $(".data-wrapper tr").click(function () {
-                    $(this).addClass('selected').siblings().removeClass("selected");
-                });
-            }
-        });
+        $('#grvComplaint').data('kendoGrid').dataSource.read();
+        $('#grvComplaint').data('kendoGrid').refresh();
     }
 
     function complaintWindowToolBarItemClick(sender) {
@@ -469,9 +358,10 @@
                 $('#complainWindow').modal('close');
                 break;
             case "btnStop":
+                finishTicket();
                 break;
             case "btnErrand":
-                $('#errandWindow').modal('open');
+                openErrandWindow();
                 break;
         }
     }
@@ -492,11 +382,12 @@
     function saveErrandComplain() {
         var userId = $("#ddlUser option:selected").val();
         var description = $("#txtErrandDescription").val();
+        var ticketId = $("#hiddenTicketId").val();
 
         var dataArray = [];
         var dataItem = {};
 
-        dataItem["complainId"] = complainId;
+        dataItem["ticketId"] = ticketId;
         dataItem["userId"] = userId;
         dataItem["description"] = description;
 
@@ -510,7 +401,7 @@
             data: JSON.stringify(dataArray),
             success: function (data) {
                 if (data) {
-                    complainId = 0;
+                    ticketId = 0;
                     $('#errandWindow').modal('close');
                     $('#complainWindow').modal('close');
                     Materialize.toast('عملیات با موفقیت انجام شد', 4000, 'success-toast');
@@ -548,6 +439,60 @@
 
                         $("#ddlUser").append(option);
                     });
+                }
+            }
+        });
+    }
+    function openErrandWindow() {
+        var hospitalId = $("#hiddenHospitalId").val();
+
+        $.ajax({
+            type: "POST",
+            url: "/adComplain/api/getHospitalSection",
+            contentType: "application/json; charset=utf-8",
+            dataType: 'json',
+            data: hospitalId.toString(),
+            success: function (data) {
+                $("#ddlSection option").remove();
+
+                var defaultOption = $("<option>");
+                defaultOption.text("کاربر موردنظر را انتخاب نمائید")
+                    .prop("disabled", true)
+                    .prop("selected", true)
+                    .attr("value", "");
+
+                $("#ddlSection").append(defaultOption);
+
+                if (data.length > 0) {
+                    $.each(data, function (index, dataItem) {
+                        var option = $("<option>");
+                        option.text(dataItem.sectionTitle).attr("value", dataItem.sectionId);
+
+                        $("#ddlSection").append(option);
+                    });
+                }
+                $('#errandWindow').modal('open');
+            }
+        });
+
+    }
+
+    function finishTicket() {
+        var ticketId = $("#hiddenTicketId").val();
+
+        $.ajax({
+            type: "POST",
+            url: "/adComplain/api/finishTicket",
+            contentType: "application/json; charset=utf-8",
+            dataType: 'json',
+            data: ticketId.toString(),
+            success: function (data) {
+                if (data) {
+                    ticketId = 0;
+                    $('#complainWindow').modal('close');
+                    Materialize.toast('عملیات با موفقیت انجام شد', 4000, 'success-toast');
+                } else {
+                    Materialize.toast('خطا در انجام عملیات', 4000, 'error-toast');
                 }
             }
         });

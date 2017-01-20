@@ -28,53 +28,53 @@
 </style>
 
 <div class="row">
-<%--    <nav>
-        <div class="nav-wrapper grey lighten-4" style="border: 1px solid #e0e0e0">
-            <ul class="left ">
-                <li>
-                    <a href="#" class="notification-text" onclick="btnViewOfferClick()">
-                        <i class="material-icons right notification-text">visibility</i>مشاهده
-                    </a>
-                </li>
-            </ul>
-        </div>
-    </nav>
+    <%--    <nav>
+            <div class="nav-wrapper grey lighten-4" style="border: 1px solid #e0e0e0">
+                <ul class="left ">
+                    <li>
+                        <a href="#" class="notification-text" onclick="btnViewOfferClick()">
+                            <i class="material-icons right notification-text">visibility</i>مشاهده
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
 
-    <table id="tblOffer" class="left bordered responsive-table textColor">
-        <thead>
-        <tr>
-            <th class="center">ردیف</th>
-            <th class="center">نام و نام خانوادگی پیشنهاد دهنده</th>
-            <th class="center">کد ملی</th>
-            <th class="center">موضوع</th>
-            <th class="center">نام بیمارستان</th>
-            <th class="center">بخش بیمارستان</th>
-        </tr>
-        </thead>
+        <table id="tblOffer" class="left bordered responsive-table textColor">
+            <thead>
+            <tr>
+                <th class="center">ردیف</th>
+                <th class="center">نام و نام خانوادگی پیشنهاد دهنده</th>
+                <th class="center">کد ملی</th>
+                <th class="center">موضوع</th>
+                <th class="center">نام بیمارستان</th>
+                <th class="center">بخش بیمارستان</th>
+            </tr>
+            </thead>
 
-        <c:if test="${not empty offerList}">
-            <c:set var="row" value="1" scope="page"/>
+            <c:if test="${not empty offerList}">
+                <c:set var="row" value="1" scope="page"/>
 
-            <tbody class="data-wrapper">
-            <c:forEach var="entry" items="${offerList}">
+                <tbody class="data-wrapper">
+                <c:forEach var="entry" items="${offerList}">
 
-                <tr data-uid="${entry.offerId}">
+                    <tr data-uid="${entry.offerId}">
 
-                    <td class="center counter"><c:out value="${row}"/></td>
-                    <td class="center">${entry.firstName} ${entry.lastName}</td>
-                    <td class="center">${entry.nationalCode}</td>
-                    <td class="center">${entry.subject}</td>
-                    <td class="center">${entry.hospital.name}</td>
-                    <td class="center">${entry.section.title}</td>
+                        <td class="center counter"><c:out value="${row}"/></td>
+                        <td class="center">${entry.firstName} ${entry.lastName}</td>
+                        <td class="center">${entry.nationalCode}</td>
+                        <td class="center">${entry.subject}</td>
+                        <td class="center">${entry.hospital.name}</td>
+                        <td class="center">${entry.section.title}</td>
 
-                </tr>
+                    </tr>
 
-                <c:set var="row" value="${row + 1}" scope="page"/>
-            </c:forEach>
-            </tbody>
+                    <c:set var="row" value="${row + 1}" scope="page"/>
+                </c:forEach>
+                </tbody>
 
-        </c:if>
-    </table>--%>
+            </c:if>
+        </table>--%>
 
     <div class="k-rtl">
         <div id="grvOffer"></div>
@@ -87,7 +87,7 @@
     </div>
     <div class="modal-content">
         <div class="row">
-
+            <input disabled id="hiddenTicketId" type="text" class="validate notification-text" hidden>
             <div class="row">
                 <label for="txtName" style="font-size: 13px; font-weight: 500; color: #707070">نام نام خانوادگی پیشنهاد
                     دهنده:</label>
@@ -144,11 +144,15 @@
            onclick="offerWindowToolbarButtonClick(this)">
             <img src="/static/icon/cancel2.png" class="windowToolbarImage">انصراف
         </a>
+        <a href="#" id="btnStop" class="modal-action waves-effect waves-light btn-flat notification-text"
+           onclick="offerWindowToolbarButtonClick(this)">
+            <img src="/static/icon/stop5.png" class="windowToolbarImage">خاتمه
+        </a>
     </div>
 </div>
 
 <script>
-    var offerId = 0;
+    var ticketTypeId = 2;
 
     $(document).ready(function () {
         $(".page-title").text("پیشنهادات");
@@ -167,10 +171,14 @@
             dataSource: {
                 transport: {
                     read: {
-                        url: "/adOffer/api/getAllOfferData",
-                        type: "GET",
+                        url: "/ticket/api/getData",
+                        type: "POST",
                         contentType: "application/json",
                         dataType: "json",
+                    },
+                    parameterMap: function () {
+
+                        return ticketTypeId.toString();
                     }
                 },
             },
@@ -188,7 +196,7 @@
             },
             selectable: "single",
             columns: [
-                {field: "offerId", title: "UserId", hidden: true},
+                {field: "ticketId", title: "UserId", hidden: true},
                 {
                     field: "name", title: "نام و نام خانوادگی", filterable: {
                     cell: {
@@ -238,7 +246,15 @@
                     }
                 }
                 },
-                {command: {text: "مشاهده", click: btnViewClick}, title: "&nbsp;", width: "120px"}
+
+                {
+                    command: {
+                        text: "مشاهده", click: function (e) {
+                            var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+                            btnViewOfferClick(dataItem);
+                        }
+                    }, title: "&nbsp;", width: "120px"
+                }
             ]
         });
     }
@@ -258,29 +274,28 @@
         );
     }
 
-    function btnViewOfferClick() {
-        if ($('.data-wrapper .selected').length > 0) {
+    function btnViewOfferClick(dataItem) {
+        if (dataItem != null) {
 
-            offerId = $('.data-wrapper .selected').data('uid');
+            var ticketId = dataItem.ticketId;
 
             $.ajax({
                 type: "POST",
-                url: "/adOffer/api/findOfferById",
+                url: "/ticket/api/findTicketByTicketId",
                 contentType: "application/json; charset=utf-8",
                 dataType: 'json',
-                data: offerId.toString(),
+                data: ticketId.toString(),
                 success: function (data) {
-                    var dataItem = data[0];
 
-                    $("#txtName").val(dataItem.name);
-                    $("#txtNationalCode").val(dataItem.nationalCode);
-                    $("#txtMobile").val(dataItem.mobile);
-                    $("#txtSubject").val(dataItem.subject);
-                    $("#txtHospitalName").val(dataItem.hospitalName);
-                    $("#txtSectionTitle").val(dataItem.sectionTitle);
-                    $("#txtDescription").val(dataItem.description);
-                    $("#txtTrackingCode").val(dataItem.trackingCode);
-                    $("#txtEmail").val(dataItem.email);
+                    $("#txtName").val(data.firstName + " " + data.lastName);
+                    $("#txtNationalCode").val(data.nationalCode);
+                    $("#txtMobile").val(data.mobile);
+                    $("#txtSubject").val(data.subject);
+                    $("#txtHospitalName").val(data.hospitalName);
+                    $("#txtSectionTitle").val(data.sectionTitle);
+                    $("#txtDescription").val(data.description);
+                    $("#txtEmail").val(data.email);
+                    $("#hiddenTicketId").val(ticketId);
                 }
             });
 
@@ -291,42 +306,8 @@
     }
 
     function refreshOfferTable() {
-        $.ajax({
-            type: "GET",
-            url: "/adOffer/api/getAllOfferData",
-            contentType: "application/json; charset=utf-8",
-            dataType: 'json',
-            success: function (data) {
-                $("#tblOffer tbody tr").remove();
-
-                if (data.length > 0) {
-                    $.each(data, function (index, dataItem) {
-
-                        var tr = $("<tr>").attr("data-uid", dataItem.offerId);
-
-                        var tdCounter = $("<td>").addClass("center").text(index + 1);
-                        var tdName = $("<td>").addClass("center").text(dataItem.name);
-                        var tdNationalCode = $("<td>").addClass("center").text(dataItem.nationalCode);
-                        var tdsubject = $("<td>").addClass("center").text(dataItem.subject);
-                        var tdHospitalName = $("<td>").addClass("center").text(dataItem.hospitalName);
-                        var tdSectionName = $("<td>").addClass("center").text(dataItem.sectionName);
-
-                        tr.append(tdCounter);
-                        tr.append(tdName);
-                        tr.append(tdNationalCode);
-                        tr.append(tdsubject);
-                        tr.append(tdHospitalName);
-                        tr.append(tdSectionName);
-
-                        $("#tblOffer tbody").append(tr);
-                    });
-                }
-
-                $(".data-wrapper tr").click(function () {
-                    $(this).addClass('selected').siblings().removeClass("selected");
-                });
-            }
-        });
+        $('#grvOffer').data('kendoGrid').dataSource.read();
+        $('#grvOffer').data('kendoGrid').refresh();
     }
 
     function offerWindowToolbarButtonClick(sender) {
@@ -336,11 +317,30 @@
             case "btnOk":
                 $('#offerWindow').modal('close');
                 break;
+            case "btnStop":
+                finishOffer();
+                break;
         }
     }
-
-    function btnViewClick() {
-
+    function finishOffer() {
+        var ticketId = $("#hiddenTicketId").val();
+        debugger;
+        $.ajax({
+            type: "POST",
+            url: "/adComplain/api/finishTicket",
+            contentType: "application/json; charset=utf-8",
+            dataType: 'json',
+            data: ticketId.toString(),
+            success: function (data) {
+                if (data) {
+                    ticketId = 0;
+                    $('#offerWindow').modal('close');
+                    Materialize.toast('عملیات با موفقیت انجام شد', 4000, 'success-toast');
+                } else {
+                    Materialize.toast('خطا در انجام عملیات', 4000, 'error-toast');
+                }
+            }
+        });
     }
 
 </script>

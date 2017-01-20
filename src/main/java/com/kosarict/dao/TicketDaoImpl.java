@@ -33,10 +33,11 @@ public class TicketDaoImpl implements TicketDao {
 
     {
         String queryString = "SELECT ticket FROM Ticket ticket WHERE ticket.ticketType.ticketTypeId =:ticketTypeId " +
-                "and ticket.enable = true ";
+                "and ticket.enable = true and  ticket.ticketStatus.id !=:finishStatus";
 
         Query query = entityManager.createQuery(queryString);
         query.setParameter("ticketTypeId", ticketTypeId);
+        query.setParameter("finishStatus",(short)3);
 
         return query.getResultList();
     }
@@ -125,7 +126,7 @@ public class TicketDaoImpl implements TicketDao {
 
         Query query = entityManager.createQuery(queryString);
 
-        return query.setMaxResults(10).getResultList();
+        return query.getResultList().subList(0, 10);
     }
 
 }

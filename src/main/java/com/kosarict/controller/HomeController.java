@@ -118,11 +118,23 @@ public class HomeController {
 
             JSONObject dataItem = new JSONObject();
 
+            int ticketTypeId = ticket.getTicketType().getTicketTypeId();
+
+            if (ticketTypeId == 3) {
+                dataItem.put("responseTime", ticket.getComplaintType().getResponceTime());
+            } else {
+                dataItem.put("responseTime", "");
+            }
+
+            dataItem.put("ticketStatusId", ticket.getTicketStatus().getTicketStatusId());
             dataItem.put("ticketTypeTitle", ticket.getTicketType().getTitle());
+            dataItem.put("ticketTypeId", ticketTypeId);
             dataItem.put("ticketSubject", ticket.getSubject());
             dataItem.put("sectionTitle", ticket.getSection().getTitle());
             dataItem.put("sendTypeTitle", ticket.getSendType().getTitle());
             dataItem.put("submitDate", ticket.getSubmitDate());
+            dataItem.put("submitDate", ticket.getSubmitDate());
+            dataItem.put("ticketStatusTitle", ticket.getTicketStatus().getTitle());
             dataItem.put("hospitalName", ticket.getHospital().getName());
 
             dataArray.put(dataItem);

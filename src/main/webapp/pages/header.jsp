@@ -23,9 +23,10 @@
     <script type="text/javascript" src="<c:url value='/static/js/waypoints.min.js'/>"></script>
     <script type="text/javascript" src="<c:url value='/static/js/jquery.counterup.min.js'/>"></script>
     <script type="text/javascript" src="<c:url value='/static/js/jquery.noty.packaged.min.js'/>"></script>
-    <script type="text/javascript" src="<c:url value='/static/js/Chart.min.js'/>"></script>
+    <%--<script type="text/javascript" src="<c:url value='/static/js/Chart.min.js'/>"></script>--%>
     <script type="text/javascript" src="<c:url value='/static/js/kendo.all.min.js'/>"></script>
     <script type="text/javascript" src="<c:url value='/static/js/jszip.min.js'/>"></script>
+    <script type="text/javascript" src="<c:url value='/static/js/PersianDate.js '/>"></script>
 
     <script>
         /*    $(window).load(function() {
@@ -42,7 +43,7 @@
 
             $(".dropdown-button").dropdown({
                 belowOrigin: true,
-                alignment:'right'
+                alignment: 'right'
             });
         });
 
@@ -54,18 +55,18 @@
                 dataType: 'json',
                 success: function (data) {
                     $("#currentUserDisplayName").text(data[0][0].displayName);
-                    $("#imgUserImage").attr("src","/static/userImage/" + data[0][0].imageName);
+                    $("#imgUserImage").attr("src", "/static/userImage/" + data[0][0].imageName);
 
                     if (data.length > 0) {
                         $.each(data[1], function (index, dataItem) {
                             var data = dataItem;
-
+//ToDo:$("<span>").addClass("new badge").text("");
                             var liParent = $("<li>");
 
                             if (data.child.length > 0) {
                                 liParent.addClass("no-padding");
 
-                                var ul = $("<ul>").addClass("collapsible collapsible-accordion").css("padding-right","0");
+                                var ul = $("<ul>").addClass("collapsible collapsible-accordion").css("padding-right", "0");
 
                                 var liChild = $("<li>");
 
@@ -75,7 +76,7 @@
 
                                 var div = $("<div>").addClass("collapsible-body");
 
-                                var ulDropDown = $("<ul>").css("padding-right","0").addClass("slideColor");
+                                var ulDropDown = $("<ul>").css("padding-right", "0").addClass("slideColor");
 
                                 $.each(data.child, function (counter, item) {
                                     var liDropDown = $("<li>");
@@ -100,12 +101,12 @@
 
                             } else {
                                 var a = $("<a>").text(data.title).addClass("white-text");
-
+//Todo:
                                 liParent.append(a);
 
-                                if(data.url == "logout"){
-                                    a.attr("href","<c:url value="/logout" />");
-                                }else{
+                                if (data.url == "logout") {
+                                    a.attr("href", "<c:url value="/logout" />");
+                                } else {
                                     a.attr("href", data.url);
                                 }
 
@@ -114,7 +115,7 @@
 
                             setTimeout(function () {
                                 selectTab();
-                            },50);
+                            }, 50);
                         });
 
 
@@ -127,7 +128,7 @@
         function selectTab() {
             var url = window.location.pathname;
 
-            switch (url){
+            switch (url) {
                 case "/admin":
                     debugger;
                     $("#nav-mobile li a[href=admin]").parent().addClass("active");
@@ -145,23 +146,23 @@
                     $("#nav-mobile li a[href=adCriticism]").parent().addClass("active");
                     break;
                 case "/user":
-                    $("#nav-mobile li a[href=hospitalSection]").parent().parent().parent().css("display","block");
+                    $("#nav-mobile li a[href=hospitalSection]").parent().parent().parent().css("display", "block");
                     $("#nav-mobile li a[href=user]").parent().addClass("active");
                     break;
                 case "/role":
-                    $("#nav-mobile li a[href=role]").parent().parent().parent().css("display","block");
+                    $("#nav-mobile li a[href=role]").parent().parent().parent().css("display", "block");
                     $("#nav-mobile li a[href=role]").parent().addClass("active");
                     break;
                 case "/hospital":
-                    $("#nav-mobile li a[href=hospitalSection]").parent().parent().parent().css("display","block");
+                    $("#nav-mobile li a[href=hospitalSection]").parent().parent().parent().css("display", "block");
                     $("#nav-mobile li a[href=hospital]").parent().addClass("active");
                     break;
                 case "/complaintType":
-                    $("#nav-mobile li a[href=hospitalSection]").parent().parent().parent().css("display","block");
+                    $("#nav-mobile li a[href=hospitalSection]").parent().parent().parent().css("display", "block");
                     $("#nav-mobile li a[href=complaintType]").parent().addClass("active");
                     break;
                 case "/hospitalSection":
-                    $("#nav-mobile li a[href=hospitalSection]").parent().parent().parent().css("display","block");
+                    $("#nav-mobile li a[href=hospitalSection]").parent().parent().parent().css("display", "block");
                     $("#nav-mobile li a[href=hospitalSection]").parent().addClass("active");
                     break;
             }
