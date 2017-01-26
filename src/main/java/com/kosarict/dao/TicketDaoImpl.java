@@ -129,4 +129,16 @@ public class TicketDaoImpl implements TicketDao {
         return query.getResultList().subList(0, 10);
     }
 
+    @Override
+    public List<Ticket> getTicketArchiveList()
+
+    {
+        String queryString = "SELECT ticket FROM Ticket ticket WHERE  " +
+                "ticket.enable = true and  ticket.ticketStatus.id =:finishStatus";
+
+        Query query = entityManager.createQuery(queryString);
+        query.setParameter("finishStatus",(short)3);
+
+        return query.getResultList();
+    }
 }

@@ -48,4 +48,16 @@ public class ComplainantRelationDaoImpl implements ComplainantRelationDao {
         entityManager.remove(complainantRelation);
         return true;
     }
+
+    @Override
+    public List<ComplainantRelation> findComplainantRelationByTicketId(long ticketId) {
+
+        String queryString = "SELECT complainantRelation FROM ComplainantRelation" +
+                " complainantRelation where complainantRelation.ticketId=:ticketId";
+
+        Query query = entityManager.createQuery(queryString);
+        query.setParameter("ticketId", ticketId);
+
+        return query.getResultList();
+    }
 }

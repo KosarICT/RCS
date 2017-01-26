@@ -325,8 +325,14 @@
                     $("#txtNationalCode").val(data.nationalCode);
                     $("#txtTel").val(data.tel);
                     $("#txtMobile").val(data.mobile);
-//                    $("#txtRelationName").val("");
-//                    $("#txtRelationNationalCode").val("");
+
+                    var complainatId = data.complainatId;
+                    if (complainatId == 2) {
+                        $("#txtRelationName").val(data.complainerName);
+                        $("#txtRelationNationalCode").val(data.complainerNationalCode);
+                    }
+
+
                     $("#txComplaintTypeTitle").val(data.complaintTypeTitle);
                     $("#txtShiftTitle").val(data.shiftTitle);
                     $("#hiddenHospitalId").val(data.hospitalId);

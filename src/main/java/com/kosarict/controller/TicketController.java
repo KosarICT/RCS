@@ -269,6 +269,7 @@ public class TicketController {
 
             ticketJson.put("ticket_Id", ticket.getTicketId());
             ticketJson.put("ticketType_Id", ticketTypeId);
+            ticketJson.put("ticketTypeTitle", ticket.getTicketType().getTitle());
 
             if (ticketTypeId != Constant.OfferTicketTypeId) {
                 ticketJson.put("shiftTitle", ticket.getShift().getTitle());
@@ -278,10 +279,16 @@ public class TicketController {
                 ticketJson.put("complaintTypeTitle", ticket.getComplaintType().getTitle());
                 int complainatId = ticket.getComplainant().getComplainantId();
                 ticketJson.put("complainantTitle", ticket.getComplainant().getTitle());
+                ticketJson.put("complainatId", complainatId);
 
-//                if (complainatId == 2) {
-//
-//                }
+                if (complainatId == 2) {
+                    List<ComplainantRelation> complainantRelationList = complainantRelationDao.findComplainantRelationByTicketId(id);
+                    ComplainantRelation complainantRelation = complainantRelationList.get(0);
+
+                    ticketJson.put("complainerName", complainantRelation.getFirstName() + " " + complainantRelation.getLastName());
+                    ticketJson.put("complainerNationalCode", complainantRelation.getNationalCode());
+
+                }
             }
 
             if (ticketTypeId != Constant.OfferTicketTypeId) {

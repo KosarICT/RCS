@@ -19,4 +19,6 @@ public interface ComplainantRelationDao {
 
     @Transactional
     boolean deleteComplainantRelation(short complainantRelationId);
+
+    List<ComplainantRelation> findComplainantRelationByTicketId(long TicketId);
 }
