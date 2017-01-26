@@ -556,7 +556,8 @@
         $("#chkLocked").prop("checked", false)
 
         $("#imgUser").attr("src", "/static/userImage/boy.png");
-
+        $('#ddlHospital').val("0");
+        $("#roleListDiv").empty();
         var checkList = $("#roleListDiv").children();
 
         $.each(checkList, function (count, dataItem) {
