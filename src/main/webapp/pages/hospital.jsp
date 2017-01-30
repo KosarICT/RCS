@@ -75,9 +75,9 @@
         <div class="row">
             <div class="col m2 l1"></div>
             <div class="col s12 m8 l10">
-                <div class="input-field">
+                <%--<div class="input-field">--%>
                     <input placeholder="نام بیمارستان" id="txtHospitalName" type="text" autocomplete="false" autofocus>
-                </div>
+                <%--</div>--%>
 
                 <div class="input-field">
                     <input placeholder="شماره خط پیام رسان" id="txtSmsNumber" type="text" class="validate"

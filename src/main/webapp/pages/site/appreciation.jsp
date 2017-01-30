@@ -11,12 +11,12 @@
 
 
         <div class="row">
-            <div class="col s12 m4 l4 right">
+            <div class="col s12 m4 l4 right marginTop">
                 <label for="ddlHospital">انتخاب بیمارستان:</label>
             </div>
 
             <div class="col s12 m8 l8 left">
-                <select id="ddlHospital" onchange="ddlHospitalChange();">
+                <select id="ddlHospital" onchange="ddlHospitalChange();" style="font-weight: 400; color: #989898">
                     <option value="" disabled selected>بیمارستان موردنظر انتخاب نمائید</option>
                     <c:if test="${not empty hospitalList}">
                         <c:forEach var="entry" items="${hospitalList}">
@@ -29,8 +29,8 @@
 
         <div class="row">
 
-            <div class="col s12 m4 l4 right">
-                <label for="ddlSection">بخش</label>
+            <div class="col s12 m4 l4 right marginTop">
+                <label for="ddlSection">بخش:</label>
             </div>
             <div class="col s12 m8 l8 left">
                 <select id='ddlSection'>
@@ -40,7 +40,7 @@
 
         <div class="row">
 
-            <div class="col s12 m4 l4 right">
+            <div class="col s12 m4 l4 right marginTop">
                 <label for="ddlShift">شیفت کاری:</label>
             </div>
 
@@ -53,31 +53,31 @@
 
         <div class="row">
 
-            <div class="col s12 m4 l4 right">
+            <div class="col s12 m4 l4 right marginTop">
                 <label for="appreciationName">نام:</label>
             </div>
 
             <div class="col s12 m8 l8 left">
-                <input maxlength="100" id="appreciationName" type="text" class="validate">
+                <input maxlength="100" id="appreciationName" type="text" class="validate" lang="fa">
             </div>
 
         </div>
 
         <div class="row">
 
-            <div class="col s12 m4 l4 right">
+            <div class="col s12 m4 l4 right marginTop">
                 <label for="appreciationFamily">نام خانوادگی:</label>
             </div>
 
             <div class="col s12 m8 l8 left">
-                <input maxlength="100" id="appreciationFamily" type="text" class="validate">
+                <input maxlength="100" id="appreciationFamily" type="text" class="validate" lang="fa">
             </div>
 
         </div>
 
         <div class="row">
 
-            <div class="col s12 m4 l4 right">
+            <div class="col s12 m4 l4 right marginTop">
                 <label for="nationalCode">کد ملی:</label>
             </div>
 
@@ -90,7 +90,7 @@
 
         <div class="row">
 
-            <div class="col s12 m4 l4 right">
+            <div class="col s12 m4 l4 right marginTop">
                 <label for="telephone">تلفن ثابت:</label>
             </div>
 
@@ -103,7 +103,7 @@
 
         <div class="row">
 
-            <div class="col s12 m4 l4 right">
+            <div class="col s12 m4 l4 right marginTop">
                 <label for="mobile">تلفن همراه:</label>
             </div>
 
@@ -116,55 +116,55 @@
 
         <div class="row">
 
-            <div class="col s12 m4 l4 right">
+            <div class="col s12 m4 l4 right marginTop">
                 <label for="appreciationUserName">نام پرسنل:</label>
             </div>
 
             <div class="col s12 m8 l8 left">
-                <input maxlength="100" id="appreciationUserName" type="text" class="validate">
+                <input maxlength="100" id="appreciationUserName" type="text" class="validate" lang="fa">
             </div>
 
         </div>
 
         <div class="row">
 
-            <div class="col s12 m4 l4 right">
+            <div class="col s12 m4 l4 right marginTop">
                 <label for="appreciationUserFamily">نام خانوادگی پرسنل:</label>
             </div>
 
             <div class="col s12 m8 l8 left">
-                <input maxlength="100" id="appreciationUserFamily" type="text" class="validate">
+                <input maxlength="100" id="appreciationUserFamily" type="text" class="validate" lang="fa">
             </div>
 
         </div>
 
         <div class="row">
 
-            <div class="col s12 m4 l4 right">
+            <div class="col s12 m4 l4 right marginTop">
                 <label for="appreciationSubject">موضوع:</label>
             </div>
 
             <div class="col s12 m8 l8 left">
-                <input maxlength="500" id="appreciationSubject" type="text" class="validate">
+                <input maxlength="500" id="appreciationSubject" type="text" class="validate" lang="fa">
             </div>
 
         </div>
 
         <div class="row">
 
-            <div style="display: inline-block;width: 29%;text-align: right; vertical-align: top;">
+            <div class="col s12 m4 l4 right marginTop">
                 <label for="appreciationDescription">متن قدردانی:</label>
             </div>
 
             <div class="col s12 m8 l8 left" class="input-field">
-                <textarea maxlength="4000" id="appreciationDescription" class="materialize-textarea"></textarea>
+                <textarea maxlength="4000" id="appreciationDescription" class="materialize-textarea" lang="fa"></textarea>
             </div>
 
         </div>
 
         <div class="row">
 
-            <div class="col s12 m4 l4 right">
+            <div class="col s12 m4 l4 right marginTop">
                 <label for="appreciationEmail">ایمیل:</label>
             </div>
 
@@ -176,7 +176,7 @@
 
         <div class="row">
 
-            <div class="col s12 m4 l4 right">
+            <div class="col s12 m4 l4 right marginTop">
                 <label>مستندات :</label>
             </div>
 
@@ -194,7 +194,7 @@
 
         <div class="row">
 
-            <div class="col s12 m4 l4 right"></div>
+            <div class="col s12 m4 l4 right marginTop"></div>
 
             <div class="col s12 m8 l8 left">
                 <label>فایل های با پسوند rar. و zip. تا سقف 3072KB مجاز می باشند</label>
@@ -203,17 +203,18 @@
         </div>
 
         <div class="row">
-            <div class="col s12 m4 l4 right"></div>
+            <div class="col s12 m4 l4 right marginTop"></div>
+
             <div class="col s12 m8 l8 left">
                 <input type="text" id="txtCaptcha" disabled
                        style="
                    background-image: url(/static/icon/captcha.JPG);
                    text-align:center;
                    border:1px solid #a1a1a1;
-                   color: #000;
+                   color: #000 !important;
                    font-size: 17px;
                    display: inline-block;
-                   width: auto;
+                   width: 73% !important;
                    direction: ltr;
                     font-weight:bold;"/>
                 <a href="#!" class="waves-effect waves-light btn" id="btnrefresh" onclick="DrawCaptcha();"
@@ -226,7 +227,7 @@
 
         <div class="row">
 
-            <div class="col s12 m4 l4 right">
+            <div class="col s12 m4 l4 right marginTop">
                 <label>کد امنیتی :</label>
             </div>
             <div class="col s12 m8 l8 left">
@@ -236,7 +237,7 @@
 
         <div class="row">
 
-            <div class="col s12 m4 l4 right">
+            <div class="col s12 m4 l4 right marginTop">
             </div>
 
             <a class="waves-effect waves-light btn"
@@ -484,7 +485,7 @@
                     .attr("value", "");
 
                 var defaultShifit = $("<option>");
-                defaultShifit.text("بخش موردنظر را انتخاب نمائید")
+                defaultShifit.text("شیفت موردنظر را انتخاب نمائید")
                     .prop("disabled", true)
                     .prop("selected", true)
                     .attr("value", "");

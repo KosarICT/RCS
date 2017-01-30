@@ -87,6 +87,7 @@ public class TicketDaoImpl implements TicketDao {
                 "WHERE hospitalSection.hospital.hospitalId =:hospitalId " +
                 "AND hospitalSection.section.sectionId =:sectionId ";
 
+
         Query query = entityManager.createQuery(queryString);
         query.setParameter("hospitalId", hospitalId);
         query.setParameter("sectionId", sectionId);

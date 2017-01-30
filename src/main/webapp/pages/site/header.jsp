@@ -9,11 +9,13 @@
     <link type="text/css" rel="stylesheet" href="<c:url value='/static/css/web/materialize.min.css'/>"
           media="screen,projection"/>
     <link href="<c:url value='/static/css/web/common.css'/>" rel="stylesheet">
+    <link href="<c:url value='/static/css/web/site.css'/>" rel="stylesheet">
 
 
     <script type="text/javascript" src="<c:url value='/static/js/jquery.min.js'/>"></script>
     <script type="text/javascript" src="<c:url value='/static/js/materialize.min.js'/>"></script>
     <script type="text/javascript" src="<c:url value='/static/js/persiaNumber.min.js'/>"></script>
+    <script type="text/javascript" src="<c:url value='/static/js/FarsiType.js'/>"></script>
 
     <style>
         #map-canvas {
@@ -33,6 +35,7 @@
             display: block;
         }
     </style>
+
 </head>
 
 <body >

@@ -4,6 +4,44 @@
 
 <%@include file="header.jsp" %>
 
+<style>
+    table {
+        font-size: 13px !important;
+    }
+
+    tbody tr {
+        height: 59px !important;
+    }
+
+    tr td {
+        text-align: right !important;
+        border-bottom: 1px solid #c8c8c8 !important;
+    }
+
+    #grvAdminTicket th {
+        text-align: right !important;
+    }
+
+    .textBox{
+        width: 90%;
+        border: 1px solid #bfbfbf !important;
+        height: 33px !important;
+        background: #fff !important;
+        color: #a8a8a8;
+    }
+
+    .k-grid-pager a{
+        margin-top: 3px !important;
+    }
+    .k-grid-pager a span{
+        margin-top: 5px !important;
+    }
+
+    .k-dropdown span{
+        margin-top: 5px !important;
+    }
+</style>
+
 <div class="row">
     <div class="col s12 m6 l3">
         <div class="card" style="background: #6580b1">
@@ -70,76 +108,130 @@
                         dataType: "json",
                     }
                 },
+                pageSize: 5
             },
             sortable: {
                 mode: "single",
                 allowUnsort: false
             },
-
-            filterable: {
-                mode: "row"
+            pageable: {
+                pageSizes: true,
+                messages: {
+                    itemsPerPage: "",
+                    display: "نمایش {0}-{1} آیتم از {2} آیتم",
+                    empty: "اطلاعاتی برای نمایش وجود ندارد"
+                }
             },
-            selectable: "single",
             columns: [
                 {field: "appreciationId", hidden: true},
                 {field: "ticketStatusId", hidden: true},
                 {field: "ticketTypeId", hidden: true},
                 {
-                    field: "ticketTypeTitle", title: "نوع گزارش", filterable: {
+                    field: "ticketTypeTitle", title: "نوع گزارش", width: "100px", filterable: {
                     cell: {
-                        showOperators: false
+                        showOperators: false,
+                        operator: "contains",
+                        template: function (args) {
+                            args.element.css("width", "90%").addClass("textBox").keydown(function (e) {
+                                setTimeout(function () {
+                                    $(e.target).trigger("change");
+                                });
+                            });
+                        },
                     }
                 }
                 },
-                {
-                    field: "ticketSubject", title: "عنوان گزارش", filterable: {
+                {field: "ticketSubject", title: "عنوان گزارش", filterable: {
                     cell: {
-                        showOperators: false
+                        showOperators: false,
+                        operator: "contains",
+                        template: function (args) {
+                            args.element.css("width", "90%").addClass("textBox").keydown(function(e){
+                                setTimeout(function(){
+                                    $(e.target).trigger("change");
+                                });
+                            });
+                        },
                     }
-                }
-                },
-                {
-                    field: "sectionTitle", title: "واحد", width: "120px", filterable: {
+                }},
+                {field: "sectionTitle", title: "واحد", width: "120px", filterable: {
                     cell: {
-                        showOperators: false
+                        showOperators: false,
+                        operator: "contains",
+                        template: function (args) {
+                            args.element.css("width", "90%").addClass("textBox").keydown(function(e){
+                                setTimeout(function(){
+                                    $(e.target).trigger("change");
+                                });
+                            });
+                        },
                     }
-                }
-                },
-                {
-                    field: "sendTypeTitle", title: "نوع ارسال", filterable: {
+                }},
+                {field: "sendTypeTitle", title: "نوع ارسال", width: "100px", filterable: {
                     cell: {
-                        showOperators: false
+                        showOperators: false,
+                        operator: "contains",
+                        template: function (args) {
+                            args.element.css("width", "90%").addClass("textBox").keydown(function(e){
+                                setTimeout(function(){
+                                    $(e.target).trigger("change");
+                                });
+                            });
+                        },
                     }
-                }
-                },
-                {
-                    field: "submitDate", title: "تاریخ و ساعت", filterable: {
+                }},
+                {field: "submitDate", title: "تاریخ و ساعت", width: "100px", filterable: {
                     cell: {
-                        showOperators: false
+                        showOperators: false,
+                        operator: "contains",
+                        template: function (args) {
+                            args.element.css("width", "90%").addClass("textBox").keydown(function(e){
+                                setTimeout(function(){
+                                    $(e.target).trigger("change");
+                                });
+                            });
+                        },
                     }
-                }
-                },
-                {
-                    field: "responseTime", title: "زمان /روز", width: "100px", filterable: {
+                }},
+                {field: "responseTime", title: "زمان/روز", width: "100px", filterable: {
                     cell: {
-                        showOperators: false
+                        showOperators: false,
+                        operator: "contains",
+                        template: function (args) {
+                            args.element.css("width", "90%").addClass("textBox").keydown(function(e){
+                                setTimeout(function(){
+                                    $(e.target).trigger("change");
+                                });
+                            });
+                        },
                     }
-                }
-                },
-                {
-                    field: "hospitalName", title: "نام مرکز", width: "100px", filterable: {
+                }},
+                {field: "hospitalName", title: "نام مرکز", width: "200px", filterable: {
                     cell: {
-                        showOperators: false
+                        showOperators: false,
+                        operator: "contains",
+                        template: function (args) {
+                            args.element.css("width", "90%").addClass("textBox").keydown(function(e){
+                                setTimeout(function(){
+                                    $(e.target).trigger("change");
+                                });
+                            });
+                        },
                     }
-                }
-                },
-                {
-                    field: "ticketStatusTitle", title: "وضعیت", width: "100px", filterable: {
+                }},
+                {field: "ticketStatusTitle", title: "وضعیت", width: "100px" ,filterable: {
                     cell: {
-                        showOperators: false
+                        showOperators: false,
+                        operator: "contains",
+                        template: function (args) {
+                            args.element.css("width", "90%").addClass("textBox").keydown(function(e){
+                                setTimeout(function(){
+                                    $(e.target).trigger("change");
+                                });
+                            });
+                        },
                     }
-                }
-                },
+                }}
             ],
             dataBound: function (e) {
                 var grid = $("#grvAdminTicket").data("kendoGrid");
@@ -153,7 +245,7 @@
 
                         var calender = new PersianDate();
 
-                        var responseDay = gridData[i].responseTime
+                        var responseDay = gridData[i].responseTime;
                         var submitDate = gridData[i].submitDate;
 
                         var dateArray = submitDate.split("/");
@@ -177,7 +269,6 @@
                         var value = days / len;
                         var colorCode = getColor(value);
 
-                        debugger;
                         $('tr[data-uid="' + gridData[i].uid + '"] ').css("background-color", colorCode);
 
                     }
@@ -224,7 +315,7 @@
     function getColor(value) {
         //value from 0 to 1
         var hue = ((1 - value) * 120).toString(10);
-        return ["hsl(", hue, ",100%,85%)"].join("");
+        return ["hsl(", hue, ",100%,92%)"].join("");
     }
 </script>
 

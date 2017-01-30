@@ -8,7 +8,7 @@
     <div class="card col s12 m10 l6 row" style="padding: 30px 60px 30px 60px">
 
         <div class="row" >
-            <div class="col s12 m4 l4 right">
+            <div class="col s12 m4 l4 right marginTop">
                 <label for="ddlHospital">انتخاب بیمارستان:</label>
             </div>
 
@@ -26,8 +26,8 @@
 
         <div class="row">
 
-            <div class="col s12 m4 l4 right">
-                <label for="ddlSection">بخش</label>
+            <div class="col s12 m4 l4 right marginTop">
+                <label for="ddlSection">بخش:</label>
             </div>
 
             <div class="col s12 m8 l8 m12 left">
@@ -39,7 +39,7 @@
 
         <div class="row">
 
-            <div class="col s12 m4 l4 right">
+            <div class="col s12 m4 l4 right marginTop">
                 <label for="name">نام پیشنهاد دهنده:</label>
             </div>
 
@@ -50,7 +50,7 @@
 
         <div class="row">
 
-            <div class="col s12 m4 l4 right">
+            <div class="col s12 m4 l4 right marginTop">
                 <label for="family">نام خانوادگی پیشنهاد دهنده:</label>
             </div>
 
@@ -61,7 +61,7 @@
 
         <div class="row">
 
-            <div class="col s12 m4 l4 right">
+            <div class="col s12 m4 l4 right marginTop">
                 <label for="nationalCode">کد ملی:</label>
             </div>
 
@@ -74,7 +74,7 @@
 
         <div class="row">
 
-            <div class="col s12 m4 l4 right">
+            <div class="col s12 m4 l4 right marginTop">
                 <label for="telephone">تلفن ثابت:</label>
             </div>
 
@@ -87,7 +87,7 @@
 
         <div class="row">
 
-            <div class="col s12 m4 l4 right">
+            <div class="col s12 m4 l4 right marginTop">
                 <label for="mobile">تلفن همراه:</label>
             </div>
 
@@ -100,7 +100,7 @@
 
         <div class="row">
 
-            <div class="col s12 m4 l4 right">
+            <div class="col s12 m4 l4 right marginTop">
                 <label for="offerSubject">موضوع:</label>
             </div>
 
@@ -112,7 +112,7 @@
 
         <div class="row">
 
-            <div class="col s12 m4 l4 right">
+            <div class="col s12 m4 l4 right marginTop">
                 <label for="offerDescription">متن پیشنهاد:</label>
             </div>
 
@@ -124,7 +124,7 @@
 
         <div class="row">
 
-            <div class="col s12 m4 l4 right">
+            <div class="col s12 m4 l4 right marginTop">
                 <label for="email">ایمیل:</label>
             </div>
 
@@ -136,7 +136,7 @@
 
         <div class="row">
 
-            <div class="col s12 m4 l4 right">
+            <div class="col s12 m4 l4 right marginTop">
                 <label>مستندات :</label>
             </div>
 
@@ -154,16 +154,16 @@
 
         <div class="row">
 
-            <div class="col s12 m4 l4 right"></div>
+            <div class="col s12 m4 l4 right marginTop"></div>
 
-            <div style="display: inline-block;width: 70%">
+            <div class="col s12 m8 l8 left">
                 <label>فایل های با پسوند rar. و zip. تا سقف 3072KB مجاز می باشند</label>
             </div>
 
         </div>
 
         <div class="row">
-            <div class="col s12 m4 l4 right"></div>
+            <div class="col s12 m4 l4 right marginTop"></div>
 
             <div class="col s12 m8 l8 left">
                 <input type="text" id="txtCaptcha" disabled
@@ -171,10 +171,10 @@
                    background-image: url(/static/icon/captcha.JPG);
                    text-align:center;
                    border:1px solid #a1a1a1;
-                   color: #000;
+                   color: #000 !important;
                    font-size: 17px;
                    display: inline-block;
-                   width: auto;
+                   width: 73% !important;
                    direction: ltr;
                     font-weight:bold;"/>
                 <a href="#!" class="waves-effect waves-light btn" id="btnrefresh" onclick="DrawCaptcha();"
@@ -185,7 +185,7 @@
         </div>
 
         <div class="row">
-            <div class="col s12 m4 l4 right">
+            <div class="col s12 m4 l4 right marginTop">
                 <label>کد امنیتی :</label>
             </div>
 
@@ -196,7 +196,7 @@
 
         <div class="row">
 
-            <div style="display: inline-block;width: 29%;text-align: right;">
+            <div class="col s12 m4 l4 right marginTop">
             </div>
 
             <a class="waves-effect waves-light btn"

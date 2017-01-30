@@ -25,6 +25,25 @@
         border-bottom: none !important;
         box-shadow: none !important;
     }
+
+    .textBox{
+        width: 90%;
+        border: 1px solid #bfbfbf !important;
+        height: 33px !important;
+        background: #fff !important;
+        color: #a8a8a8;
+    }
+
+    .k-grid-pager a{
+        margin-top: 3px !important;
+    }
+    .k-grid-pager a span{
+        margin-top: 5px !important;
+    }
+
+    .k-dropdown span{
+        margin-top: 5px !important;
+    }
 </style>
 
 <div class="row">
@@ -127,6 +146,7 @@
 <script>
     $(document).ready(function () {
         $(".page-title").text("بایگانی");
+
         $(".row").persiaNumber();
 
         $(".data-wrapper tr").click(function () {
@@ -148,6 +168,7 @@
                         dataType: "json",
                     },
                 },
+                pageSize: 5
             },
             sortable: {
                 mode: "single",
@@ -162,48 +183,104 @@
                 mode: "row"
             },
             selectable: "single",
+            pageable: {
+                pageSizes: true,
+                messages: {
+                    itemsPerPage: "",
+                    display: "نمایش {0}-{1} آیتم از {2} آیتم",
+                    empty: "اطلاعاتی برای نمایش وجود ندارد"
+                }
+            },
             columns: [
 
                 {field: "ticketId", hidden: true},
                 {
                     field: "ticketTypeTitle", title: "نوع گزارش", filterable: {
                     cell: {
-                        showOperators: false
+                        showOperators: false,
+                        operator: "contains",
+                        template: function (args) {
+                            args.element.css("width", "90%").addClass("textBox").keydown(function(e){
+                                setTimeout(function(){
+                                    $(e.target).trigger("change");
+                                });
+                            });
+                        },
                     }
                 }
                 },
                 {
                     field: "ticketSubject", title: "عنوان گزارش", filterable: {
                     cell: {
-                        showOperators: false
+                        showOperators: false,
+                        operator: "contains",
+                        template: function (args) {
+                            args.element.css("width", "90%").addClass("textBox").keydown(function(e){
+                                setTimeout(function(){
+                                    $(e.target).trigger("change");
+                                });
+                            });
+                        },
                     }
                 }
                 },
                 {
                     field: "hospitalName", title: "نام مرکز", width: "100px", filterable: {
                     cell: {
-                        showOperators: false
+                        showOperators: false,
+                        operator: "contains",
+                        template: function (args) {
+                            args.element.css("width", "90%").addClass("textBox").keydown(function(e){
+                                setTimeout(function(){
+                                    $(e.target).trigger("change");
+                                });
+                            });
+                        },
                     }
                 }
                 },
                 {
                     field: "sectionTitle", title: "واحد", width: "120px", filterable: {
                     cell: {
-                        showOperators: false
+                        showOperators: false,
+                        operator: "contains",
+                        template: function (args) {
+                            args.element.css("width", "90%").addClass("textBox").keydown(function(e){
+                                setTimeout(function(){
+                                    $(e.target).trigger("change");
+                                });
+                            });
+                        },
                     }
                 }
                 },
                 {
                     field: "sendTypeTitle", title: "نوع ارسال", filterable: {
                     cell: {
-                        showOperators: false
+                        showOperators: false,
+                        operator: "contains",
+                        template: function (args) {
+                            args.element.css("width", "90%").addClass("textBox").keydown(function(e){
+                                setTimeout(function(){
+                                    $(e.target).trigger("change");
+                                });
+                            });
+                        },
                     }
                 }
                 },
                 {
                     field: "submitDate", title: "تاریخ و ساعت", filterable: {
                     cell: {
-                        showOperators: false
+                        showOperators: false,
+                        operator: "contains",
+                        template: function (args) {
+                            args.element.css("width", "90%").addClass("textBox").keydown(function(e){
+                                setTimeout(function(){
+                                    $(e.target).trigger("change");
+                                });
+                            });
+                        },
                     }
                 }
                 },

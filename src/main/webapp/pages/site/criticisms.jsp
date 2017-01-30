@@ -9,7 +9,7 @@
     <div class="card col s12 m10 l6 row" style="padding: 30px 60px 30px 60px">
 
         <div class="row">
-            <div class="col s12 m4 l4 right">
+            <div class="col s12 m4 l4 right marginTop">
                 <label for="ddlHospital">انتخاب بیمارستان:</label>
             </div>
 
@@ -28,7 +28,7 @@
         <div class="row">
 
             <div class="col s12 m4 l4 right">
-                <label for="ddlSection">بخش</label>
+                <label for="ddlSection">بخش:</label>
             </div>
             <div class="col s12 m8 l8 left">
                 <select id='ddlSection'>
@@ -39,7 +39,7 @@
 
         <div class="row">
 
-            <div class="col s12 m4 l4 right">
+            <div class="col s12 m4 l4 right marginTop">
                 <label for="ddlShift">شیفت کاری:</label>
             </div>
 
@@ -52,7 +52,7 @@
         
         <div class="row">
 
-            <div class="col s12 m4 l4 right">
+            <div class="col s12 m4 l4 right marginTop">
                 <label for="criticismName">نام:</label>
             </div>
 
@@ -64,7 +64,7 @@
 
         <div class="row">
 
-            <div class="col s12 m4 l4 right">
+            <div class="col s12 m4 l4 right marginTop">
                 <label for="criticismFamily">نام خانوادگی:</label>
             </div>
 
@@ -76,7 +76,7 @@
         
         <div class="row">
 
-            <div class="col s12 m4 l4 right">
+            <div class="col s12 m4 l4 right marginTop">
                 <label for="nationalCode">کد ملی:</label>
             </div>
 
@@ -89,7 +89,7 @@
 
         <div class="row">
 
-            <div class="col s12 m4 l4 right">
+            <div class="col s12 m4 l4 right marginTop">
                 <label for="telephone">تلفن ثابت:</label>
             </div>
 
@@ -102,7 +102,7 @@
 
         <div class="row">
 
-            <div class="col s12 m4 l4 right">
+            <div class="col s12 m4 l4 right marginTop">
                 <label for="mobile">تلفن همراه:</label>
             </div>
 
@@ -115,7 +115,7 @@
         
         <div class="row">
 
-            <div class="col s12 m4 l4 right">
+            <div class="col s12 m4 l4 right marginTop">
                 <label for="criticismSubject">موضوع:</label>
             </div>
 
@@ -127,7 +127,7 @@
 
         <div class="row">
 
-            <div style="display: inline-block;width: 29%;text-align: right; vertical-align: top;">
+            <div class="col s12 m4 l4 right marginTop">
                 <label for="criticismDescription">متن انتقاد:</label>
             </div>
 
@@ -139,7 +139,7 @@
 
         <div class="row">
 
-            <div class="col s12 m4 l4 right">
+            <div class="col s12 m4 l4 right marginTop">
                 <label for="criticismEmail">ایمیل:</label>
             </div>
 
@@ -151,7 +151,7 @@
 
         <div class="row">
 
-            <div class="col s12 m4 l4 right">
+            <div class="col s12 m4 l4 right marginTop">
                 <label>مستندات :</label>
             </div>
 
@@ -169,7 +169,7 @@
 
         <div class="row">
 
-            <div class="col s12 m4 l4 right">
+            <div class="col s12 m4 l4 right marginTop">
             </div>
 
             <div class="col s12 m8 l8 left">
@@ -179,7 +179,7 @@
         </div>
         
         <div class="row">
-            <div class="col s12 m4 l4 right"></div>
+            <div class="col s12 m4 l4 right marginTop"></div>
 
             <div class="col s12 m8 l8 left">
                 <input type="text" id="txtCaptcha" disabled
@@ -187,10 +187,10 @@
                    background-image: url(/static/icon/captcha.JPG);
                    text-align:center;
                    border:1px solid #a1a1a1;
-                   color: #000;
+                   color: #000 !important;
                    font-size: 17px;
                    display: inline-block;
-                   width: auto;
+                   width: 73% !important;
                    direction: ltr;
                     font-weight:bold;"/>
                 <a href="#!" class="waves-effect waves-light btn" id="btnrefresh" onclick="DrawCaptcha();"
@@ -203,7 +203,7 @@
 
         <div class="row">
 
-            <div class="col s12 m4 l4 right">
+            <div class="col s12 m4 l4 right marginTop">
                 <label>کد امنیتی :</label>
             </div>
             <div class="col s12 m8 l8 left">
@@ -213,7 +213,7 @@
 
         <div class="row">
 
-            <div class="col s12 m4 l4 right">
+            <div class="col s12 m4 l4 right marginTop">
             </div>
 
             <a class="waves-effect waves-light btn"
@@ -444,7 +444,7 @@
                     .attr("value", "");
 
                 var defaultShifit = $("<option>");
-                defaultShifit.text("بخش موردنظر را انتخاب نمائید")
+                defaultShifit.text("شیفت موردنظر را انتخاب نمائید")
                     .prop("disabled", true)
                     .prop("selected", true)
                     .attr("value", "");

@@ -1,14 +1,12 @@
 package com.kosarict.entity;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 /**
  * Created by Sadegh-Pc on 12/5/2016.
  */
 @Entity
+@Table(name = "SendType", schema = "dbo", catalog = "Monitoring")
 public class SendType {
     private short sendTypeId;
     private String title;

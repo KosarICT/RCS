@@ -96,7 +96,7 @@ public class TicketController {
             dataItem.put("submitDate", ticket.getSubmitDate());
 
             if (id == Constant.AppreciationTicketTypeId) {
-
+                dataItem.put("sectionName", ticket.getSection().getTitle());
             } else if (id == Constant.ComplainTicketTypeId) {
                 dataItem.put("complainantTitle", ticket.getComplainant().getTitle());
                 dataItem.put("complaintTypeTitle", ticket.getComplaintType().getTitle());

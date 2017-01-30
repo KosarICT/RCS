@@ -9,7 +9,7 @@
     <div class="card col s12 m10 l6 row" style="padding: 30px 60px 30px 60px">
 
         <div class="row">
-            <div class="col s12 m4 l4 right">
+            <div class="col s12 m4 l4 right marginTop">
                 <label for="ddlHospital">انتخاب بیمارستان:</label>
             </div>
 
@@ -27,8 +27,8 @@
 
         <div class="row">
 
-            <div class="col s12 m4 l4 right">
-                <label for="ddlSection">بخش</label>
+            <div class="col s12 m4 l4 right marginTop">
+                <label for="ddlSection">بخش:</label>
             </div>
             <div class="col s12 m8 l8 left">
                 <select id='ddlSection'>
@@ -38,25 +38,19 @@
 
         <div class="row">
 
-            <div class="col s12 m4 l4 right">
+            <div class="col s12 m4 l4 right marginTop">
                 <label for="ddlShift">شیفت کاری:</label>
             </div>
 
             <div class="col s12 m8 l8 left">
                 <select id='ddlShift'>
-                    <c:if test="${not empty shiftLists}">
-                        <option value="0" disabled selected>شیفت مورد نظر</option>
-                        <c:forEach var="entry" items="${shiftLists}">
-                            <option value="${entry.shiftId}">${entry.title}</option>
-                        </c:forEach>
-                    </c:if>
                 </select>
             </div>
         </div>
 
         <div class="row">
 
-            <div class="col s12 m4 l4 right">
+            <div class="col s12 m4 l4 right marginTop">
                 <label>شکایت کننده:</label>
             </div>
 
@@ -78,7 +72,7 @@
 
         <div class="row">
 
-            <div class="col s12 m4 l4 right">
+            <div class="col s12 m4 l4 right marginTop">
                 <label for="ddlRelation">نسبت ثبت کننده شکایت:</label>
             </div>
 
@@ -97,7 +91,7 @@
 
         <div class="row">
 
-            <div class="col s12 m4 l4 right">
+            <div class="col s12 m4 l4 right marginTop">
                 <label for="sickName">نام بیمار:</label>
             </div>
 
@@ -109,7 +103,7 @@
 
         <div class="row">
 
-            <div class="col s12 m4 l4 right">
+            <div class="col s12 m4 l4 right marginTop">
                 <label for="sickFamily">نام خانوادگی بیمار:</label>
             </div>
 
@@ -121,7 +115,7 @@
 
         <div class="row">
 
-            <div class="col s12 m4 l4 right">
+            <div class="col s12 m4 l4 right marginTop">
                 <label for="nationalCode">کد ملی:</label>
             </div>
 
@@ -134,7 +128,7 @@
 
         <div class="row">
 
-            <div class="col s12 m4 l4 right">
+            <div class="col s12 m4 l4 right marginTop">
                 <label for="telephone">تلفن ثابت:</label>
             </div>
 
@@ -147,7 +141,7 @@
 
         <div class="row">
 
-            <div class="col s12 m4 l4 right">
+            <div class="col s12 m4 l4 right marginTop">
                 <label for="mobile">تلفن همراه:</label>
             </div>
 
@@ -172,7 +166,7 @@
 
         <div class="row">
 
-            <div class="col s12 m4 l4 right">
+            <div class="col s12 m4 l4 right marginTop">
                 <label for="compalainerFamily">نام خانوادگی شکایت کننده:</label>
             </div>
 
@@ -184,7 +178,7 @@
 
         <div class="row">
 
-            <div class="col s12 m4 l4 right">
+            <div class="col s12 m4 l4 right marginTop">
                 <label for="registerNationalCode"> کد ملی ثبت کننده:</label>
             </div>
 
@@ -197,7 +191,7 @@
 
         <div class="row">
 
-            <div class="col s12 m4 l4 right">
+            <div class="col s12 m4 l4 right marginTop">
                 <label for="ddlComplaintType">نوع شکایت:</label>
             </div>
 
@@ -218,7 +212,7 @@
 
         <div class="row">
 
-            <div class="col s12 m4 l4 right">
+            <div class="col s12 m4 l4 right marginTop">
                 <label for="complainSubject">موضوع:</label>
             </div>
 
@@ -230,7 +224,7 @@
 
         <div class="row">
 
-            <div class="col s12 m4 l4 right">
+            <div class="col s12 m4 l4 right marginTop">
                 <label for="complainDescription">متن شکایت:</label>
             </div>
 
@@ -242,7 +236,7 @@
 
         <div class="row">
 
-            <div class="col s12 m4 l4 right">
+            <div class="col s12 m4 l4 right marginTop">
                 <label for="complainEmail">ایمیل:</label>
             </div>
 
@@ -254,7 +248,7 @@
 
         <div class="row">
 
-            <div class="col s12 m4 l4 right">
+            <div class="col s12 m4 l4 right marginTop">
                 <label>مستندات :</label>
             </div>
 
@@ -271,7 +265,7 @@
         </div>
 
         <div class="row">
-            <div class="col s12 m4 l4 right"></div>
+            <div class="col s12 m4 l4 right marginTop"></div>
 
             <div class="col s12 m8 l8 left">
                 <label>فایل های با پسوند rar. و zip. تا سقف 3072KB مجاز می باشند</label>
@@ -280,7 +274,7 @@
         </div>
 
         <div class="row">
-            <div class="col s12 m4 l4 right"></div>
+            <div class="col s12 m4 l4 right marginTop"></div>
 
             <div class="col s12 m8 l8 left">
                 <input type="text" id="txtCaptcha" disabled
@@ -288,10 +282,10 @@
                    background-image: url(/static/icon/captcha.JPG);
                    text-align:center;
                    border:1px solid #a1a1a1;
-                   color: #000;
+                   color: #000 !important;
                    font-size: 17px;
                    display: inline-block;
-                   width: auto;
+                   width: 73% !important;
                    direction: ltr;
                     font-weight:bold;"/>
                 <a href="#!" class="waves-effect waves-light btn" id="btnrefresh" onclick="DrawCaptcha();"
@@ -302,7 +296,7 @@
         </div>
 
         <div class="row">
-            <div class="col s12 m4 l4 right">
+            <div class="col s12 m4 l4 right marginTop">
                 <label>کد امنیتی :</label>
             </div>
             <div class="col s12 m8 l8 left">
@@ -311,7 +305,7 @@
         </div>
 
         <div class="row">
-            <div class="col s12 m4 l4 right"></div>
+            <div class="col s12 m4 l4 right marginTop"></div>
 
             <div class="col s12 m8 l8 left">
                 <a class="waves-effect waves-light btn"
@@ -658,7 +652,7 @@
                     .attr("value", "");
 
                 var defaultShifit = $("<option>");
-                defaultShifit.text("بخش موردنظر را انتخاب نمائید")
+                defaultShifit.text("شیفت موردنظر را انتخاب نمائید")
                     .prop("disabled", true)
                     .prop("selected", true)
                     .attr("value", "");

@@ -47,7 +47,7 @@ public class UserController {
         ModelAndView model = new ModelAndView("user");
         model.addObject("lists", getUsersList());
         model.addObject("hospitalList", getHospitalLists());
-        model.addObject("roleList",getRols());
+        model.addObject("roleList", getRols());
         return model;
     }
 
@@ -112,13 +112,13 @@ public class UserController {
             int newUserId = userDao.saveUser(user);
 
 
-            List<UsersHospitalSection> usersHospitalSectionList=userSectionDao.findUserHospitalSectionByUserId(newUserId);
+            List<UsersHospitalSection> usersHospitalSectionList = userSectionDao.findUserHospitalSectionByUserId(newUserId);
             JSONArray hospitalSection = jsonObject.getJSONArray("hospitalSections");
 
-            for (UsersHospitalSection usersHospitalSection :usersHospitalSectionList){
-                int length=hospitalSection.length();
-                int i=0;
-                for (;i<length;i++){
+            for (UsersHospitalSection usersHospitalSection : usersHospitalSectionList) {
+                int length = hospitalSection.length();
+                int i = 0;
+                for (; i < length; i++) {
                     JSONObject userHospitalSectionJSONObject = hospitalSection.getJSONObject(i);
 
                     int hospitalSectionId = userHospitalSectionJSONObject.getInt("hospitalSectionId");
@@ -129,19 +129,19 @@ public class UserController {
                     }
                 }
 
-                if(i==length){
+                if (i == length) {
                     userSectionDao.deleteUserHospitalSection(usersHospitalSection.getUsersHospitalSectionId());
                 }
             }
 
-            int j=0;
-            Users users=userDao.findUserById(newUserId);
-            for (;j<hospitalSection.length();j++){
+            int j = 0;
+            Users users = userDao.findUserById(newUserId);
+            for (; j < hospitalSection.length(); j++) {
                 UsersHospitalSection usersHospitalSection = new UsersHospitalSection();
                 JSONObject userRoleJSONObject = hospitalSection.getJSONObject(j);
 
                 Integer hospitalSectionId = userRoleJSONObject.getInt("hospitalSectionId");
-                HospitalSection hospitalSection1=hospitalSectionDao.findHospitalSectionById(hospitalSectionId);
+                HospitalSection hospitalSection1 = hospitalSectionDao.findHospitalSectionById(hospitalSectionId);
                 usersHospitalSection.setUser(users);
                 usersHospitalSection.setHospitalSection(hospitalSection1);
 
@@ -171,8 +171,6 @@ public class UserController {
             List<UsersHospitalSection> usersHospitalSection = userSectionDao.findUserHospitalSectionByUserId(id);
 
 
-
-
             //List<UserRole> rolesUser=userRoleDao.getUserRole(id);
             if (user != null) {
                 JSONObject jsonObject = new JSONObject();
@@ -188,8 +186,8 @@ public class UserController {
                 jsonObject.put("mobile", user.getMobile());
                 jsonObject.put("locked", user.getLocked());
                 jsonObject.put("usershospitalSection", usersHospitalSection);
-                if(usersHospitalSection.size()>0){
-                    List<HospitalSection> hospitalSections=hospitalSectionDao.getHospitalSectionsListByHospitalId(usersHospitalSection.get(0).getHospitalSection().getHospital().getHospitalId());
+                if (usersHospitalSection.size() > 0) {
+                    List<HospitalSection> hospitalSections = hospitalSectionDao.getHospitalSectionsListByHospitalId(usersHospitalSection.get(0).getHospitalSection().getHospital().getHospitalId());
                     jsonObject.put("hospitalSection", hospitalSections);
                 }
                 //jsonObject.put("roles",rolesUser);
@@ -249,14 +247,20 @@ public class UserController {
 
 
     private List<Users> getUsersList() {
-        return userDao.getAllUsersList();
+        try {
+            return userDao.getAllUsersList();
+        }catch (Exception ex){
+            int x = 0;
+            return null;
+        }
+
     }
 
     private List<Hospital> getHospitalLists() {
         return hospitalDao.getAllHospitalList();
     }
 
-    private List<Role> getRols(){
+    private List<Role> getRols() {
         return roleDao.getRoles();
     }
 

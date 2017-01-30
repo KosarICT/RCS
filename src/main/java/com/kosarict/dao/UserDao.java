@@ -10,6 +10,8 @@ import java.util.List;
 public interface UserDao {
     List<Users> getAllUsersList();
 
+    List<Users> getAllUsersList1();
+
     Users findUserByUserName(String userName);
 
     List<Users> checkUser(String userName, String password);

@@ -7,6 +7,7 @@ import java.util.Arrays;
  * Created by Sadegh-Pc on 11/28/2016.
  */
 @Entity
+@Table(name = "Role", schema = "dbo", catalog = "Monitoring")
 public class Role {
     private short roleId;
     private String name;

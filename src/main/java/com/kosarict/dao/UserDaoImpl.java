@@ -1,6 +1,8 @@
 package com.kosarict.dao;
 
 import com.kosarict.entity.Users;
+import org.hibernate.Session;
+import org.hibernate.transform.Transformers;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,6 +30,18 @@ public class UserDaoImpl implements UserDao {
         Query query = entityManager.createQuery(queryString);
 
         return query.getResultList();
+    }
+
+    @Transactional(isolation = Isolation.SERIALIZABLE)
+    @Override
+    public List<Users> getAllUsersList1() {
+        String queryString = "SELECT user FROM Users user  WHERE user.enable = true ";
+        Session session = entityManager.unwrap(Session.class);
+
+        List query =
+                session.createSQLQuery("SELECT * FROM Users").addEntity(Users.class).list();
+
+        return query;
     }
 
     @Override

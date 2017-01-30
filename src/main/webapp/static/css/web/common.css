@@ -253,3 +253,16 @@ ul.side-nav.fixed {
 ::-webkit-scrollbar-corner {
     background: transparent;
 }
+
+.textBox{
+    width: 90%;
+    border: 1px solid #bfbfbf;
+    height: 33px;
+    background: #fff;
+    color: #a8a8a8;
+}
+
+.textBox:focus:not([readonly]){
+    border-bottom: none !important;
+    box-shadow: none !important;
+}

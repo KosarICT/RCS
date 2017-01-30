@@ -1,0 +1,49 @@
+input[type=text], input[type=email], input[type=tel], input[type=number], textarea {
+    text-align: right;
+    direction: rtl;
+    width: 98% !important;
+    height: 35px;
+    outline: none !important;
+    border: 1px solid #e5e5e5 !important;
+    border-radius: 2px !important;
+    padding: 3px 3px !important;
+    color: #999 !important;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 8px !important;
+    -moz-box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 8px !important;
+    -webkit-box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 8px !important;
+}
+
+input:not([type]):focus:not([readonly]), input[type=text]:focus:not([readonly]), input[type=password]:focus:not([readonly]), input[type=email]:focus:not([readonly]), input[type=url]:focus:not([readonly]), input[type=time]:focus:not([readonly]), input[type=date]:focus:not([readonly]), input[type=datetime]:focus:not([readonly]), input[type=datetime-local]:focus:not([readonly]), input[type=tel]:focus:not([readonly]), input[type=number]:focus:not([readonly]), input[type=search]:focus:not([readonly]), textarea.materialize-textarea:focus:not([readonly]) {
+
+}
+
+textarea {
+    width: 98% !important;
+    height: 150px !important;
+    line-height: 18px;
+}
+
+div div label {
+    color: #a8a8a8;
+}
+
+.marginTop {
+    margin-top: 14px !important;
+}
+
+select {
+    font-weight: 400;
+    color: #a8a8a8;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 8px !important;
+    -moz-box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 8px !important;
+    -webkit-box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 8px !important;
+    border: 1px solid #e0e0e0 !important;
+}
+
+.btn, .btn-large {
+    background: #2b86bb !important;
+}
+
+.btn:hover, .btn-large:hover {
+    background: #2b86bb !important;
+}

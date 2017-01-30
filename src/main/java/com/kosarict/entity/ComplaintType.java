@@ -6,7 +6,6 @@ import javax.persistence.*;
  * Created by Sadegh-Pc on 11/28/2016.
  */
 @Entity
-@Table(name = "ComplaintType", schema = "dbo", catalog = "Monitoring")
 public class ComplaintType {
     private short complaintTypeId;
     private String title;

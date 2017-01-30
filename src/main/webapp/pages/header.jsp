@@ -27,11 +27,44 @@
     <script type="text/javascript" src="<c:url value='/static/js/kendo.all.min.js'/>"></script>
     <script type="text/javascript" src="<c:url value='/static/js/jszip.min.js'/>"></script>
     <script type="text/javascript" src="<c:url value='/static/js/PersianDate.js '/>"></script>
+<%--    <script type="text/javascript" src="<c:url value='/static/js/datatables.min.js '/>"></script>--%>
+
+    <style>
+        span.badge {
+            min-width: 27px;
+            padding: 0 6px;
+            /* margin-right: 38px; */
+            text-align: center;
+            font-size: 1rem;
+            line-height: inherit;
+            color: #757575;
+            float: left;
+            box-sizing: border-box;
+        }
+
+        span.badge.new {
+            font-weight: 300;
+            font-size: 0.8rem;
+            color: #fff;
+            background-color: #26a69a;
+            border-radius: 2px;
+            z-index: 10;
+        }
+
+        .inline{
+            display: inline-block !important;
+        }
+
+        .side-nav a{
+            padding:0 10px !important;
+        }
+
+        .side-nav .collapsible-header, .side-nav.fixed .collapsible-header{
+            padding: 0 10px !important;
+        }
+    </style>
 
     <script>
-        /*    $(window).load(function() {
-         $("#loading").fadeOut(2000);
-         });*/
 
         $(document).ready(function () {
             getTabList();
@@ -60,7 +93,7 @@
                     if (data.length > 0) {
                         $.each(data[1], function (index, dataItem) {
                             var data = dataItem;
-//ToDo:$("<span>").addClass("new badge").text("");
+
                             var liParent = $("<li>");
 
                             if (data.child.length > 0) {
@@ -100,14 +133,18 @@
                                 $("#nav-mobile").append(liParent);
 
                             } else {
-                                var a = $("<a>").text(data.title).addClass("white-text");
-//Todo:
+                                var a = $("<a>").addClass("white-text");
+                                var span = $("<span>").addClass("new badge").text("1").attr("data-badge-caption", "");
+
                                 liParent.append(a);
 
                                 if (data.url == "logout") {
                                     a.attr("href", "<c:url value="/logout" />");
+                                } else if (data.url == "admin" || data.url == "setting") {
+                                    a.attr("href", data.url).text(data.title);
                                 } else {
-                                    a.attr("href", data.url);
+                                    a.attr("href", data.url).text(data.title);
+                                    a.append(span);
                                 }
 
                                 $("#nav-mobile").append(liParent);
@@ -145,8 +182,12 @@
                 case "/adCriticism":
                     $("#nav-mobile li a[href=adCriticism]").parent().addClass("active");
                     break;
+                case "/adArchive":
+                    $("#nav-mobile li a[href=adArchive]").parent().addClass("active");
+                    break;
                 case "/user":
-                    $("#nav-mobile li a[href=hospitalSection]").parent().parent().parent().css("display", "block");
+                    debugger;
+                    $("#nav-mobile li a[href=user]").parent().parent().parent().css("display", "block");
                     $("#nav-mobile li a[href=user]").parent().addClass("active");
                     break;
                 case "/role":
@@ -154,11 +195,11 @@
                     $("#nav-mobile li a[href=role]").parent().addClass("active");
                     break;
                 case "/hospital":
-                    $("#nav-mobile li a[href=hospitalSection]").parent().parent().parent().css("display", "block");
+                    $("#nav-mobile li a[href=hospital]").parent().parent().parent().css("display", "block");
                     $("#nav-mobile li a[href=hospital]").parent().addClass("active");
                     break;
                 case "/complaintType":
-                    $("#nav-mobile li a[href=hospitalSection]").parent().parent().parent().css("display", "block");
+                    $("#nav-mobile li a[href=complaintType]").parent().parent().parent().css("display", "block");
                     $("#nav-mobile li a[href=complaintType]").parent().addClass("active");
                     break;
                 case "/hospitalSection":
@@ -194,10 +235,7 @@
                 اصلی</a>
             <ul id="nav-mobile1" class="left hide-on-med-and-down">
                 <li>
-                    <a href="#"
-                       style="font-size: 15px">
-                        <i class="material-icons notification-text">notifications</i>
-                    </a>
+                    <a href="<c:url value="/logout" />" style="color: #555555; font-weight: 400">خروج از سیستم</a>
                 </li>
             </ul>
         </div>
@@ -205,14 +243,13 @@
     <ul id="nav-mobile" class="side-nav no-padding fixed slideColor" style="transform: translateX(0%);height: 100%">
 
         <li>
-            <div class="userView" style="margin-top: 50px; text-align: -webkit-center">
+            <div class="userView" style="text-align: -webkit-center">
                 <img id="imgUserImage" class="circle" style="background: transparent">
             </div>
             <div>
                 <ul style="padding-right: 0">
                     <li>
                         <a id="currentUserDisplayName" class="dropdown-button center white-text" href="#"
-                           data-activates="dropdown1"
                            style="font-size: 15px !important; font-weight: bold !important;">
                         </a>
                     </li>
