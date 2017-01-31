@@ -47,6 +47,9 @@ public class ADComplainController {
     @Autowired
     private TicketStatusDao ticketStatusDao;
 
+    @Autowired
+    private TicketUserSeenDao ticketUserSeenDao;
+
     @RequestMapping(value = "/adComplain", method = RequestMethod.GET)
     public ModelAndView getComplainView() {
         ModelAndView model = new ModelAndView("adComplain");
@@ -84,6 +87,12 @@ public class ADComplainController {
             ticketErrand.setDescription(description);
 
             ticketErrandDao.saveTicketErrand(ticketErrand);
+
+            TicketUserSeen ticketUserSeen = new TicketUserSeen();
+            ticketUserSeen.setTicket(ticket);
+            ticketUserSeen.setUser(user);
+            ticketUserSeenDao.saveTicketUserSeen(ticketUserSeen);
+
 
             return String.valueOf(true);
 
