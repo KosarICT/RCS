@@ -8,4 +8,6 @@ import com.kosarict.entity.TicketUserSeen;
 public interface TicketUserSeenDao {
     long saveTicketUserSeen(TicketUserSeen ticketUserSeen);
 
+    boolean deleteTicketUserSeen(long ticketId,int userId);
+
 }

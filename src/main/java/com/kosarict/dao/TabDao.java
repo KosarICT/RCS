@@ -19,4 +19,6 @@ public interface TabDao {
     List<Tab> getAllTabListByRoleId(int roleId);
 
     List<Tab> getAllTabListByPermissionId(int permissionId);
+
+    int getNumberOfNew(short tabId,int userId);
 }

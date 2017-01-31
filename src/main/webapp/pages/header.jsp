@@ -134,7 +134,8 @@
 
                             } else {
                                 var a = $("<a>").addClass("white-text");
-                                var span = $("<span>").addClass("new badge").text("1").attr("data-badge-caption", "");
+                                var span = $("<span>").addClass("new badge").text(data.count).attr("data-badge-caption", "");
+
 
                                 liParent.append(a);
 
@@ -144,7 +145,8 @@
                                     a.attr("href", data.url).text(data.title);
                                 } else {
                                     a.attr("href", data.url).text(data.title);
-                                    a.append(span);
+                                    if(data.count>0){
+                                    a.append(span);}
                                 }
 
                                 $("#nav-mobile").append(liParent);

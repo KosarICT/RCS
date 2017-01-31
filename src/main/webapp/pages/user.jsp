@@ -178,7 +178,7 @@
 
                         <div class="col s12 m8 l8 left">
                             <select id="ddlHospital" onchange="ddlHospitalChange(this)">
-                                <option value="" disabled selected>بیمارستان موردنظر انتخاب نمائید</option>
+                                <option value="0" disabled selected>بیمارستان موردنظر انتخاب نمائید</option>
                                 <c:if test="${not empty hospitalList}">
                                     <c:forEach var="entry" items="${hospitalList}">
                                         <option value="${entry.hospitalId}">${entry.name}</option>

@@ -7,6 +7,8 @@ import com.kosarict.tools.PersianCalendar;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -71,6 +73,8 @@ public class TicketController {
 
     @Autowired
     private TicketStatusDao ticketStatusDao;
+
+
 
     @RequestMapping(value = "/ticket/api/getData", method = RequestMethod.POST)
     public
@@ -316,10 +320,21 @@ public class TicketController {
             ticketJson.put("trackingCode", ticket.getTrackingCode());
             ticketJson.put("ticketAttachmentList", ticketAttachmentList);
 
+            Users users=getCurrentUser();
+            ticketUserSeenDao.deleteTicketUserSeen(id,users.getUserId());
             return ticketJson.toString();
         } catch (Exception ex) {
             return String.valueOf(false);
         }
+    }
+
+    private Users getCurrentUser() {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        String userName = userDetails.getUsername();
+        Users user = userDao.findUserByUserName(userName);
+
+        return user;
     }
 
     private int trackingNumber() {

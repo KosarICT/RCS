@@ -66,34 +66,43 @@ public class HomeController {
     }
 
     private JSONArray getMenu() {
-        List<Tab> tabList = tabDao.getAllTabList();
-        JSONArray userArray = new JSONArray();
-        JSONArray tabArray = new JSONArray();
-        JSONArray jsonArray = new JSONArray();
+        try {
+            Users users = getCurrentUser();
+            List<Tab> tabList = tabDao.getAllTabListByUserId(users.getUserId());
+            JSONArray userArray = new JSONArray();
+            JSONArray tabArray = new JSONArray();
+            JSONArray jsonArray = new JSONArray();
 
-        JSONObject userObject = new JSONObject();
-        userObject.put("displayName", getCurrentUser().getDisplayName());
-        userObject.put("imageName", getCurrentUser().getImageName());
+            JSONObject userObject = new JSONObject();
+            userObject.put("displayName", getCurrentUser().getDisplayName());
+            userObject.put("imageName", getCurrentUser().getImageName());
 
-        userArray.put(userObject);
-        jsonArray.put(userArray);
+            userArray.put(userObject);
+            jsonArray.put(userArray);
 
-        for (Tab tab : tabList) {
-            List<Tab> childTab = tabDao.getChildTabByParentId(tab.getTabId());
+            for (Tab tab : tabList) {
+                List<Tab> childTab = tabDao.getChildTabByParentId(tab.getTabId());
 
-            JSONObject jsonObject = new JSONObject();
+                int countOfNew = tabDao.getNumberOfNew(tab.getTabId(),users.getUserId());
+                JSONObject jsonObject = new JSONObject();
 
-            jsonObject.put("title", tab.getTitle());
-            jsonObject.put("icon", tab.getIcon());
-            jsonObject.put("url", tab.getUrl());
-            jsonObject.put("child", childTab);
+                jsonObject.put("title", tab.getTitle());
+                jsonObject.put("icon", tab.getIcon());
+                jsonObject.put("url", tab.getUrl());
+                jsonObject.put("child", childTab);
+                jsonObject.put("count", countOfNew);
 
-            tabArray.put(jsonObject);
+                tabArray.put(jsonObject);
+            }
+
+            jsonArray.put(tabArray);
+
+            return jsonArray;
+        } catch (Exception ex) {
+            int x = 0;
+            return null;
         }
 
-        jsonArray.put(tabArray);
-
-        return jsonArray;
     }
 
     private Users getCurrentUser() {

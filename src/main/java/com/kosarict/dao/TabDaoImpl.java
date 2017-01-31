@@ -1,7 +1,11 @@
 package com.kosarict.dao;
 
 import com.kosarict.entity.Tab;
+import com.kosarict.entity.TicketUserSeen;
+import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -44,9 +48,25 @@ public class TabDaoImpl implements TabDao {
         return query.getResultList();
     }
 
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     @Override
     public List<Tab> getAllTabListByUserId(int userId) {
-        return null;
+        Session session = entityManager.unwrap(Session.class);
+
+
+        String queryString="SELECT Tab.Enable,Tab.Icon,Tab.IsShowInMobile,Tab.Name,Tab.Parent,Tab.Position,Tab.Tab_Id,Tab.Title,Tab.Url" +
+                "  FROM UsersHospitalSection" +
+                "  join HospitalSection ON HospitalSection.HospitalSection_Id=UsersHospitalSection.HospitalSection_Id" +
+                "  join Section ON Section.Section_Id=HospitalSection.Section_Id" +
+                "  join SectionPermission ON SectionPermission.Section_Id=Section.Section_Id" +
+                "  join Permission ON SectionPermission.Permission_Id=Permission.Permission_Id" +
+                "  join TabPermission ON TabPermission.Permission_Id=Permission.Permission_Id" +
+                "  join Tab ON Tab.Tab_Id=TabPermission.Tab_Id" +
+                "  where UsersHospitalSection.User_Id="+userId+" AND Section.Enable=1 And Permission.Enable=1";
+        List query =
+                session.createSQLQuery(queryString).addEntity(Tab.class).list();
+
+        return query;
     }
 
     @Override
@@ -57,5 +77,18 @@ public class TabDaoImpl implements TabDao {
     @Override
     public List<Tab> getAllTabListByPermissionId(int permissionId) {
         return null;
+    }
+
+    @Override
+    public int getNumberOfNew(short tabId, int userId) {
+        String queryString = "SELECT ticketUserSeen FROM TicketUserSeen ticketUserSeen WHERE ticketUserSeen.ticket.ticketType.tab.tabId=:tabId AND " +
+                "ticketUserSeen.user.userId=:userId";
+
+        Query query = entityManager.createQuery(queryString);
+        query.setParameter("userId",userId);
+        query.setParameter("tabId",tabId);
+        List<TicketUserSeen> ticketUserSeenList=query.getResultList();
+        return ticketUserSeenList.size();
+
     }
 }
