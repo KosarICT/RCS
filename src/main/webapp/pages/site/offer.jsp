@@ -44,7 +44,7 @@
             </div>
 
             <div class="col s12 m8 l8 m12 left">
-                <input id="name" type="text" class="validate" maxlength="100">
+                <input id="name" type="text" class="validate" maxlength="100" lang="fa-IR">
             </div>
         </div>
 
@@ -55,7 +55,7 @@
             </div>
 
             <div class="col s12 m8 l8 m12 left">
-                <input id="family" type="text" class="validate" maxlength="100">
+                <input id="family" type="text" class="validate" maxlength="100" lang="fa-IR">
             </div>
         </div>
 
@@ -105,7 +105,7 @@
             </div>
 
             <div class="col s12 m8 l8 m12 left">
-                <input maxlength="500" id="offerSubject" type="text" class="validate">
+                <input maxlength="500" id="offerSubject" type="text" class="validate" lang="fa-IR">
             </div>
 
         </div>
@@ -117,7 +117,7 @@
             </div>
 
             <div class="col s12 m8 l8 m12 input-field left">
-                <textarea maxlength="4000" id="offerDescription" class="materialize-textarea"></textarea>
+                <textarea maxlength="4000" id="offerDescription" class="materialize-textarea" lang="fa-IR"></textarea>
             </div>
 
         </div>

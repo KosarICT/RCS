@@ -96,7 +96,7 @@
             </div>
 
             <div class="col s12 m8 l8 left">
-                <input id="sickName" type="text" class="validate" maxlength="100">
+                <input id="sickName" type="text" class="validate" maxlength="100" lang="fa-IR">
             </div>
 
         </div>
@@ -108,7 +108,7 @@
             </div>
 
             <div class="col s12 m8 l8 left">
-                <input maxlength="100" id="sickFamily" type="text" class="validate">
+                <input maxlength="100" id="sickFamily" type="text" class="validate" lang="fa-IR">
             </div>
 
         </div>
@@ -159,7 +159,7 @@
             </div>
 
             <div class="col s12 m8 l8 left">
-                <input maxlength="100" id="compalainerName" type="text" class="validate" disabled>
+                <input maxlength="100" id="compalainerName" type="text" class="validate" disabled lang="fa-IR">
             </div>
 
         </div>
@@ -171,7 +171,7 @@
             </div>
 
             <div class="col s12 m8 l8 left">
-                <input maxlength="100" id="compalainerFamily" type="text" class="validate" disabled>
+                <input maxlength="100" id="compalainerFamily" type="text" class="validate" disabled lang="fa-IR">
             </div>
 
         </div>
@@ -217,7 +217,7 @@
             </div>
 
             <div class="col s12 m8 l8 left">
-                <input maxlength="500" id="complainSubject" type="text" class="validate">
+                <input maxlength="500" id="complainSubject" type="text" class="validate" lang="fa-IR">
             </div>
 
         </div>
@@ -229,7 +229,7 @@
             </div>
 
             <div class="col s12 m8 l8 input-field left">
-                <textarea maxlength="4000" id="complainDescription" class="materialize-textarea"></textarea>
+                <textarea maxlength="4000" id="complainDescription" class="materialize-textarea" lang="fa-IR"></textarea>
             </div>
 
         </div>

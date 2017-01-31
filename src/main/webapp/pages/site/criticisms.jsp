@@ -57,7 +57,7 @@
             </div>
 
             <div class="col s12 m8 l8 left">
-                <input maxlength="100" id="criticismName" type="text" class="validate" >
+                <input maxlength="100" id="criticismName" type="text" class="validate" lang="fa-IR">
             </div>
 
         </div>
@@ -69,7 +69,7 @@
             </div>
 
             <div class="col s12 m8 l8 left">
-                <input maxlength="100" id="criticismFamily" type="text" class="validate" >
+                <input maxlength="100" id="criticismFamily" type="text" class="validate" lang="fa-IR">
             </div>
 
         </div>
@@ -120,7 +120,7 @@
             </div>
 
             <div class="col s12 m8 l8 left">
-                <input maxlength="500" id="criticismSubject" type="text" class="validate">
+                <input maxlength="500" id="criticismSubject" type="text" class="validate" lang="fa-IR">
             </div>
 
         </div>
@@ -132,7 +132,7 @@
             </div>
 
             <div class="col s12 m8 l8 left input-field" >
-                <textarea maxlength="4000" id="criticismDescription" class="materialize-textarea"></textarea>
+                <textarea maxlength="4000" id="criticismDescription" class="materialize-textarea" lang="fa-IR"></textarea>
             </div>
 
         </div>

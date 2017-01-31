@@ -58,7 +58,7 @@
             </div>
 
             <div class="col s12 m8 l8 left">
-                <input maxlength="100" id="appreciationName" type="text" class="validate" lang="fa">
+                <input maxlength="100" id="appreciationName" type="text" class="validate" lang="fa-IR">
             </div>
 
         </div>
@@ -70,7 +70,7 @@
             </div>
 
             <div class="col s12 m8 l8 left">
-                <input maxlength="100" id="appreciationFamily" type="text" class="validate" lang="fa">
+                <input maxlength="100" id="appreciationFamily" type="text" class="validate" lang="fa-IR">
             </div>
 
         </div>
@@ -121,7 +121,8 @@
             </div>
 
             <div class="col s12 m8 l8 left">
-                <input maxlength="100" id="appreciationUserName" type="text" class="validate" lang="fa">
+                <input maxlength="100" id="appreciationUserName" type="text" class="validate persian-digit"
+                       lang="fa-IR"/>
             </div>
 
         </div>
@@ -133,7 +134,7 @@
             </div>
 
             <div class="col s12 m8 l8 left">
-                <input maxlength="100" id="appreciationUserFamily" type="text" class="validate" lang="fa">
+                <input maxlength="100" id="appreciationUserFamily" type="text" class="translate" lang="fa-IR"/>
             </div>
 
         </div>
@@ -145,7 +146,7 @@
             </div>
 
             <div class="col s12 m8 l8 left">
-                <input maxlength="500" id="appreciationSubject" type="text" class="validate" lang="fa">
+                <input maxlength="500" id="appreciationSubject" type="text" class="translate" lang="fa-IR"/>
             </div>
 
         </div>
@@ -157,7 +158,8 @@
             </div>
 
             <div class="col s12 m8 l8 left" class="input-field">
-                <textarea maxlength="4000" id="appreciationDescription" class="materialize-textarea" lang="fa"></textarea>
+                <textarea maxlength="4000" id="appreciationDescription" class="materialize-textarea"
+                          lang="fa-IR"></textarea>
             </div>
 
         </div>
@@ -275,8 +277,18 @@
 
     $(document).ready(function () {
         initWindow();
-    });
+        var arabicNumbers = ['۰', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
 
+    });
+    $('.translate').text(function(i, v) {
+        var chars = v.split('');
+        for (var i = 0; i < chars.length; i++) {
+            if (/\d/.test(chars[i])) {
+                chars[i] = arabicNumbers[chars[i]];
+            }
+        }
+        return chars.join('');
+    })
     function initWindow() {
         $('#alertWindow').modal({
                 dismissible: false,
@@ -466,8 +478,6 @@
 
     function ddlHospitalChange() {
         var hospitalId = $("#ddlHospital option:selected").val();
-
-        debugger;
         $.ajax({
             type: "POST",
             url: "/offer/api/getSection",
@@ -524,7 +534,6 @@
             dataType: 'json',
             data: JSON.stringify(dataArray),
             success: function (data) {
-                debugger;
                 if (data > 0) {
                     $("#lblMessage").text("پیام شما با موفقیت ثبت شد");
                     $('#alertWindow').modal('open');
@@ -534,6 +543,8 @@
             }
         });
     }
+
+
 
 </script>
 
