@@ -42,7 +42,7 @@
 
 <nav class="blue-grey darken-1">
     <div class="nav-wrapper">
-        <img class="responsive-img right"  src="../static/icon//logouu.png" style="display: inline-block; margin-top: 7px">
-        <h5 class="brand-logo right" style="display: inline-block; margin-top: 20px;font-size: 22px !important; margin-right: 40px">دانشگاه علوم پزشکی ایران</h5>
+        <img class="responsive-img right"  src="../static/icon/logouu.png" style="display: inline-block; margin-top: 7px">
+        <h5 class="brand-logo right" style="display: inline-block; margin-top: 20px;font-size: 22px !important; margin-right: 40px"></h5>
     </div>
 </nav>

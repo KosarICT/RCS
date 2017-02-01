@@ -14,7 +14,7 @@
             </div>
 
             <div class="col s12 m8 l8 left">
-                <select id="ddlHospital" onchange="ddlHospitalChange(this)">
+                <select id="ddlHospital" onchange="ddlHospitalChange(this)" disabled>
                     <option value="" disabled selected>بیمارستان موردنظر انتخاب نمائید</option>
                     <c:if test="${not empty hospitalList}">
                         <c:forEach var="entry" items="${hospitalList}">
@@ -356,12 +356,27 @@
 
 <script>
     var captchaString = "";
+    var hospitalId = 0;
 
     $(window).load(function () {
         DrawCaptcha();
     });
 
+    function createDynamicURL() {
+        var URL = '';
+
+        URL + location.host + "/" + hospitalId + "/";
+
+        return URL;
+    }
+
     $(document).ready(function () {
+        hospitalId = "${hospitalId}";
+
+        $("#ddlHospital").val(hospitalId);
+        $(".brand-logo").text($("#ddlHospital option:selected").text());
+        ddlHospitalChange();
+
         $("#lblTrackingNumber").persiaNumber();
         initWindow();
 

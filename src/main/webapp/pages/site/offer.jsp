@@ -13,7 +13,7 @@
             </div>
 
             <div class="col s12 m8 l8 m12 left">
-                <select id="ddlHospital" onchange="loadSection(this)">
+                <select id="ddlHospital" onchange="loadSection(this)" disabled>
                     <option value="" disabled selected>بیمارستان موردنظر انتخاب نمائید</option>
                     <c:if test="${not empty hospitalList}">
                         <c:forEach var="entry" items="${hospitalList}">
@@ -233,6 +233,12 @@
     });
 
     $(document).ready(function () {
+        var id = "${hospitalId}";
+
+        $("#ddlHospital").val(id);
+        $(".brand-logo").text($("#ddlHospital option:selected").text());
+        loadSection();
+
         initWindow();
     });
 

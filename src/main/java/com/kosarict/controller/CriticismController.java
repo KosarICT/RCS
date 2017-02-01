@@ -38,13 +38,14 @@ public class CriticismController {
 
 
 
-    @RequestMapping(value = "/criticisms", method = RequestMethod.GET)
-    public ModelAndView complain() {
+    @RequestMapping(value = "/{hospitalId}/criticisms", method = RequestMethod.GET)
+    public ModelAndView complain(@PathVariable(value = "hospitalId") String hospitalId) {
         ModelAndView model = new ModelAndView("/site/criticisms");
 
         model.addObject("shiftLists", getShiftLists());
         model.addObject("sectionLists", getSectionLists());
         model.addObject("hospitalList", getHospitalLists());
+        model.addObject("hospitalId", hospitalId);
         return model;
     }
 

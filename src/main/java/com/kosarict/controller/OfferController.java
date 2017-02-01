@@ -44,11 +44,12 @@ public class OfferController {
     @Autowired
     private ShiftDao shiftDao;
 
-    @RequestMapping(value = "/offer", method = RequestMethod.GET)
-    public ModelAndView complain() {
+    @RequestMapping(value = "/{hospitalId}/offer", method = RequestMethod.GET)
+    public ModelAndView complain(@PathVariable(value = "hospitalId") String hospitalId) {
         ModelAndView model = new ModelAndView("/site/offer");
         model.addObject("hospitalList", getHospitalLists());
         model.addObject("sectionLists", getSectionLists());
+        model.addObject("hospitalId", hospitalId);
         return model;
     }
 

@@ -6,12 +6,13 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.ServletContext;
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -19,8 +20,14 @@ import java.util.List;
  */
 @Controller
 public class HospitalController {
+
     @Autowired
     private HospitalDao hospitalDao;
+
+    @Autowired
+    private ServletContext servletContext;
+
+
 
     @RequestMapping(value = "/hospital", produces = "application/json")
     public ModelAndView hospital() {
@@ -70,6 +77,7 @@ public class HospitalController {
             String url = jsonObject.getString("url");
             String address = jsonObject.getString("address");
             String description = jsonObject.getString("description");
+            String imageName = jsonObject.getString("imageName");
 
             Hospital hospital;
 
@@ -85,6 +93,7 @@ public class HospitalController {
             hospital.setUrl(url);
             hospital.setAddress(address);
             hospital.setDescription(description);
+            hospital.setImageName(imageName);
             hospital.setEnable(true);
 
             int newHospitalId = hospitalDao.saveHospital(hospital);
@@ -115,6 +124,7 @@ public class HospitalController {
                 jsonObject.put("url", hospital.getUrl());
                 jsonObject.put("address", hospital.getAddress());
                 jsonObject.put("description", hospital.getDescription());
+                jsonObject.put("imageName", hospital.getImageName());
 
                 jsonArray.put(jsonObject);
             }
@@ -134,6 +144,31 @@ public class HospitalController {
             hospitalDao.deleteHospital(id);
             return String.valueOf(true);
         } catch (Exception ex) {
+            return String.valueOf(false);
+        }
+    }
+
+    @RequestMapping(value = "/hospital/api/uploadImage", method = RequestMethod.POST)
+    public
+    @ResponseBody
+    String doUpload(@RequestParam("file") MultipartFile file) {
+        try {
+            String fileName = file.getOriginalFilename();
+
+            String uniqFileName = fileName;
+
+            File rootDir = new File(servletContext.getRealPath("/static/hospitalImage"));
+
+            if (!rootDir.exists())
+                rootDir.mkdirs();
+
+
+            if (!"".equalsIgnoreCase(fileName)) {
+                file.transferTo(new File(rootDir.getAbsolutePath() + File.separator + uniqFileName));
+            }
+
+            return String.valueOf(true);
+        } catch (IOException e) {
             return String.valueOf(false);
         }
     }

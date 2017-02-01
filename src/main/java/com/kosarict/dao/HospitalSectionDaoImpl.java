@@ -50,6 +50,7 @@ public class HospitalSectionDaoImpl implements HospitalSectionDao {
     @Override
     public boolean deleteHospitalSectionBySectionId(int hospitalSectionId) {
         HospitalSection hospitalSection = findHospitalSectionBySectionId(hospitalSectionId);
+        hospitalSection.setEnable(false);
         entityManager.remove(hospitalSection);
         return true;
     }

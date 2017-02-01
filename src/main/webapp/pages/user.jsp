@@ -160,7 +160,7 @@
                         <div class="file-field input-field">
                             <div class="btn">
                                 <span>بارگذاری فایل</span>
-                                <input type="file" id="userImageUploader">
+                                <input type="file" id="userImageUploader" accept=".jpg,.jpeg,.png">
                             </div>
                             <div class="file-path-wrapper">
                                 <input class="file-path validate" type="text">

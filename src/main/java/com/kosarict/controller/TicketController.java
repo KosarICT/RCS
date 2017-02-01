@@ -239,19 +239,20 @@ public class TicketController {
 
                     ticketErrandDao.saveTicketErrand(ticketErrand);
                 }
-
-                if (!fileName.matches("")) {
-                    TicketAttachment ticketAttachment = new TicketAttachment();
-                    ticketAttachment.setFileName(fileName.split("\\.")[0]);
-                    ticketAttachment.setDate(currentDate);
-                    ticketAttachment.setFileType(fileName.split("\\.")[1]);
-                    ticketAttachment.setTicketId(ticketId);
-
-                    ticketAttachmentDao.saveTicketAttachment(ticketAttachment);
-                }
             }
+
+            if (!fileName.matches("")) {
+                TicketAttachment ticketAttachment = new TicketAttachment();
+                ticketAttachment.setFileName(fileName.split("\\.")[0]);
+                ticketAttachment.setDate(currentDate);
+                ticketAttachment.setFileType(fileName.split("\\.")[1]);
+                ticketAttachment.setTicketId(newTicketId);
+
+                ticketAttachmentDao.saveTicketAttachment(ticketAttachment);
+            }
+
             result.put("trackingNumber", trackingNumber);
-            return result.toString();
+            return String.valueOf(trackingNumber);
 
         } catch (Exception ex) {
             return String.valueOf(false);

@@ -6,11 +6,20 @@
 <div class="row">
     <div class="col m3 l3"></div>
 
-    <div class="card col s12 m10 l6 row">
+    <div class="card col s12 m10 l6 row" style="padding: 30px 60px 30px 60px">
         <div class="row">
-            <input type="text">
+            <div class="col s12 m4 l4 right marginTop">
+                <label>کد پیگیری:</label>
+            </div>
+
+            <div class="col s12 m8 l8 left">
+                <input maxlength="100" id="txtTrackingCode" type="text" class="validate">
+            </div>
+
         </div>
         <div class="row">
+            <div class="col s12 m4 l4 right marginTop"></div>
+
             <a class="waves-effect waves-light btn"
                onclick="appreciationSubmit()">جستجو
 

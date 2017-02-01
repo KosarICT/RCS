@@ -15,6 +15,7 @@ public class Hospital {
     private String url;
     private boolean enable;
     private String address;
+    private String imageName;
     private String description;
 
     @Id
@@ -86,6 +87,16 @@ public class Hospital {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    @Basic
+    @Column(name = "ImageName")
+    public String getImageName() {
+        return imageName;
+    }
+
+    public void setImageName(String imageName) {
+        this.imageName = imageName;
     }
 
     @Basic

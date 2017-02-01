@@ -12,7 +12,6 @@
     .modal {
         max-height: 90% !important;
         top: 5% !important;
-        width: 500px;
     }
 </style>
 
@@ -72,9 +71,9 @@
         اضافه/ویرایش بیمارستان
     </div>
     <div class="modal-content">
+
         <div class="row">
-            <div class="col m2 l1"></div>
-            <div class="col s12 m8 l10">
+            <div class="col s12 m6 l6 right">
                 <%--<div class="input-field">--%>
                     <input placeholder="نام بیمارستان" id="txtHospitalName" type="text" autocomplete="false" autofocus>
                 <%--</div>--%>
@@ -100,8 +99,25 @@
                     <textarea id="txtDescription" placeholder="توضیحات" class="materialize-textarea"
                               length="4000"></textarea>
                 </div>
+
             </div>
-            <div class="col m2 l1"></div>
+            <div class="col s12 m6 l6 left">
+                <div class="center" style="margin-bottom: 10px">
+                    <img style="width: 64px; height: 64px" class="card" id="imgHospital"
+                         src="../static/hospitalImage/heart.png">
+                </div>
+                <div>
+                    <div class="file-field input-field">
+                        <div class="btn">
+                            <span>بارگذاری فایل</span>
+                            <input type="file" id="hospitalImageUploader" accept=".jpg,.jpeg,.png">
+                        </div>
+                        <div class="file-path-wrapper">
+                            <input class="file-path validate" type="text">
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
     </div>
@@ -126,6 +142,7 @@
 
 <script>
     var hospitalId = 0;
+    var imageName = "heart.png";
 
     $(document).ready(function () {
         $(".page-title").text("بیمارستان ها");
@@ -137,6 +154,10 @@
         $(".row").persiaNumber();
 
         $('.fixed-action-btn').openFAB();
+
+        $("#hospitalImageUploader").change(function () {
+            processUpload();
+        });
     });
 
     function initWindow() {
@@ -145,8 +166,8 @@
                 opacity: .5,
                 in_duration: 300,
                 out_duration: 200,
-                starting_top: '4%',
-                ending_top: '4%',
+                starting_top: '1%',
+                ending_top: '1%',
                 complete: function () {
                     refreshTable();
                 }
@@ -228,6 +249,10 @@
                 $("#txtAddress").val(hospital.address);
                 $("#txtDescription").val(hospital.description);
 
+                $("#imgHospital").attr("src", "/static/hospitalImage/" + hospital.imageName);
+
+                imageName = hospital.imageName;
+
                 $('#hospitalWindow').modal('open');
             }
         });
@@ -255,6 +280,7 @@
             dataItem["url"] = url;
             dataItem["address"] = address;
             dataItem["description"] = description;
+            dataItem["imageName"] = imageName;
 
             dataArray.push(dataItem);
 
@@ -284,6 +310,8 @@
         $("#txtUrl").val("");
         $("#txtAddress").val("");
         $("#txtDescription").val("");
+
+        imageName = "heart.png";
     }
 
     function showConfirm(sender) {
@@ -306,6 +334,36 @@
                 } else {
                     Materialize.toast('خطا در انجام عملیات', 4000, 'error-toast');
                 }
+            }
+        });
+    }
+
+    function processUpload() {
+        var oMyForm = new FormData();
+        var file_data = $('input[type=file]')[0].files[0];
+
+        oMyForm.append('file', file_data);
+        imageName = file_data.name;
+
+        $.ajax({
+            dataType: 'json',
+            url: "/hospital/api/uploadImage",
+            data: oMyForm,
+            type: "POST",
+            enctype: 'multipart/form-data',
+            processData: false,
+            contentType: false,
+            success: function (result) {
+                if (result) {
+                    var reader = new FileReader();
+                    reader.onload = function () {
+                        $('#imgHospital').attr("src", reader.result);
+                    };
+                    reader.readAsDataURL($('input[type=file]')[0].files[0]);
+                }
+            },
+            error: function (result) {
+                alert("error");
             }
         });
     }

@@ -64,14 +64,15 @@ public class ComplainController {
 
 
 
-    @RequestMapping(value = "/complaint",method = RequestMethod.GET)
-    public ModelAndView complain() {
+    @RequestMapping(value = "/{hospitalId}/complaint",method = RequestMethod.GET)
+    public ModelAndView complain(@PathVariable(value = "hospitalId") String hospitalId) {
         ModelAndView model = new ModelAndView("/site/complain");
         model.addObject("relationLists", getRelationLists());
         model.addObject("complainTypeLists", getComplainTypeLists());
         model.addObject("shiftLists", getShiftLists());
         model.addObject("sectionLists", getSectionLists());
         model.addObject("hospitalList", getHospitalLists());
+        model.addObject("hospitalId", hospitalId);
         return model;
     }
 

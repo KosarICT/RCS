@@ -27,9 +27,10 @@ public class TicketUserSeenDaoImpl implements TicketUserSeenDao {
         return ticketUserSeen.getTicketUserSeenId();
     }
 
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     @Override
     public boolean deleteTicketUserSeen(long ticketId, int userId) {
-        String queryString="SELECT ticketUserSeen FROM TicketUserSeen ticketUserSeen WHERE ticketUserSeen.user.userId=:userId and ticketUserSeen.ticket.ticketId=:ticketId";
+        String queryString = "SELECT ticketUserSeen FROM TicketUserSeen ticketUserSeen WHERE ticketUserSeen.user.userId=:userId and ticketUserSeen.ticket.ticketId=:ticketId";
 
         Query query = entityManager.createQuery(queryString);
         query.setParameter("ticketId", ticketId);
@@ -38,7 +39,7 @@ public class TicketUserSeenDaoImpl implements TicketUserSeenDao {
 
         List<TicketUserSeen> ticketUserSeenList = query.getResultList();
 
-        if(ticketUserSeenList.size()>0){
+        if (ticketUserSeenList.size() > 0) {
             entityManager.remove(ticketUserSeenList.get(0));
             return true;
         }

@@ -1,6 +1,7 @@
 package com.kosarict.dao;
 
 import com.kosarict.entity.*;
+import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
@@ -77,23 +78,26 @@ public class TicketDaoImpl implements TicketDao {
         return true;
     }
 
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     @Override
     public List<UsersHospitalSection> forwardTicket(int hospitalId, int sectionId) {
+        Session session = entityManager.unwrap(Session.class);
+
+        String queryString = "select \n" +
+                "\tUsersHospitalSection.*\n" +
+                "From \n" +
+                "\tUsersHospitalSection\n" +
+                "JOIN\n" +
+                "\tHospitalSection On UsersHospitalSection.HospitalSection_Id = HospitalSection.HospitalSection_Id\n" +
+                "WHERE\n" +
+                "\tHospitalSection.Section_Id = " + sectionId + " AND\n" +
+                "\tHospitalSection.Hospital_Id = " + hospitalId;
 
 
-        String queryString = "SELECT userSection  " +
-                "FROM UsersHospitalSection userSection " +
-                "JOIN userSection.hospitalSection hospitalSection " +
-                "WHERE hospitalSection.hospital.hospitalId =:hospitalId " +
-                "AND hospitalSection.section.sectionId =:sectionId ";
+        List query = session.createSQLQuery(queryString).addEntity(UsersHospitalSection.class).list();
 
 
-        Query query = entityManager.createQuery(queryString);
-        query.setParameter("hospitalId", hospitalId);
-        query.setParameter("sectionId", sectionId);
-
-
-        return query.getResultList();
+        return query;
     }
 
     @Override

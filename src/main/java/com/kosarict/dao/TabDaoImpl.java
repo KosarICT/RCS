@@ -62,7 +62,8 @@ public class TabDaoImpl implements TabDao {
                 "  join Permission ON SectionPermission.Permission_Id=Permission.Permission_Id" +
                 "  join TabPermission ON TabPermission.Permission_Id=Permission.Permission_Id" +
                 "  join Tab ON Tab.Tab_Id=TabPermission.Tab_Id" +
-                "  where UsersHospitalSection.User_Id="+userId+" AND Section.Enable=1 And Permission.Enable=1";
+                "  where UsersHospitalSection.User_Id="+userId+" AND Tab.Parent = 0 AND Tab.Enable=1 And Section.Enable=1 And Permission.Enable=1" +
+                "  order by Tab.Position";
         List query =
                 session.createSQLQuery(queryString).addEntity(Tab.class).list();
 

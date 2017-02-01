@@ -15,6 +15,7 @@ public class TicketAttachment {
     private long ticketId;
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "TicketAttachment_Id")
     public int getTicketAttachmentId() {
         return ticketAttachmentId;

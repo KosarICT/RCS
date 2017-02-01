@@ -57,32 +57,25 @@ public class HospitalSectionController {
             JSONArray hospitalSectionArray = jsonObject.getJSONArray("hospitalSectionArray");
             List<HospitalSection> hospitalSectionList = hospitalSectionDao.getHospitalSectionsListByHospitalId((int) hospitalId);
 
-            /**
-             * compare HospitalSection
-             * */
             for (HospitalSection hospitalSection : hospitalSectionList) {
 
                 int index = 0;
-                int newHospitalSectionCount = hospitalSectionArray.length();
-
+                int oldCount = hospitalSectionArray.length();
                 for (; index < hospitalSectionArray.length(); index++) {
-                    JSONObject hospitalSectionJSONObject = hospitalSectionArray.getJSONObject(index);
+                    JSONObject userRoleJsonObject = hospitalSectionArray.getJSONObject(index);
 
-                    int sectionId = hospitalSectionJSONObject.getInt("sectionId");
+                    int sectionId = userRoleJsonObject.getInt("sectionId");
 
                     if (sectionId == hospitalSection.getSection().getSectionId()) {
+                        hospitalSectionArray.remove(index);
                         break;
                     }
                 }
-
-                if (index == newHospitalSectionCount) {
-                    hospitalSectionDao.deleteHospitalSectionBySectionId(hospitalSection.getSection().getSectionId());
+                if (index == oldCount) {
+                    hospitalSectionDao.deleteHospitalSectionBySectionId(hospitalSection.getHospitalSectionId());
                 }
             }
 
-            /**
-             * save HospitalSection
-             * */
             for (int j = 0; j < hospitalSectionArray.length(); j++) {
                 JSONObject hospitalSectionArrayJSONObject = hospitalSectionArray.getJSONObject(j);
 
@@ -94,6 +87,7 @@ public class HospitalSectionController {
 
                 hospitalSection.setHospital(hospital);
                 hospitalSection.setSection(section);
+                hospitalSection.setEnable(true);
 
                 hospitalSectionDao.saveHospitalSection(hospitalSection);
             }
@@ -114,7 +108,7 @@ public class HospitalSectionController {
     @RequestMapping(value = "/hospitalSection/api/getHospitalSectionDataByHospitalId", method = RequestMethod.POST)
     public
     @ResponseBody
-    List<HospitalSection> getHospitalSectionByHospitalId(@RequestBody String hospitalId){
+    List<HospitalSection> getHospitalSectionByHospitalId(@RequestBody String hospitalId) {
         int id = Integer.parseInt(hospitalId);
         return hospitalSectionDao.getHospitalSectionsListByHospitalId(id);
     }
@@ -167,9 +161,9 @@ public class HospitalSectionController {
             HospitalSectionModel hospitalSectionModel = new HospitalSectionModel();
             hospitalSectionModel.setHospitalId(hospitalId);
             hospitalSectionModel.setHospitalName(hospital.getName());
-            if(!section.matches(""))
-                hospitalSectionModel.setSectionName(section.substring(0,section.lastIndexOf(" - ")));
-            else{
+            if (!section.matches(""))
+                hospitalSectionModel.setSectionName(section.substring(0, section.lastIndexOf(" - ")));
+            else {
                 hospitalSectionModel.setSectionName("");
             }
 

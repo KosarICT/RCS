@@ -3,6 +3,22 @@
 
 <%@include file="site/header.jsp" %>
 
+<input type="hidden" id="hiddenField">
+
+<script>
+
+    $(".brand-logo ").text("${hospitalName}");
+
+    function createDynamicURL(command) {
+        var URL = '';
+
+        URL += command;
+
+        return URL;
+    }
+</script>
+
+
 <div class="row">
     <div class="col m1 l1"></div>
     <div class="col m10 l10 row">
@@ -15,7 +31,7 @@
                         <p>شما میتوانید شکایت خود را در این قسمت وارد و برای ما ارسال نمائید</p>
                     </div>
                     <div class="card-action">
-                        <a href="/complaint">ثبت شکایت</a>
+                        <a href="javascript:window.location=createDynamicURL('complaint');">ثبت شکایت</a>
                     </div>
                 </div>
             </div>
@@ -27,7 +43,7 @@
                         <p>انتقادات خود را در جهت بهبود عملکرد مجموعه برای ما ارسال نمائید</p>
                     </div>
                     <div class="card-action">
-                        <a href="/criticisms">ثبت انتقاد</a>
+                        <a href="javascript:window.location=createDynamicURL('criticisms');">ثبت انتقاد</a>
                     </div>
                 </div>
             </div>
@@ -39,7 +55,7 @@
                         <p>پیشنهادات خود را در جهت بهبود عملکرد مجموعه برای ما ارسال نمائید</p>
                     </div>
                     <div class="card-action">
-                        <a href="/offer">ثبت پیشنهاد</a>
+                        <a href="javascript:window.location=createDynamicURL('offer');">ثبت پیشنهاد</a>
                     </div>
                 </div>
             </div>
@@ -51,7 +67,7 @@
                         <p>ثبت تقدیر و تشکرات شما از مجموعه و پرسنل جهت بهبود</p>
                     </div>
                     <div class="card-action">
-                        <a href="/appreciation">ثبت تقدیر و تشکر</a>
+                        <a href="javascript:window.location=createDynamicURL('appreciation');">ثبت تقدیر و تشکر</a>
                     </div>
                 </div>
             </div>
@@ -67,7 +83,7 @@
                         <p>پیگیری از وضعیت درخواست های ثبت شده شما</p>
                     </div>
                     <div class="card-action">
-                        <a href="/follow">سیستم پیگیری</a>
+                        <a href="javascript:window.location=createDynamicURL('follow');">سیستم پیگیری</a>
                     </div>
                 </div>
             </div>

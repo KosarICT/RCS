@@ -16,7 +16,7 @@
             </div>
 
             <div class="col s12 m8 l8 left">
-                <select id="ddlHospital" onchange="ddlHospitalChange();" style="font-weight: 400; color: #989898">
+                <select id="ddlHospital" onchange="ddlHospitalChange();" disabled style="font-weight: 400; color: #989898">
                     <option value="" disabled selected>بیمارستان موردنظر انتخاب نمائید</option>
                     <c:if test="${not empty hospitalList}">
                         <c:forEach var="entry" items="${hospitalList}">
@@ -276,10 +276,17 @@
     });
 
     $(document).ready(function () {
+        var id = "${hospitalId}";
+
+        $("#ddlHospital").val(id);
+        $(".brand-logo").text($("#ddlHospital option:selected").text());
+        ddlHospitalChange();
+
         initWindow();
         var arabicNumbers = ['۰', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
 
     });
+
     $('.translate').text(function(i, v) {
         var chars = v.split('');
         for (var i = 0; i < chars.length; i++) {
@@ -288,7 +295,8 @@
             }
         }
         return chars.join('');
-    })
+    });
+
     function initWindow() {
         $('#alertWindow').modal({
                 dismissible: false,
