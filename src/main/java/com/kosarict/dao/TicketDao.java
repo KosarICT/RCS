@@ -27,7 +27,7 @@ public interface TicketDao {
 
     boolean trackingCodeIsExist(String trackingCode);
 
-    List<Ticket> getTop10Ticket();
+    List<Ticket> getTop10Ticket(Users users);
 
     List<Ticket> getTicketArchiveList();
 }

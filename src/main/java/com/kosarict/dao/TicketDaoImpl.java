@@ -122,16 +122,30 @@ public class TicketDaoImpl implements TicketDao {
         }
     }
 
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     @Override
-    public List<Ticket> getTop10Ticket()
+    public List<Ticket> getTop10Ticket(Users users)
 
     {
-        String queryString = "SELECT ticket FROM Ticket ticket WHERE ticket.enable = true order by ticket.id desc ";
+        Session session = entityManager.unwrap(Session.class);
 
 
-        Query query = entityManager.createQuery(queryString);
+        String queryString= "SELECT top 10 [Ticket_Id],Ticket.[TicketType_Id],[ComplainType_Id],Ticket.[Hospital_Id],[Shift_Id],Ticket.[Section_Id]" +
+                "      ,[SendType_Id],[Complainant_Id],[TicketStatus_Id],[FirstName],[LastName],[NationalCode],[PhoneNumber]" +
+                "      ,[Mobile],[PersnolFirstName],[PersnolLastName],[Subject],Ticket.[Description],[Raiting],[SubmitDate]" +
+                "      ,[Email],Ticket.Enable ,[TrackingCode] FROM [Monitoring].[dbo].[Ticket]" +
+                "  join TicketType on TicketType.TicketType_Id=Ticket.TicketType_Id" +
+                "  join Tab on Tab.Tab_Id=TicketType.Tab_Id join TabPermission on TabPermission.Tab_Id=Tab.Tab_Id" +
+                "  join Permission on Permission.Permission_Id=TabPermission.Permission_Id" +
+                "  join SectionPermission on SectionPermission.Permission_Id=Permission.Permission_Id" +
+                "  join Section on Section.Section_Id =SectionPermission.Section_Id" +
+                "  join HospitalSection on HospitalSection.Section_Id=Section.Section_Id" +
+                "  join UsersHospitalSection on UsersHospitalSection.HospitalSection_Id=HospitalSection.HospitalSection_Id" +
+                "  where Ticket.Enable=1 and Permission.Enable=1 and Tab.Enable=1 and HospitalSection.Enable=1 and UsersHospitalSection.User_Id=" +users.getUserId();
+        List query =
+                session.createSQLQuery(queryString).addEntity(Ticket.class).list();
 
-        return query.getResultList().subList(0, 10);
+        return query;
     }
 
     @Override

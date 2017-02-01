@@ -119,7 +119,8 @@ public class HomeController {
     @ResponseBody
     String getTop10Ticket() {
 
-        List<Ticket> ticketList = ticketDao.getTop10Ticket();
+        Users users = getCurrentUser();
+        List<Ticket> ticketList = ticketDao.getTop10Ticket(users);
 
         JSONArray dataArray = new JSONArray();
 
