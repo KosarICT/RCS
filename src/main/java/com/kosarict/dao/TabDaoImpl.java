@@ -55,14 +55,11 @@ public class TabDaoImpl implements TabDao {
 
 
         String queryString="SELECT DISTINCT Tab.Enable,Tab.Icon,Tab.IsShowInMobile,Tab.Name,Tab.Parent,Tab.Position,Tab.Tab_Id,Tab.Title,Tab.Url" +
-                "  FROM UsersHospitalSection" +
-                "  join HospitalSection ON HospitalSection.HospitalSection_Id=UsersHospitalSection.HospitalSection_Id" +
-                "  join Section ON Section.Section_Id=HospitalSection.Section_Id" +
-                "  join SectionPermission ON SectionPermission.Section_Id=Section.Section_Id" +
-                "  join Permission ON SectionPermission.Permission_Id=Permission.Permission_Id" +
-                "  join TabPermission ON TabPermission.Permission_Id=Permission.Permission_Id" +
-                "  join Tab ON Tab.Tab_Id=TabPermission.Tab_Id" +
-                "  where UsersHospitalSection.User_Id="+userId+" AND Tab.Parent = 0 AND Tab.Enable=1 And Section.Enable=1 And Permission.Enable=1" +
+                "  FROM Tab" +
+                "  join TabRole ON Tab.Tab_Id=TabRole.Tab_Id" +
+                "  join Role ON Role.Role_Id=TabRole.Role_Id" +
+                "  join UserRole ON UserRole.Role_Id=Role.Role_Id" +
+                "  where UserRole.User_Id="+userId+" AND Tab.Parent = 0 AND Tab.Enable=1 And Role.Enable=1" +
                 "  order by Tab.Position";
         List query =
                 session.createSQLQuery(queryString).addEntity(Tab.class).list();

@@ -11,7 +11,7 @@ public class Permission {
     private short permissionId;
     private String title;
     private boolean enable;
-    private List<SectionPermission> sectionPermissionList;
+    private List<RolePermission> rolePermissionList;
 
     @Id
     @Column(name = "Permission_Id")
@@ -45,11 +45,11 @@ public class Permission {
 
     @OneToMany
     @JoinColumn(name = "Permission_Id")
-    public List<SectionPermission> getSectionPermissionList() {
-        return sectionPermissionList;
+    public List<RolePermission> getSectionPermissionList() {
+        return rolePermissionList;
     }
 
-    public void setSectionPermissionList(List<SectionPermission> sectionPermissionList) {
-        this.sectionPermissionList = sectionPermissionList;
+    public void setSectionPermissionList(List<RolePermission> rolePermissionList) {
+        this.rolePermissionList = rolePermissionList;
     }
 }

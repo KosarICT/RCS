@@ -104,10 +104,10 @@
     <div class="modal-content">
         <div class="row">
 
-            <%--            <ul id="userTab" class="tabs" style="padding-right: 0">
+                        <ul id="userTab" class="tabs" style="padding-right: 0">
                             <li class="tab col s3 right"><a id="userInformationTab" href="#userInformation">مشخصات</a></li>
-                            <li class="tab col s3 right"><a href="#rols">گروه کاری</a></li>
-                        </ul>--%>
+                            <li class="tab col s3 right"><a href="#rols">بخش ها</a></li>
+                        </ul>
             <div id="userInformation">
                 <div class="col s12 m7 l6 right">
 
@@ -172,24 +172,7 @@
                 <div class="col s12 m5 l6 left">
                     <div class="row box" style="margin-top: 10px">
                         <fieldset>
-                            <legend>تنظیمات دسترسی</legend>
-
-                            <div id="hospitalArea" class="row" style="margin-top: 10px">
-                                <div class="col s12 m4 l4 right" style="margin-top: 13px">
-                                    <label for="ddlHospital">انتخاب بیمارستان:</label>
-                                </div>
-
-                                <div class="col s12 m8 l8 left">
-                                    <select id="ddlHospital" onchange="ddlHospitalChange(this)">
-                                        <option value="0" disabled selected>بیمارستان موردنظر انتخاب نمائید</option>
-                                        <c:if test="${not empty hospitalList}">
-                                            <c:forEach var="entry" items="${hospitalList}">
-                                                <option value="${entry.hospitalId}">${entry.name}</option>
-                                            </c:forEach>
-                                        </c:if>
-                                    </select>
-                                </div>
-                            </div>
+                            <legend>گروه کاری</legend>
                             <div id="roleListDiv"></div>
                         </fieldset>
                     </div>
@@ -210,27 +193,9 @@
                     </div>
                 </div>
             </div>
-            <%--                        <div id="rols">
-                                        <div class="col right ">
-                                            <div class="row" style="margin-top: 10px">
-                                                <div class="col s12 m4 l4 right" style="margin-top: 13px">
-                                                    <label for="ddlHospital">انتخاب بیمارستان:</label>
-                                                </div>
-
-                                                <div class="col s12 m8 l8 left">
-                                                    <select id="ddlHospital" onchange="ddlHospitalChange(this)">
-                                                        <option value="0" disabled selected>بیمارستان موردنظر انتخاب نمائید</option>
-                                                        <c:if test="${not empty hospitalList}">
-                                                            <c:forEach var="entry" items="${hospitalList}">
-                                                                <option value="${entry.hospitalId}">${entry.name}</option>
-                                                            </c:forEach>
-                                                        </c:if>
-                                                    </select>
-                                                </div>
-
-                                            </div>
-                                        </div>
-                                    </div>--%>
+            <div id="rols">
+                <div id="hospitalSectionDiv"></div>
+            </div>
         </div>
 
     </div>
@@ -268,6 +233,9 @@
 
         $('#userTab.tabs').tabs('select_tab', 'userInformation');
 
+        getHospitalSection();
+
+        createRoleDiv();
 
         var height = screen.height - 170;
         $("#container").css("height", height + "px").css("overflow", "auto").persiaNumber();
@@ -308,7 +276,7 @@
         );
     }
 
-    function ddlHospitalChange() {
+    function getHospitalSection() {
 
         if (isSuperUser == "1") {
             $("#hospitalArea").css("display", "block");
@@ -317,7 +285,6 @@
         } else {
             $("#hospitalArea").css("display", "none");
         }
-
         $.ajax({
             type: "POST",
             url: "/hospitalSection/api/getHospitalSectionDataByHospitalId",
@@ -325,7 +292,7 @@
             dataType: 'json',
             data: hospitalId.toString(),
             success: function (data) {
-                $("#roleListDiv").empty();
+                $("#hospitalSectionDiv").empty();
                 if (data.length > 0) {
                     createHospitalSectionDiv(data);
                 }
@@ -335,9 +302,8 @@
 
     function createHospitalSectionDiv(data) {
 
-        var roleListDiv = $("#roleListDiv");
+        var roleListDiv = $("#hospitalSectionDiv");
         $.each(data, function (index, dataItem) {
-            debugger;
             var div = $("<div>").css("width", "48%").css("display", "inline-block").css("margin", "2px");
 
             var pTag = $('<p>');
@@ -355,6 +321,34 @@
             roleListDiv.append(div);
 
         });
+
+    }
+
+    function createRoleDiv() {
+        <c:if test="${not empty roles}">
+        <c:forEach var="entry" items="${roles}">
+
+        var roleListDiv = $("#roleListDiv");
+
+        var div = $("<div>").css("width", "48%").css("display", "inline-block").css("margin", "2px");
+
+        var pTag = $('<p>');
+
+        var lblUserName = $("<label>").attr("for", "${entry.roleId}").css("width", "0");
+        var chkUser = $("<input>").attr("type", "checkBox").attr("value", "${entry.roleId}").attr("id", "${entry.roleId}");
+        var lblUserText = $("<label>").text("${entry.name}").attr("for", "${entry.roleId}").css("vertical-align", "top").css("margin-right", "8px");
+
+        pTag.append(chkUser);
+        pTag.append(lblUserName);
+        pTag.append(lblUserText);
+
+        div.append(pTag);
+
+        roleListDiv.append(div);
+
+        </c:forEach>
+        </c:if>
+
 
     }
 
@@ -392,7 +386,8 @@
         var displayName = $("#txtDisplayName").val();
         var tel = $("#txtTel").val();
         var mobile = $("#txtMobile").val();
-        var roles = getCheckListArray();
+        var roles = getRoles();
+        var hospitalSections=getHospitalSections();
 
         if (checkUserName == "" || personalNumber == "" || firstName == "" || lastName == "" || displayName == "") {
             Materialize.toast('تمامی فیلدها اجباری می باشد', 4000, 'info-toast');
@@ -427,7 +422,8 @@
                                 dataItem["mobile"] = $("#txtMobile").val();
                                 dataItem["locked"] = $("#chkLocked").is(':checked') ? 1 : 0;
                                 dataItem["imageName"] = imageName;
-                                dataItem["hospitalSections"] = roles;
+                                dataItem["roles"] = roles;
+                                dataItem["hospitalSections"] = hospitalSections;
                                 dataArray.push(dataItem);
                                 $.ajax({
                                     type: "POST",
@@ -469,7 +465,8 @@
                 dataItem["mobile"] = $("#txtMobile").val();
                 dataItem["locked"] = $("#chkLocked").is(':checked') ? 1 : 0;
                 dataItem["imageName"] = imageName;
-                dataItem["hospitalSections"] = roles;
+                dataItem["roles"] = roles;
+                dataItem["hospitalSections"] = hospitalSections;
 
                 dataArray.push(dataItem);
                 $.ajax({
@@ -492,10 +489,26 @@
         }
     }
 
-    function getCheckListArray() {
+    function getRoles() {
         var checkList = $("#roleListDiv").children();
         var array = [];
         $.each(checkList, function (count, dataItem) {
+            if (dataItem.childNodes[0].childNodes[0].checked) {
+
+                var item = {};
+                item["roleId"] = dataItem.childNodes[0].childNodes[0].value;
+                array.push(item);
+            }
+            ;
+        });
+        return array;
+    }
+
+    function getHospitalSections() {
+        var checkList = $("#hospitalSectionDiv").children();
+        var array = [];
+        $.each(checkList, function (count, dataItem) {
+            debugger;
             if (dataItem.childNodes[0].childNodes[0].checked) {
 
                 var item = {};
@@ -534,11 +547,10 @@
                     $("#chkLocked").prop('checked', user.locked);
                     $("#imgUser").attr("src", "/static/userImage/" + user.imageName);
 
-                    if (user.hospitalSection != undefined && user.hospitalSection.length > 0) {
-                        $("#ddlHospital").val(user.hospitalSection[0].hospital.hospitalId.toString()).prop("disabled", true);
-                        createHospitalSectionDiv(user.hospitalSection);
-                        checkRoles(user.usershospitalSection);
-                    }
+                    debugger;
+                    checkRoles(user.roles);
+                    checkHospitalSection(user.usershospitalSection);
+
                     imageName = user.imageName;
 
                     $('#userWindow').modal('open');
@@ -547,14 +559,25 @@
         });
     }
 
+    function checkHospitalSection(hospitalSectionList) {
+        var checkList = $("#hospitalSectionDiv").children();
+        $.each(checkList, function (count, dataItem) {
+            $.each(hospitalSectionList, function (count, hospitalSection) {
+                if (dataItem.childNodes[0].childNodes[0].value == hospitalSection.hospitalSection.hospitalSectionId) {
+                    dataItem.childNodes[0].childNodes[0].checked = true;
+                }
+            });
+        });
+    }
+
     function checkRoles(roleList) {
         var checkList = $("#roleListDiv").children();
         $.each(checkList, function (count, dataItem) {
-            $.each(roleList, function (count, hospitalSection) {
+            $.each(roleList, function (count, role) {
+                debugger;
 
-                if (dataItem.childNodes[0].childNodes[0].value == hospitalSection.hospitalSection.hospitalSectionId) {
+                if (dataItem.childNodes[0].childNodes[0].value == role.role.roleId) {
                     dataItem.childNodes[0].childNodes[0].checked = true;
-
                 }
             });
         });
@@ -562,7 +585,6 @@
 
     function showUserWindow() {
         clearForm();
-        ddlHospitalChange();
         $('#userWindow').modal('open');
         $("#txtUserName").focus();
         $("#userInformationTab").click();
@@ -612,8 +634,14 @@
 
         $("#imgUser").attr("src", "/static/userImage/boy.png");
         $('#ddlHospital').val("0");
-        $("#roleListDiv").empty();
+
         var checkList = $("#roleListDiv").children();
+
+        $.each(checkList, function (count, dataItem) {
+            dataItem.childNodes[0].childNodes[0].checked = false;
+        });
+
+         checkList = $("#hospitalSectionDiv").children();
 
         $.each(checkList, function (count, dataItem) {
             dataItem.childNodes[0].childNodes[0].checked = false;

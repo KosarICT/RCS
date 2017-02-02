@@ -6,19 +6,19 @@ import javax.persistence.*;
  * Created by Ali-Pc on 1/26/2017.
  */
 @Entity
-public class SectionPermission {
-    private int sectionPermissionId;
+public class RolePermission {
+    private int rolePermissionId;
     private Permission permission;
-    private Section section;
+    private Role role;
 
     @Id
-    @Column(name = "SectionPermission_Id")
+    @Column(name = "RolePermission_Id")
     public int getSectionPermissionId() {
-        return sectionPermissionId;
+        return rolePermissionId;
     }
 
     public void setSectionPermissionId(int sectionPermissionId) {
-        this.sectionPermissionId = sectionPermissionId;
+        this.rolePermissionId = sectionPermissionId;
     }
 
     @ManyToOne
@@ -33,12 +33,12 @@ public class SectionPermission {
 
     @ManyToOne
     @JoinColumn (name = "Section_Id")
-    public Section getSection() {
-        return section;
+    public Role getRole() {
+        return role;
     }
 
-    public void setSection(Section section) {
-        this.section = section;
+    public void setRole(Role role) {
+        this.role = role;
     }
 
 }

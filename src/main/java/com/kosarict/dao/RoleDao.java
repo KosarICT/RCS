@@ -13,4 +13,5 @@ public interface RoleDao {
     Role getRole(short roleId);
 
     short saveRole(Role role);
+
 }

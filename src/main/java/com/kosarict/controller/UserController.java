@@ -52,7 +52,7 @@ public class UserController {
     public ModelAndView user() {
         ModelAndView model = new ModelAndView("user");
         model.addObject("lists", getUsersList());
-        model.addObject("hospitalList", getHospitalLists());
+        model.addObject("roles", getRols());
 
         if (checkSuperUser()) {
             model.addObject("isSuperUser", 1);
@@ -161,6 +161,41 @@ public class UserController {
                 userSectionDao.saveUserHospitalSection(usersHospitalSection);
             }
 
+            List<UserRole> userRoles=userRoleDao.getUserRole(newUserId);
+            JSONArray roles = jsonObject.getJSONArray("roles");
+
+            for(UserRole userRole:userRoles){
+                int length = roles.length();
+                int i = 0;
+                for (; i < length; i++) {
+                    JSONObject userHospitalSectionJSONObject = roles.getJSONObject(i);
+
+                    int roleId = userHospitalSectionJSONObject.getInt("roleId");
+
+                    if (roleId == userRole.getRole().getRoleId()) {
+                        hospitalSection.remove(i);
+                        break;
+                    }
+                }
+
+                if (i == length) {
+                    userRoleDao.deleteUserRole(userRole.getUserRoleId());
+                }
+            }
+
+            j=0;
+            for (; j < roles.length(); j++) {
+                UserRole userRole = new UserRole();
+                JSONObject userRoleJSONObject = roles.getJSONObject(j);
+
+                Integer roleIdId = userRoleJSONObject.getInt("roleId");
+                Role role=roleDao.getRole(roleIdId.shortValue());
+                userRole.setRole(role);
+                userRole.setUsers(users);
+
+                userRoleDao.save(userRole);
+            }
+
 
             return String.valueOf(true);
 
@@ -182,6 +217,8 @@ public class UserController {
 
             Users user = userDao.findUserById(id);
             List<UsersHospitalSection> usersHospitalSection = userSectionDao.findUserHospitalSectionByUserId(id);
+            List<UserRole> userRoles=userRoleDao.getUserRole(id);
+
 
 
             //List<UserRole> rolesUser=userRoleDao.getUserRole(id);
@@ -199,11 +236,7 @@ public class UserController {
                 jsonObject.put("mobile", user.getMobile());
                 jsonObject.put("locked", user.getLocked());
                 jsonObject.put("usershospitalSection", usersHospitalSection);
-                if (usersHospitalSection.size() > 0) {
-                    List<HospitalSection> hospitalSections = hospitalSectionDao.getHospitalSectionsListByHospitalId(usersHospitalSection.get(0).getHospitalSection().getHospital().getHospitalId());
-                    jsonObject.put("hospitalSection", hospitalSections);
-                }
-                //jsonObject.put("roles",rolesUser);
+                jsonObject.put("roles", userRoles);
 
                 jsonArray.put(jsonObject);
             }
