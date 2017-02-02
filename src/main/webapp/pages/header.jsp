@@ -209,6 +209,10 @@
                     $("#nav-mobile li a[href=hospitalSection]").parent().parent().parent().css("display", "block");
                     $("#nav-mobile li a[href=hospitalSection]").parent().addClass("active");
                     break;
+                    case "/section":
+                    $("#nav-mobile li a[href=section]").parent().parent().parent().css("display", "block");
+                    $("#nav-mobile li a[href=section]").parent().addClass("active");
+                    break;
             }
         }
     </script>

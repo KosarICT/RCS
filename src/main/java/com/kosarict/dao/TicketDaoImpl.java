@@ -48,7 +48,7 @@ public class TicketDaoImpl implements TicketDao {
     public List<Ticket> getTicketListByTicketTypeId(short ticketTypeId, int userId) {
         Session session = entityManager.unwrap(Session.class);
 
-        String queryString = "Select  \n" +
+        String queryString = "Select distinct \n" +
                 "\tTicket.* \n" +
                 "FROM  \n" +
                 "\tTicket \n" +
@@ -163,7 +163,7 @@ public class TicketDaoImpl implements TicketDao {
                 "  join Section on Section.Section_Id =SectionPermission.Section_Id" +
                 "  join HospitalSection on HospitalSection.Section_Id=Section.Section_Id" +
                 "  join UsersHospitalSection on UsersHospitalSection.HospitalSection_Id=HospitalSection.HospitalSection_Id" +
-                "  where Ticket.Enable=1 and Permission.Enable=1 and Tab.Enable=1 and HospitalSection.Enable=1 and UsersHospitalSection.User_Id=" + users.getUserId();
+                "  where Ticket.Enable=1 AND Ticket.TicketStatus_Id != 3 and Permission.Enable=1 and Tab.Enable=1 and HospitalSection.Enable=1 and UsersHospitalSection.User_Id=" + users.getUserId();
 
         List query = session.createSQLQuery(queryString).addEntity(Ticket.class).list();
 

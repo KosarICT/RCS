@@ -291,6 +291,10 @@ public class TicketController {
                 ticketJson.put("complainantTitle", ticket.getComplainant().getTitle());
                 ticketJson.put("complainatId", complainatId);
 
+                List<TicketErrand> ticketErrandList = ticketErrandDao.getTicketErrandListByTicketId(id);
+
+                ticketJson.put("ticketErrand", ticketErrandList);
+
                 if (complainatId == 2) {
                     List<ComplainantRelation> complainantRelationList = complainantRelationDao.findComplainantRelationByTicketId(id);
                     ComplainantRelation complainantRelation = complainantRelationList.get(0);

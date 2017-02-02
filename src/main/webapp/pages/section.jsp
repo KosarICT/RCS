@@ -24,20 +24,22 @@
         <c:if test="${not empty lists}">
 
             <tbody class="data-wrapper">
-            <c:forEach var="element" items="${lists}">
-
+            <c:forEach var="entry" items="${lists}">
+                <c:set var="userId" value="${entry.sectionId}" scope="page"/>
                 <tr>
-                    <td class="center" style="display: none">${element.setionId}</td>
-                    <td class="center">${element.title}</td>
-                    <td class="center">${element.description}</td>
+                    <td class="center" style="display: none">${entry.sectionId}</td>
+                    <td class="center counter"><c:out value="${row}"/></td>
+                    <td class="center">${entry.title}</td>
+                    <td class="center">${entry.description}</td>
                     <td class="center">
-                        <a id="btnEdit_${element.sectionId}" href="#" class="mainTextColor"
+                        <a id="btnEdit_${entry.sectionId}" href="#" class="mainTextColor"
                            style="margin-left: 5px" onclick="getSectionForEdit(this);">
                             <img src="/static/icon/edit1.png">
                         </a>
                     </td>
                 </tr>
 
+                <c:set var="row" value="${row + 1}" scope="page"/>
             </c:forEach>
             </tbody>
         </c:if>
@@ -86,12 +88,15 @@
 
 </div>
 
-<script>
+<script type="text/javascript">
 
     var sectionId = 0;
 
     $(document).ready(function () {
         $(".page-title").text("بخش ها");
+        debugger;
+        var section = "${lists}";
+
 
 
         var height = screen.height - 170;
@@ -148,6 +153,25 @@
                 }
             });
         }
+    }
+
+    function getSectionForEdit(sender) {
+        sectionId = sender.id.split("_")[1];
+
+        $.ajax({
+            type: "POST",
+            url: "/section/api/getSectionForEdit",
+            contentType: "application/json; charset=utf-8",
+            dataType: 'json',
+            data: sectionId.toString(),
+            success: function (data) {
+
+                $("#txtSectionName").val(data[0].title);
+                $("#txtDescription").val(data[0].description);
+
+                $('#sectionWindow').modal('open');
+            }
+        });
     }
 
     function showSectionWindow() {

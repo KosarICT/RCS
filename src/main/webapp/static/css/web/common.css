@@ -293,6 +293,15 @@ input[type=text], input[type=email], input[type=tel], input[type=number], input[
     -webkit-box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 8px !important;
 }
 
+.shadow{
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 8px !important;
+    -moz-box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 8px !important;
+    -webkit-box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 8px !important;
+    margin-bottom: 3px;
+    padding: 10px;
+    border-radius: 2px;
+}
+
 input:not([type]):focus:not([readonly]), input[type=text]:focus:not([readonly]), input[type=password]:focus:not([readonly]), input[type=email]:focus:not([readonly]), input[type=url]:focus:not([readonly]), input[type=time]:focus:not([readonly]), input[type=date]:focus:not([readonly]), input[type=datetime]:focus:not([readonly]), input[type=datetime-local]:focus:not([readonly]), input[type=tel]:focus:not([readonly]), input[type=number]:focus:not([readonly]), input[type=search]:focus:not([readonly]), textarea.materialize-textarea:focus:not([readonly]) {
 
 }

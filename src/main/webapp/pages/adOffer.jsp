@@ -155,6 +155,13 @@
                     رهگیری:</label>
                 <input disabled id="txtTrackingCode" type="text" class="validate notification-text">
             </div>
+
+            <div class="row">
+                <label style="display:block; color: #707070; font-weight: 500; font-size: 13px; margin-bottom: 20px">فایل
+                    های پیوست:</label>
+
+                <div class="row" id="attachmentArea"></div>
+            </div>
         </div>
         <div class="row"></div>
     </div>
@@ -381,6 +388,18 @@
                     $("#txtDescription").val(data.description);
                     $("#txtEmail").val(data.email);
                     $("#hiddenTicketId").val(ticketId);
+
+                    var attachList = data.ticketAttachmentList;
+
+                    for (var i = 0; i < attachList.length; i++) {
+
+                        var div = $("<div>").addClass("card").addClass("attachment").addClass("left");
+                        var img = $("<img>").attr("src", "../static/icon/attach.png").attr("onclick", "btnDownloadAttachment('" + attachList[i].fileName + "." + attachList[i].fileType + "');");
+
+                        div.append(img);
+
+                        $("#attachmentArea").append(div);
+                    }
                 }
             });
 

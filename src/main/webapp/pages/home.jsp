@@ -42,7 +42,7 @@
     }
 </style>
 
-<div class="row">
+<%--<div class="row">
     <div class="col s12 m6 l3">
         <div class="card" style="background: #6580b1">
             <div class="card-content white-text">
@@ -76,7 +76,7 @@
             </div>
         </div>
     </div>
-</div>
+</div>--%>
 <div>
     <div id="grvAdminTicket"></div>
 </div>

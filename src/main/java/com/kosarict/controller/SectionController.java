@@ -39,7 +39,8 @@ public class SectionController {
 
 
     @RequestMapping(value = "/section", method = RequestMethod.GET)
-    public ModelAndView section(ModelAndView model) {
+    public ModelAndView section() {
+        ModelAndView model = new ModelAndView("section");
 
         model.addObject("lists", getHospitalSectionByHospitalId());
 
@@ -103,7 +104,7 @@ public class SectionController {
     @RequestMapping(value = "/section/api/save", method = RequestMethod.POST)
     public
     @ResponseBody
-    String addUser(@RequestBody String model) {
+    String save(@RequestBody String model) {
 
         try {
             JSONArray jsonArray = new JSONArray(model);
@@ -114,30 +115,68 @@ public class SectionController {
             String description = jsonObject.getString("description");
 
 
-            Section section = new Section();
+            Section section;
 
-            section.setSectionId(sectionId);
+            if (sectionId <= 0) {
+                section = new Section();
+                section.setSectionId(0);
+            } else {
+                section = sectionDao.findSectionById(sectionId);
+            }
+
+
             section.setTitle(title);
             section.setDescription(description);
-            section.setView(false);
+            section.setView(true);
             section.setEnable(true);
 
             int newSectionId = userSectionDao.saveSection(section);
 
-            HospitalSection hospitalSection = new HospitalSection();
+            if (sectionId <= 0) {
+                HospitalSection hospitalSection = new HospitalSection();
 
-            Hospital hospital = hospitalDao.findHospitalById(getCurrentHospital());
-            Section sectionItem = sectionDao.findSectionById(newSectionId);
+                Hospital hospital = hospitalDao.findHospitalById(getCurrentHospital());
+                Section sectionItem = sectionDao.findSectionById(newSectionId);
 
 
-            hospitalSection.setHospital(hospital);
-            hospitalSection.setSection(sectionItem);
-            hospitalSection.setEnable(true);
+                hospitalSection.setHospital(hospital);
+                hospitalSection.setSection(sectionItem);
+                hospitalSection.setEnable(true);
 
-            hospitalSectionDao.saveHospitalSection(hospitalSection);
+                hospitalSectionDao.saveHospitalSection(hospitalSection);
+            }
 
             return String.valueOf(true);
 
+        } catch (Exception ex) {
+            return String.valueOf(false);
+        }
+    }
+
+    @RequestMapping(value = "/section/api/getSectionForEdit", method = RequestMethod.POST)
+    public
+    @ResponseBody
+    String getSectionForEdit(@RequestBody String sectionId) {
+
+        try {
+            JSONArray jsonArray = new JSONArray();
+            int id = Integer.parseInt(sectionId);
+
+            Section section = sectionDao.findSectionById(id);
+
+
+            //List<UserRole> rolesUser=userRoleDao.getUserRole(id);
+            if (section != null) {
+                JSONObject jsonObject = new JSONObject();
+
+                jsonObject.put("title", section.getTitle());
+                jsonObject.put("description", section.getDescription());
+
+
+                jsonArray.put(jsonObject);
+            }
+
+            return jsonArray.toString();
         } catch (Exception ex) {
             return String.valueOf(false);
         }

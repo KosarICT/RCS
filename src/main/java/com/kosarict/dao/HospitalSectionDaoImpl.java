@@ -50,9 +50,9 @@ public class HospitalSectionDaoImpl implements HospitalSectionDao {
     public List<Section> getSectionList(int hospitalId) {
         Session session = entityManager.unwrap(Session.class);
 
-        String queryString = "Select Section.* From Section\n" +
-                "Join HospitalSection ON Section.Section_Id = HospitalSection.Section_Id\n" +
-                "WHERE HospitalSection.Hospital_Id = " + hospitalId+ " AND Section.Enable = 1 AND Section.IsView = 1";
+        String queryString = "Select Section.* From Section " +
+                "Join HospitalSection ON Section.Section_Id = HospitalSection.Section_Id " +
+                "WHERE HospitalSection.Hospital_Id = " + hospitalId + " AND Section.Enable = 1 AND Section.IsView = 1";
 
         List query = session.createSQLQuery(queryString).addEntity(Section.class).list();
 

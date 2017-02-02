@@ -21,6 +21,13 @@
         border-bottom: 1px solid #c8c8c8 !important;
     }
 
+    .modal {
+        max-height: 90% !important;
+        top: 5% !important;
+        width: 500px;
+
+    }
+
     #grvComplaint th input[type=text]:focus:not([readonly]) {
         border-bottom: none !important;
         box-shadow: none !important;
@@ -59,8 +66,8 @@
     </div>
     <div class="modal-content">
         <div class="row">
-            <div class="col  m3 l3"></div>
-            <div class="col s12 m6 l6">
+            <div class="col  m1 l1"></div>
+            <div class="col s12 m10 l10">
                 <input disabled id="hiddenHospitalId" type="text" class="validate notification-text" hidden>
                 <input disabled id="hiddenTicketId" type="text" class="validate notification-text" hidden>
 
@@ -141,13 +148,18 @@
                     <input disabled id="txtEmail" type="text" class="validate notification-text">
                 </div>
                 <div class="row">
+                    <label for="txtDescription"
+                           style="font-size: 13px; font-weight: 500; color: #707070">ارجاعات:</label>
+                    <div id="pnlErrand"></div>
+                </div>
+                <div class="row">
                     <label style="display:block; color: #707070; font-weight: 500; font-size: 13px; margin-bottom: 20px">فایل
                         های پیوست:</label>
 
                     <div class="row" id="attachmentArea"></div>
                 </div>
             </div>
-            <div class="col  m3 l3"></div>
+            <div class="col  m1 l1"></div>
         </div>
     </div>
     <div class="modal-footer">
@@ -262,6 +274,42 @@
                     itemsPerPage: "",
                     display: "نمایش {0}-{1} آیتم از {2} آیتم",
                     empty: "اطلاعاتی برای نمایش وجود ندارد"
+                }
+            },
+            dataBound: function (e) {
+                var grid = $("#grvComplaint").data("kendoGrid");
+                var gridData = grid.dataSource.view();
+
+                for (var i = 0; i < gridData.length; i++) {
+debugger;
+                    var calender = new PersianDate();
+
+                    var responseDay = gridData[i].responseTime;
+                    var submitDate = gridData[i].submitDate;
+
+                    var dateArray = submitDate.split("/");
+                    var y = dateArray[0];
+                    var m = dateArray[1];
+                    var d = dateArray[2];
+                    var gregorianDateArray = calender.jalaliToGregorian(y, m, d);
+                    var gregorianDate = gregorianDateArray[0] + "/" + gregorianDateArray[1] + "/" + gregorianDateArray[2];
+                    var startDate = new Date(gregorianDate);
+                    startDate.setHours(0, 0, 0, 0);
+
+                    var date = new Date();
+                    date.setHours(0, 0, 0, 0);
+
+                    var differDays = new Date(date.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24);
+
+                    var days = parseInt(differDays);
+
+                    var len = parseInt(responseDay);
+
+                    var value = days / len;
+                    var colorCode = getColor(value);
+
+                    $('tr[data-uid="' + gridData[i].uid + '"] ').css("background-color", colorCode);
+
                 }
             },
             columns: [
@@ -383,6 +431,12 @@
         });
     }
 
+    function getColor(value) {
+        //value from 0 to 1
+        var hue = ((1 - value) * 120).toString(10);
+        return ["hsl(", hue, ",100%,92%)"].join("");
+    }
+
     function initWindow() {
         $('#complainWindow').modal({
                 dismissible: false,
@@ -457,6 +511,35 @@
                         $("#attachmentArea").append(div);
                     }
 
+                    var errandList = data.ticketErrand;
+                    $("#pnlErrand").empty();
+
+                    $.each(errandList, function (index, dataItem) {
+                        if (index > 0) {
+                            var div = $("<div>").css("border", "1px solid #c0c0c0").addClass("shadow");
+                            var header = $("<div>").css("text-align", "left");
+                            var body = $("<div>");
+                            var line = $("<hr>").css("margin-bottom", "5px");
+
+                            var textArea = $("<textarea>").addClass("materialize-textarea validate notification-text")
+                                .attr("disabled", true);
+
+                            if (index % 2 == 0) {
+                                div.css("background", "#efefef")
+                            } else {
+                                div.css("background", "#fff")
+                            }
+
+                            header.text(dataItem.submitDate);
+                            body.text(dataItem.description);
+
+                            div.append(header);
+                            div.append(line);
+                            div.append(body);
+
+                            $("#pnlErrand").append(div);
+                        }
+                    });
 
                     $('#complainWindow').modal('open');
                 }
@@ -568,6 +651,7 @@
             }
         });
     }
+
     function openErrandWindow() {
         var hospitalId = $("#hiddenHospitalId").val();
 
