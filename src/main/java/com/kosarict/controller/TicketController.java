@@ -75,45 +75,50 @@ public class TicketController {
     private TicketStatusDao ticketStatusDao;
 
 
-
     @RequestMapping(value = "/ticket/api/getData", method = RequestMethod.POST)
     public
     @ResponseBody
     String getData(@RequestBody String ticketTypeId) {
+        try {
+            short id = Short.parseShort(ticketTypeId);
 
+            Users user = getCurrentUser();
 
-        short id = Short.parseShort(ticketTypeId);
+            List<Ticket> ticketList = ticketDao.getTicketListByTicketTypeId(id, user.getUserId());
 
-        List<Ticket> ticketList = ticketDao.getTicketListByTicketTypeId(id);
+            JSONArray dataArray = new JSONArray();
 
-        JSONArray dataArray = new JSONArray();
+            for (Ticket ticket : ticketList) {
 
-        for (Ticket ticket : ticketList) {
+                JSONObject dataItem = new JSONObject();
 
-            JSONObject dataItem = new JSONObject();
+                dataItem.put("ticketId", ticket.getTicketId());
+                dataItem.put("name", ticket.getFirstName() + " " + ticket.getLastName());
+                dataItem.put("nationalCode", ticket.getNationalCode());
+                dataItem.put("hospitalName", ticket.getHospital().getName());
+                dataItem.put("sendTypeTitle", ticket.getSendType().getTitle());
+                dataItem.put("submitDate", ticket.getSubmitDate());
 
-            dataItem.put("ticketId", ticket.getTicketId());
-            dataItem.put("name", ticket.getFirstName() + " " + ticket.getLastName());
-            dataItem.put("nationalCode", ticket.getNationalCode());
-            dataItem.put("hospitalName", ticket.getHospital().getName());
-            dataItem.put("sendTypeTitle", ticket.getSendType().getTitle());
-            dataItem.put("submitDate", ticket.getSubmitDate());
+                if (id == Constant.AppreciationTicketTypeId) {
+                    dataItem.put("sectionName", ticket.getSection().getTitle());
+                } else if (id == Constant.ComplainTicketTypeId) {
+                    dataItem.put("complainantTitle", ticket.getComplainant().getTitle());
+                    dataItem.put("complaintTypeTitle", ticket.getComplaintType().getTitle());
+                } else if (id == Constant.OfferTicketTypeId) {
+                    dataItem.put("mobile", ticket.getMobile());
+                    dataItem.put("sectionName", ticket.getSection().getTitle());
+                } else {
+                    dataItem.put("subject", ticket.getSubject());
+                    dataItem.put("sectionName", ticket.getSection().getTitle());
+                }
 
-            if (id == Constant.AppreciationTicketTypeId) {
-                dataItem.put("sectionName", ticket.getSection().getTitle());
-            } else if (id == Constant.ComplainTicketTypeId) {
-                dataItem.put("complainantTitle", ticket.getComplainant().getTitle());
-                dataItem.put("complaintTypeTitle", ticket.getComplaintType().getTitle());
-            } else if (id == Constant.OfferTicketTypeId) {
-
-            } else {
-
+                dataArray.put(dataItem);
             }
 
-            dataArray.put(dataItem);
+            return dataArray.toString();
+        } catch (Exception ex) {
+            return null;
         }
-
-        return dataArray.toString();
     }
 
     @RequestMapping(value = "/ticket/api/saveTicket", method = RequestMethod.POST)
@@ -321,8 +326,8 @@ public class TicketController {
             ticketJson.put("trackingCode", ticket.getTrackingCode());
             ticketJson.put("ticketAttachmentList", ticketAttachmentList);
 
-            Users users=getCurrentUser();
-            ticketUserSeenDao.deleteTicketUserSeen(id,users.getUserId());
+            Users users = getCurrentUser();
+            ticketUserSeenDao.deleteTicketUserSeen(id, users.getUserId());
             return ticketJson.toString();
         } catch (Exception ex) {
             return String.valueOf(false);

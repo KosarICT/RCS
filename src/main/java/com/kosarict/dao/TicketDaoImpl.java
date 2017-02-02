@@ -38,9 +38,34 @@ public class TicketDaoImpl implements TicketDao {
 
         Query query = entityManager.createQuery(queryString);
         query.setParameter("ticketTypeId", ticketTypeId);
-        query.setParameter("finishStatus",(short)3);
+        query.setParameter("finishStatus", (short) 3);
 
         return query.getResultList();
+    }
+
+    @Transactional(isolation = Isolation.SERIALIZABLE)
+    @Override
+    public List<Ticket> getTicketListByTicketTypeId(short ticketTypeId, int userId) {
+        Session session = entityManager.unwrap(Session.class);
+
+        String queryString = "Select  \n" +
+                "\tTicket.* \n" +
+                "FROM  \n" +
+                "\tTicket \n" +
+                "JOIN TicketErrand ON Ticket.Ticket_Id = TicketErrand.Ticket_Id\n" +
+                "JOIN TicketStatus ON Ticket.TicketStatus_Id = TicketStatus.TicketStatus_Id \n" +
+                "JOIN TicketType ON Ticket.TicketType_Id = TicketType.TicketType_Id \n" +
+                "WHERE  \n" +
+                "\tTicket.TicketType_Id = " + ticketTypeId + " AND  \n" +
+                "\tTicketErrand.AssignedUser_Id = " + userId + " AND  \n" +
+                "\tTicketStatus.TicketStatus_Id != 3 \n" +
+                "ORDER BY  \n" +
+                "\tTicket.Ticket_Id DESC";
+
+        List query = session.createSQLQuery(queryString).addEntity(Ticket.class).list();
+
+
+        return query;
     }
 
     @Override
@@ -124,13 +149,10 @@ public class TicketDaoImpl implements TicketDao {
 
     @Transactional(isolation = Isolation.SERIALIZABLE)
     @Override
-    public List<Ticket> getTop10Ticket(Users users)
-
-    {
+    public List<Ticket> getTop10Ticket(Users users) {
         Session session = entityManager.unwrap(Session.class);
 
-
-        String queryString= "SELECT top 10 [Ticket_Id],Ticket.[TicketType_Id],[ComplainType_Id],Ticket.[Hospital_Id],[Shift_Id],Ticket.[Section_Id]" +
+        String queryString = "SELECT distinct top 10 [Ticket_Id],Ticket.[TicketType_Id],[ComplainType_Id],Ticket.[Hospital_Id],[Shift_Id],Ticket.[Section_Id]" +
                 "      ,[SendType_Id],[Complainant_Id],[TicketStatus_Id],[FirstName],[LastName],[NationalCode],[PhoneNumber]" +
                 "      ,[Mobile],[PersnolFirstName],[PersnolLastName],[Subject],Ticket.[Description],[Raiting],[SubmitDate]" +
                 "      ,[Email],Ticket.Enable ,[TrackingCode] FROM [Monitoring].[dbo].[Ticket]" +
@@ -141,22 +163,20 @@ public class TicketDaoImpl implements TicketDao {
                 "  join Section on Section.Section_Id =SectionPermission.Section_Id" +
                 "  join HospitalSection on HospitalSection.Section_Id=Section.Section_Id" +
                 "  join UsersHospitalSection on UsersHospitalSection.HospitalSection_Id=HospitalSection.HospitalSection_Id" +
-                "  where Ticket.Enable=1 and Permission.Enable=1 and Tab.Enable=1 and HospitalSection.Enable=1 and UsersHospitalSection.User_Id=" +users.getUserId();
-        List query =
-                session.createSQLQuery(queryString).addEntity(Ticket.class).list();
+                "  where Ticket.Enable=1 and Permission.Enable=1 and Tab.Enable=1 and HospitalSection.Enable=1 and UsersHospitalSection.User_Id=" + users.getUserId();
+
+        List query = session.createSQLQuery(queryString).addEntity(Ticket.class).list();
 
         return query;
     }
 
     @Override
-    public List<Ticket> getTicketArchiveList()
-
-    {
-        String queryString = "SELECT ticket FROM Ticket ticket WHERE  " +
+    public List<Ticket> getTicketArchiveList() {
+        String queryString = "SELECT ticket FROM Ticket ticket WHERE " +
                 "ticket.enable = true and  ticket.ticketStatus.id =:finishStatus";
 
         Query query = entityManager.createQuery(queryString);
-        query.setParameter("finishStatus",(short)3);
+        query.setParameter("finishStatus", (short) 3);
 
         return query.getResultList();
     }

@@ -328,7 +328,7 @@
                 dataType: 'json',
                 data: ticketId.toString(),
                 success: function (data) {
-debugger;
+
                     $("#txtName").val(data.firstName + " " + data.lastName);
                     $("#txtNationalCode").val(data.nationalCode);
                     $("#txtMobile").val(data.mobile);

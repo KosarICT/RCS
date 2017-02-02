@@ -33,7 +33,7 @@ public class PersistenceConfig {
     public DataSource dataSource(){
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-        dataSource.setUrl("jdbc:sqlserver://localhost:1433;databaseName=Monitoring");
+        dataSource.setUrl("jdbc:sqlserver://DESKTOP-U8GC0G4\\SQLEXPRESS:1433;databaseName=Monitoring");
         dataSource.setUsername( "kosar" );
         dataSource.setPassword( "Kosar123" );
         return dataSource;

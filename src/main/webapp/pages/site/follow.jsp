@@ -30,4 +30,15 @@
     <div class="col m1 l3"></div>
 </div>
 
+<script>
+    $(document).ready(function () {
+        var id = "${hospitalId}";
+        var hospitalName = "${hospitalName}";
+
+        $(".brand-logo").text($("#ddlHospital option:selected").text());
+        $("#imgHospital").attr("src", "/static/hospitalImage/" + hospitalName);
+
+    });
+</script>
+
 <%@include file="footer.jsp" %>

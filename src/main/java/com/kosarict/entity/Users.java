@@ -19,6 +19,7 @@ public class Users {
     private String mobile;
     private short locked;
     private boolean enable;
+    private boolean isSuperUser;
     private String personalNumber;
 
 
@@ -132,6 +133,16 @@ public class Users {
 
     public void setEnable(boolean enable) {
         this.enable = enable;
+    }
+
+    @Basic
+    @Column(name = "IsSuperUser")
+    public boolean isSuperUser() {
+        return isSuperUser;
+    }
+
+    public void setSuperUser(boolean isSuperUser) {
+        this.isSuperUser = isSuperUser;
     }
 
     @Basic

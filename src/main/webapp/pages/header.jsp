@@ -3,8 +3,10 @@
 
 <html>
 <head>
-    <title>Title</title>
-
+    <title>پنل مدیریت</title>
+    <link rel="icon"
+          type="image/png"
+          href="/static/hospitalImage/heart.png">
     <link href="<c:url value='/static/css/web/rtl.min.css'/>" rel="stylesheet">
     <link href="<c:url value='/static/css/web/kendo.common.min.css'/>" rel="stylesheet">
     <link href="<c:url value='/static/css/web/Skin/kendo.fiori.min.css'/>" rel="stylesheet">
@@ -188,7 +190,6 @@
                     $("#nav-mobile li a[href=adArchive]").parent().addClass("active");
                     break;
                 case "/user":
-                    debugger;
                     $("#nav-mobile li a[href=user]").parent().parent().parent().css("display", "block");
                     $("#nav-mobile li a[href=user]").parent().addClass("active");
                     break;

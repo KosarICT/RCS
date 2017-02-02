@@ -5,6 +5,8 @@ import com.kosarict.entity.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -40,14 +42,24 @@ public class UserController {
     private RoleDao roleDao;
 
     @Autowired
+    private SectionDao sectionDao;
+
+    @Autowired
     private UserRoleDao userRoleDao;
+
 
     @RequestMapping(value = "/user", method = RequestMethod.GET)
     public ModelAndView user() {
         ModelAndView model = new ModelAndView("user");
         model.addObject("lists", getUsersList());
         model.addObject("hospitalList", getHospitalLists());
-        model.addObject("roleList", getRols());
+
+        if (checkSuperUser()) {
+            model.addObject("isSuperUser", 1);
+        } else {
+            model.addObject("isSuperUser", 0);
+            model.addObject("hospitalId", getCurrentHospital());
+        }
         return model;
     }
 
@@ -108,6 +120,7 @@ public class UserController {
             user.setMobile(mobile);
             user.setLocked(locked);
             user.setEnable(true);
+            user.setSuperUser(false);
 
             int newUserId = userDao.saveUser(user);
 
@@ -249,7 +262,7 @@ public class UserController {
     private List<Users> getUsersList() {
         try {
             return userDao.getAllUsersList();
-        }catch (Exception ex){
+        } catch (Exception ex) {
             int x = 0;
             return null;
         }
@@ -289,26 +302,39 @@ public class UserController {
         }
     }
 
-    /*@RequestMapping(value = "/user/api/getSectionOfHospital", method = RequestMethod.POST)
-    public
-    @ResponseBody
-    String getSectionOfHospital(@RequestBody String hospitalId) {
-        int id = Integer.parseInt(hospitalId);
+    private Users getCurrentUser() {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        List<HospitalSection> hospitalSectionList = hospitalSectionDao.getHospitalSectionsListByHospitalId(id);
+        String userName = userDetails.getUsername();
+        Users user = userDao.findUserByUserName(userName);
 
-        JSONArray jsonArray = new JSONArray();
+        return user;
+    }
 
-        for (HospitalSection hospitalSection : hospitalSectionList) {
-            JSONObject jsonObject = new JSONObject();
+    private boolean checkSuperUser() {
+        Users user = getCurrentUser();
 
+        return user.isSuperUser();
+    }
 
-            jsonObject.put("sectionId", hospitalSection.getSection().getSectionId());
-            jsonObject.put("title", hospitalSection.getSection().getTitle());
+    private int getCurrentHospital() {
+        Users user = getCurrentUser();
+        List<UsersHospitalSection> usersHospitalSectionList = userSectionDao.findUserHospitalSectionByUserId(user.getUserId());
 
-            jsonArray.put(jsonObject);
+        int hospitalId = 0;
+
+        for (UsersHospitalSection usersHospitalSection : usersHospitalSectionList) {
+            hospitalId = usersHospitalSection.getHospitalSection().getHospital().getHospitalId();
         }
 
-        return jsonArray.toString();
-    }*/
+        return hospitalId;
+    }
+
+    @RequestMapping(value = "/user/api/getSectionList", method = RequestMethod.GET)
+    public
+    @ResponseBody
+    List<Section> getSectionList() {
+        return sectionDao.getAllSectionList();
+    }
+
 }

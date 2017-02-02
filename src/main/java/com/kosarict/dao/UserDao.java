@@ -10,6 +10,8 @@ import java.util.List;
 public interface UserDao {
     List<Users> getAllUsersList();
 
+    List<Users> getAllUsersList(int hospitalId);
+
     List<Users> getAllUsersList1();
 
     Users findUserByUserName(String userName);

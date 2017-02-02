@@ -15,6 +15,8 @@ public interface TicketDao {
 
     List<Ticket> getTicketListByTicketTypeId(short ticketTypeId);
 
+    List<Ticket> getTicketListByTicketTypeId(short ticketTypeId, int userId);
+
     long saveTicket(Ticket ticketModel);
 
     Ticket findTicketById(long ticketId);

@@ -5,6 +5,9 @@
 <html>
 <head>
     <title>Title</title>
+    <link rel="icon"
+          type="image/png"
+          href="/static/hospitalImage/heart.png">
     <link href="<c:url value='/static/css/web/materialIcon.css'/>" rel="stylesheet">
     <link type="text/css" rel="stylesheet" href="<c:url value='/static/css/web/materialize.min.css'/>"
           media="screen,projection"/>
@@ -42,7 +45,8 @@
 
 <nav class="blue-grey darken-1">
     <div class="nav-wrapper">
-        <img class="responsive-img right"  src="../static/icon/logouu.png" style="display: inline-block; margin-top: 7px">
-        <h5 class="brand-logo right" style="display: inline-block; margin-top: 20px;font-size: 22px !important; margin-right: 40px"></h5>
+        <img id="imgHospital" class="responsive-img right"  src="../static/icon/logouu.png"
+             style="display: inline-block; margin-top: 7px;margin-right: 8px; width: 50px; height: 50px">
+        <h5 class="brand-logo right" style="display: inline-block; margin-top: 20px;font-size: 22px !important; margin-right: 60px">دانشگاه علوم پزشکی ایران</h5>
     </div>
 </nav>

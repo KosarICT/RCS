@@ -14,6 +14,10 @@
         top: 5% !important;
     }
 
+    .modal .modal-content {
+        padding: 0 !important;
+    }
+
     .modal select {
         display: block;
     }
@@ -100,58 +104,95 @@
     <div class="modal-content">
         <div class="row">
 
-            <ul id="userTab" class="tabs" style="padding-right: 0">
-                <li class="tab col s3 right"><a href="#userInformation">مشخصات</a></li>
-                <li class="tab col s3 right"><a href="#rols">نقش ها</a></li>
-            </ul>
+            <%--            <ul id="userTab" class="tabs" style="padding-right: 0">
+                            <li class="tab col s3 right"><a id="userInformationTab" href="#userInformation">مشخصات</a></li>
+                            <li class="tab col s3 right"><a href="#rols">گروه کاری</a></li>
+                        </ul>--%>
             <div id="userInformation">
-                <div class="col s12 m6 l5 right">
+                <div class="col s12 m7 l6 right">
 
-                    <div class="input-field">
-                        <input placeholder="نام کاربری" id="txtUserName" type="text" autocomplete="false" autofocus>
+                    <div class="row box" style="margin-top: 10px">
+                        <fieldset>
+                            <legend>اطلاعات کاربری</legend>
+                            <div class="input-field">
+                                <input placeholder="نام کاربری" id="txtUserName" type="text" autocomplete="false"
+                                       autofocus>
+                            </div>
+
+                            <div class="input-field">
+                                <input placeholder="کلمه عبور" id="txtPassword" type="password">
+                            </div>
+
+                            <div class="input-field">
+                                <input placeholder="تکرار کلمه عبور" id="txtRetryPassword" type="password">
+                            </div>
+
+                            <div class="input-field ">
+                                <input placeholder="نام نمایشی" id="txtDisplayName" type="text" maxlength="255">
+                            </div>
+
+                            <div>
+                                <input type="checkbox" class="filled-in" id="chkLocked"/>
+                                <label for="chkLocked">غیر فعال</label>
+                            </div>
+                        </fieldset>
                     </div>
 
-                    <div class="input-field">
-                        <input placeholder="کلمه عبور" id="txtPassword" type="password" >
-                    </div>
 
-                    <div class="input-field">
-                        <input placeholder="تکرار کلمه عبور" id="txtRetryPassword" type="password" >
-                    </div>
+                    <div class="row box">
+                        <fieldset>
+                            <legend>اطلاعات فردی</legend>
 
-                    <div class="input-field ">
-                        <input placeholder="شماره پرسنلی" id="txtPersonalNumber" type="text" maxlength="10"
-                               onkeypress="return event.charCode >=48 && event.charCode <= 57">
-                    </div>
+                            <div class="input-field ">
+                                <input placeholder="شماره پرسنلی" id="txtPersonalNumber" type="text" maxlength="10"
+                                       onkeypress="return event.charCode >=48 && event.charCode <= 57">
+                            </div>
 
-                    <div class="input-field ">
-                        <input placeholder="نام" id="txtFirstName" type="text" maxlength="255">
-                    </div>
+                            <div class="input-field ">
+                                <input placeholder="نام" id="txtFirstName" type="text" maxlength="255">
+                            </div>
 
-                    <div class="input-field ">
-                        <input placeholder="نام خانوادگی" id="txtLastName" type="text" maxlength="255">
-                    </div>
+                            <div class="input-field ">
+                                <input placeholder="نام خانوادگی" id="txtLastName" type="text" maxlength="255">
+                            </div>
 
-                    <div class="input-field ">
-                        <input placeholder="نام نمایشی" id="txtDisplayName" type="text" maxlength="255">
-                    </div>
+                            <div class="input-field ">
+                                <input placeholder="تلفن" id="txtTel" type="text" maxlength="11"
+                                       onkeypress="return event.charCode >=48 && event.charCode <= 57">
+                            </div>
 
-                    <div class="input-field ">
-                        <input placeholder="تلفن" id="txtTel" type="text" maxlength="11"
-                               onkeypress="return event.charCode >=48 && event.charCode <= 57">
-                    </div>
+                            <div class="input-field ">
+                                <input placeholder="موبایل" id="txtMobile" type="text" maxlength="12"
+                                       onkeypress="return event.charCode >=48 && event.charCode <= 57">
+                            </div>
+                        </fieldset>
 
-                    <div class="input-field ">
-                        <input placeholder="موبایل" id="txtMobile" type="text" maxlength="12"
-                               onkeypress="return event.charCode >=48 && event.charCode <= 57">
-                    </div>
-
-                    <div>
-                        <input type="checkbox" class="filled-in" id="chkLocked"/>
-                        <label for="chkLocked">غیر فعال</label>
                     </div>
                 </div>
-                <div class="col s12 m6 l6 left">
+                <div class="col s12 m5 l6 left">
+                    <div class="row box" style="margin-top: 10px">
+                        <fieldset>
+                            <legend>تنظیمات دسترسی</legend>
+
+                            <div id="hospitalArea" class="row" style="margin-top: 10px">
+                                <div class="col s12 m4 l4 right" style="margin-top: 13px">
+                                    <label for="ddlHospital">انتخاب بیمارستان:</label>
+                                </div>
+
+                                <div class="col s12 m8 l8 left">
+                                    <select id="ddlHospital" onchange="ddlHospitalChange(this)">
+                                        <option value="0" disabled selected>بیمارستان موردنظر انتخاب نمائید</option>
+                                        <c:if test="${not empty hospitalList}">
+                                            <c:forEach var="entry" items="${hospitalList}">
+                                                <option value="${entry.hospitalId}">${entry.name}</option>
+                                            </c:forEach>
+                                        </c:if>
+                                    </select>
+                                </div>
+                            </div>
+                            <div id="roleListDiv"></div>
+                        </fieldset>
+                    </div>
                     <div class="center" style="margin-bottom: 10px">
                         <img style="width: 250px; height: 250px" class="card" id="imgUser"
                              src="../static/userImage/boy.png">
@@ -169,28 +210,27 @@
                     </div>
                 </div>
             </div>
-            <div id="rols" >
-                <div class="col right ">
-                    <div class="row">
-                        <div class="col s12 m4 l4 right">
-                            <label for="ddlHospital">انتخاب بیمارستان:</label>
-                        </div>
+            <%--                        <div id="rols">
+                                        <div class="col right ">
+                                            <div class="row" style="margin-top: 10px">
+                                                <div class="col s12 m4 l4 right" style="margin-top: 13px">
+                                                    <label for="ddlHospital">انتخاب بیمارستان:</label>
+                                                </div>
 
-                        <div class="col s12 m8 l8 left">
-                            <select id="ddlHospital" onchange="ddlHospitalChange(this)">
-                                <option value="0" disabled selected>بیمارستان موردنظر انتخاب نمائید</option>
-                                <c:if test="${not empty hospitalList}">
-                                    <c:forEach var="entry" items="${hospitalList}">
-                                        <option value="${entry.hospitalId}">${entry.name}</option>
-                                    </c:forEach>
-                                </c:if>
-                            </select>
-                        </div>
-                    </div>
+                                                <div class="col s12 m8 l8 left">
+                                                    <select id="ddlHospital" onchange="ddlHospitalChange(this)">
+                                                        <option value="0" disabled selected>بیمارستان موردنظر انتخاب نمائید</option>
+                                                        <c:if test="${not empty hospitalList}">
+                                                            <c:forEach var="entry" items="${hospitalList}">
+                                                                <option value="${entry.hospitalId}">${entry.name}</option>
+                                                            </c:forEach>
+                                                        </c:if>
+                                                    </select>
+                                                </div>
 
-                    <div id="roleListDiv"></div>
-                </div>
-            </div>
+                                            </div>
+                                        </div>
+                                    </div>--%>
         </div>
 
     </div>
@@ -217,8 +257,13 @@
 <script>
     var userId = 0;
     var imageName = "boy.png";
+    var hospitalId;
+    var isSuperUser;
 
     $(document).ready(function () {
+        hospitalId = "${hospitalId}";
+        isSuperUser = "${isSuperUser}";
+
         $(".page-title").text("کاربران");
 
         $('#userTab.tabs').tabs('select_tab', 'userInformation');
@@ -236,7 +281,6 @@
         $("#userImageUploader").change(function () {
             processUpload();
         });
-
     });
 
     function initWindow() {
@@ -257,7 +301,7 @@
                 out_duration: 200, // Transition out duration
                 starting_top: '0', // Starting top style attribute
                 ending_top: '0',
-                ready:function () {
+                ready: function () {
 
                 }
             }
@@ -265,7 +309,15 @@
     }
 
     function ddlHospitalChange() {
-        var hospitalId = $("#ddlHospital option:selected").val();
+
+        if (isSuperUser == "1") {
+            $("#hospitalArea").css("display", "block");
+
+            hospitalId = $("#ddlHospital option:selected").val();
+        } else {
+            $("#hospitalArea").css("display", "none");
+        }
+
         $.ajax({
             type: "POST",
             url: "/hospitalSection/api/getHospitalSectionDataByHospitalId",
@@ -285,7 +337,7 @@
 
         var roleListDiv = $("#roleListDiv");
         $.each(data, function (index, dataItem) {
-
+            debugger;
             var div = $("<div>").css("width", "48%").css("display", "inline-block").css("margin", "2px");
 
             var pTag = $('<p>');
@@ -340,14 +392,16 @@
         var displayName = $("#txtDisplayName").val();
         var tel = $("#txtTel").val();
         var mobile = $("#txtMobile").val();
+        var roles = getCheckListArray();
 
-        if (checkUserName == "" || personalNumber == "" || firstName == "" || lastName == "" || displayName == "" ) {
+        if (checkUserName == "" || personalNumber == "" || firstName == "" || lastName == "" || displayName == "") {
             Materialize.toast('تمامی فیلدها اجباری می باشد', 4000, 'info-toast');
         } else if (userId <= 0 && (pas == "" || retryPas == "")) {
             Materialize.toast('تمامی فیلدها اجباری می باشد', 4000, 'info-toast');
-        }
-        else {
-            var roles = getCheckListArray();
+        } else if (roles.length <= 0) {
+            Materialize.toast('تنظیمات دسترسی کاربر را مشخص نمائید.', 4000, 'info-toast');
+        } else {
+
             if (userId <= 0) {
                 $.ajax({
                     type: "POST",
@@ -480,9 +534,8 @@
                     $("#chkLocked").prop('checked', user.locked);
                     $("#imgUser").attr("src", "/static/userImage/" + user.imageName);
 
-                    if(user.hospitalSection!= undefined &&user.hospitalSection.length>0)
-                    {
-                        $("#ddlHospital").val(user.hospitalSection[0].hospital.hospitalId.toString()).prop("disabled",true);
+                    if (user.hospitalSection != undefined && user.hospitalSection.length > 0) {
+                        $("#ddlHospital").val(user.hospitalSection[0].hospital.hospitalId.toString()).prop("disabled", true);
                         createHospitalSectionDiv(user.hospitalSection);
                         checkRoles(user.usershospitalSection);
                     }
@@ -509,8 +562,10 @@
 
     function showUserWindow() {
         clearForm();
+        ddlHospitalChange();
         $('#userWindow').modal('open');
         $("#txtUserName").focus();
+        $("#userInformationTab").click();
     }
 
     function processUpload() {

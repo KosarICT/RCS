@@ -46,6 +46,7 @@ public class CriticismController {
         model.addObject("sectionLists", getSectionLists());
         model.addObject("hospitalList", getHospitalLists());
         model.addObject("hospitalId", hospitalId);
+        model.addObject("hospitalImage", getHosptialName(Integer.parseInt(hospitalId)));
         return model;
     }
 
@@ -75,6 +76,10 @@ public class CriticismController {
             break;
         }
         return trackingNumber;
+    }
+
+    private String getHosptialName(int hospitalId){
+        return hospitalDao.findHospitalById(hospitalId).getImageName();
     }
 
 

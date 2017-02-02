@@ -1,6 +1,7 @@
 package com.kosarict.dao;
 
 import com.kosarict.entity.HospitalSection;
+import com.kosarict.entity.Section;
 
 import java.util.List;
 
@@ -10,6 +11,8 @@ import java.util.List;
 public interface HospitalSectionDao {
 
     List<HospitalSection> getHospitalSectionsListByHospitalId(int hospitalId);
+
+    List<Section> getSectionList(int hospitalId);
 
     HospitalSection findHospitalSectionById(int hospitalSectionId);
 

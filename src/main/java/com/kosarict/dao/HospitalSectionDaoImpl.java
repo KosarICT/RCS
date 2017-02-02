@@ -1,6 +1,9 @@
 package com.kosarict.dao;
 
 import com.kosarict.entity.HospitalSection;
+import com.kosarict.entity.Section;
+import com.kosarict.entity.Ticket;
+import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,13 +36,30 @@ public class HospitalSectionDaoImpl implements HospitalSectionDao {
     @Override
     public List<HospitalSection> getHospitalSectionsListByHospitalId(int hospitalId) {
         String queryString = "SELECT hs FROM HospitalSection hs " +
-                "WHERE hs.hospital.hospitalId =:hospitalId and hs.enable=true ";
+                "WHERE hs.hospital.hospitalId =:hospitalId and hs.enable=true and hs.section.view=true " +
+                "and hs.section.enable=true";
 
         Query query = entityManager.createQuery(queryString);
         query.setParameter("hospitalId", hospitalId);
 
         return query.getResultList();
     }
+
+    @Transactional(isolation = Isolation.SERIALIZABLE)
+    @Override
+    public List<Section> getSectionList(int hospitalId) {
+        Session session = entityManager.unwrap(Session.class);
+
+        String queryString = "Select Section.* From Section\n" +
+                "Join HospitalSection ON Section.Section_Id = HospitalSection.Section_Id\n" +
+                "WHERE HospitalSection.Hospital_Id = " + hospitalId+ " AND Section.Enable = 1 AND Section.IsView = 1";
+
+        List query = session.createSQLQuery(queryString).addEntity(Section.class).list();
+
+
+        return query;
+    }
+
 
     @Override
     public HospitalSection findHospitalSectionById(int hospitalSectionId) {

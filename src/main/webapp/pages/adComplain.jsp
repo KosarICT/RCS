@@ -26,7 +26,7 @@
         box-shadow: none !important;
     }
 
-    .textBox{
+    .textBox {
         width: 90%;
         border: 1px solid #bfbfbf !important;
         height: 33px !important;
@@ -34,14 +34,15 @@
         color: #a8a8a8;
     }
 
-    .k-grid-pager a{
+    .k-grid-pager a {
         margin-top: 3px !important;
     }
-    .k-grid-pager a span{
+
+    .k-grid-pager a span {
         margin-top: 5px !important;
     }
 
-    .k-dropdown span{
+    .k-dropdown span {
         margin-top: 5px !important;
     }
 </style>
@@ -58,81 +59,96 @@
     </div>
     <div class="modal-content">
         <div class="row">
-            <div class="row">
-                <label for="txtComplainantTitle" style="font-size: 13px; font-weight: 500; color: #707070">شکایت
-                    کننده:</label>
-                <input disabled id="txtComplainantTitle" type="text" class="validate notification-text">
-            </div>
-            <div class="row">
-                <label for="txtName" style="font-size: 13px; font-weight: 500; color: #707070">نام بیمار:</label>
-                <input disabled id="txtName" type="text" class="validate notification-text">
-            </div>
-            <div class="row">
-                <label for="txtNationalCode" style="font-size: 13px; font-weight: 500; color: #707070">کدملی
-                    بیمار:</label>
-                <input disabled id="txtNationalCode" type="text" class="validate notification-text">
+            <div class="col  m3 l3"></div>
+            <div class="col s12 m6 l6">
+                <input disabled id="hiddenHospitalId" type="text" class="validate notification-text" hidden>
+                <input disabled id="hiddenTicketId" type="text" class="validate notification-text" hidden>
 
-            </div>
-            <div class="row">
-                <label for="txtTel" style="font-size: 13px; font-weight: 500; color: #707070">تلفن تماس:</label>
-                <input disabled id="txtTel" type="text" class="validate notification-text">
+                <div class="row">
+                    <label for="txtComplainantTitle" style="font-size: 13px; font-weight: 500; color: #707070">شکایت
+                        کننده:</label>
+                    <input disabled id="txtComplainantTitle" type="text" class="validate notification-text">
+                </div>
 
-            </div>
-            <div class="row">
-                <label for="txtMobile" style="font-size: 13px; font-weight: 500; color: #707070">تلفن همراه:</label>
-                <input disabled id="txtMobile" type="text" class="validate notification-text">
+                <div class="row">
+                    <label for="txtName" style="font-size: 13px; font-weight: 500; color: #707070">نام
+                        بیمار:</label>
+                    <input disabled id="txtName" type="text" class="validate notification-text">
+                </div>
+                <div class="row">
+                    <label for="txtNationalCode" style="font-size: 13px; font-weight: 500; color: #707070">کدملی
+                        بیمار:</label>
+                    <input disabled id="txtNationalCode" type="text" class="validate notification-text">
 
-            </div>
-            <div class="row">
-                <label for="txtRelationName" style="font-size: 13px; font-weight: 500; color: #707070">نام همراه
-                    بیمار:</label>
-                <input disabled id="txtRelationName" type="text" class="validate notification-text">
+                </div>
+                <div class="row">
+                    <label for="txtTel" style="font-size: 13px; font-weight: 500; color: #707070">تلفن تماس:</label>
+                    <input disabled id="txtTel" type="text" class="validate notification-text">
 
-            </div>
-            <div class="row">
-                <label for="txtRelationNationalCode" style="font-size: 13px; font-weight: 500; color: #707070">کدملی
-                    همراه بیمار:</label>
-                <input disabled id="txtRelationNationalCode" type="text" class="validate notification-text">
+                </div>
+                <div class="row">
+                    <label for="txtMobile" style="font-size: 13px; font-weight: 500; color: #707070">تلفن
+                        همراه:</label>
+                    <input disabled id="txtMobile" type="text" class="validate notification-text">
 
-            </div>
-            <div class="row">
-                <label for="txComplaintTypeTitle" style="font-size: 13px; font-weight: 500; color: #707070">نوع
-                    شکایت:</label>
-                <input disabled id="txComplaintTypeTitle" type="text" class="validate notification-text">
+                </div>
+                <div class="row">
+                    <label for="txtRelationName" style="font-size: 13px; font-weight: 500; color: #707070">نام همراه
+                        بیمار:</label>
+                    <input disabled id="txtRelationName" type="text" class="validate notification-text">
 
-            </div>
+                </div>
+                <div class="row">
+                    <label for="txtRelationNationalCode" style="font-size: 13px; font-weight: 500; color: #707070">کدملی
+                        همراه بیمار:</label>
+                    <input disabled id="txtRelationNationalCode" type="text" class="validate notification-text">
 
-            <input disabled id="hiddenHospitalId" type="text" class="validate notification-text" hidden>
-            <input disabled id="hiddenTicketId" type="text" class="validate notification-text" hidden>
+                </div>
+                <div class="row">
+                    <label for="txComplaintTypeTitle" style="font-size: 13px; font-weight: 500; color: #707070">نوع
+                        شکایت:</label>
+                    <input disabled id="txComplaintTypeTitle" type="text" class="validate notification-text">
 
-            <div class="row">
-                <label for="txtShiftTitle" style="font-size: 13px; font-weight: 500; color: #707070">شیفت کاری:</label>
-                <input disabled id="txtShiftTitle" type="text" class="validate notification-text">
+                </div>
+                <div class="row">
+                    <label for="txtShiftTitle" style="font-size: 13px; font-weight: 500; color: #707070">شیفت
+                        کاری:</label>
+                    <input disabled id="txtShiftTitle" type="text" class="validate notification-text">
+                </div>
+                <div class="row">
+                    <label for="txtSectionTitle" style="font-size: 13px; font-weight: 500; color: #707070">بخش
+                        کاری:</label>
+                    <input disabled id="txtSectionTitle" type="text" class="validate notification-text">
+                </div>
+                <div class="row">
+                    <label for="txtSubject" style="font-size: 13px; font-weight: 500; color: #707070">موضوع:</label>
+                    <input disabled id="txtSubject" type="text" class="validate notification-text">
+                </div>
+                <div class="row">
+                    <label for="txtDescription"
+                           style="font-size: 13px; font-weight: 500; color: #707070">توضیحات:</label>
+                    <textarea class="materialize-textarea validate notification-text" disabled id="txtDescription"
+                              length="4000"></textarea>
+                </div>
+                <div class="row">
+                    <label for="txtSubmitDate" style="font-size: 13px; font-weight: 500; color: #707070">تاریخ
+                        ارسال:</label>
+                    <input disabled id="txtSubmitDate" type="text" class="validate notification-text">
+                </div>
+                <div class="row">
+                    <label for="txtEmail" style="font-size: 13px; font-weight: 500; color: #707070">پست
+                        الکترونیک:</label>
+                    <input disabled id="txtEmail" type="text" class="validate notification-text">
+                </div>
+                <div class="row">
+                    <label style="display:block; color: #707070; font-weight: 500; font-size: 13px; margin-bottom: 20px">فایل
+                        های پیوست:</label>
+
+                    <div class="row" id="attachmentArea"></div>
+                </div>
             </div>
-            <div class="row">
-                <label for="txtSectionTitle" style="font-size: 13px; font-weight: 500; color: #707070">بخش کاری:</label>
-                <input disabled id="txtSectionTitle" type="text" class="validate notification-text">
-            </div>
-            <div class="row">
-                <label for="txtSubject" style="font-size: 13px; font-weight: 500; color: #707070">موضوع:</label>
-                <input disabled id="txtSubject" type="text" class="validate notification-text">
-            </div>
-            <div class="row">
-                <label for="txtDescription" style="font-size: 13px; font-weight: 500; color: #707070">توضیحات:</label>
-                <textarea class="materialize-textarea validate notification-text" disabled id="txtDescription"
-                          length="4000"></textarea>
-            </div>
-            <div class="row">
-                <label for="txtSubmitDate" style="font-size: 13px; font-weight: 500; color: #707070">تاریخ
-                    ارسال:</label>
-                <input disabled id="txtSubmitDate" type="text" class="validate notification-text">
-            </div>
-            <div class="row">
-                <label for="txtEmail" style="font-size: 13px; font-weight: 500; color: #707070">پست الکترونیک:</label>
-                <input disabled id="txtEmail" type="text" class="validate notification-text">
-            </div>
+            <div class="col  m3 l3"></div>
         </div>
-        <div class="row"></div>
     </div>
     <div class="modal-footer">
         <a href="#" id="btnErrand" class="modal-action waves-effect waves-light btn-flat notification-text"
@@ -256,8 +272,8 @@
                         showOperators: false,
                         operator: "contains",
                         template: function (args) {
-                            args.element.css("width", "90%").addClass("textBox").keydown(function(e){
-                                setTimeout(function(){
+                            args.element.css("width", "90%").addClass("textBox").keydown(function (e) {
+                                setTimeout(function () {
                                     $(e.target).trigger("change");
                                 });
                             });
@@ -271,8 +287,8 @@
                         showOperators: false,
                         operator: "contains",
                         template: function (args) {
-                            args.element.css("width", "90%").addClass("textBox").keydown(function(e){
-                                setTimeout(function(){
+                            args.element.css("width", "90%").addClass("textBox").keydown(function (e) {
+                                setTimeout(function () {
                                     $(e.target).trigger("change");
                                 });
                             });
@@ -286,8 +302,8 @@
                         showOperators: false,
                         operator: "contains",
                         template: function (args) {
-                            args.element.css("width", "90%").addClass("textBox").keydown(function(e){
-                                setTimeout(function(){
+                            args.element.css("width", "90%").addClass("textBox").keydown(function (e) {
+                                setTimeout(function () {
                                     $(e.target).trigger("change");
                                 });
                             });
@@ -301,8 +317,8 @@
                         showOperators: false,
                         operator: "contains",
                         template: function (args) {
-                            args.element.css("width", "90%").addClass("textBox").keydown(function(e){
-                                setTimeout(function(){
+                            args.element.css("width", "90%").addClass("textBox").keydown(function (e) {
+                                setTimeout(function () {
                                     $(e.target).trigger("change");
                                 });
                             });
@@ -316,8 +332,8 @@
                         showOperators: false,
                         operator: "contains",
                         template: function (args) {
-                            args.element.css("width", "90%").addClass("textBox").keydown(function(e){
-                                setTimeout(function(){
+                            args.element.css("width", "90%").addClass("textBox").keydown(function (e) {
+                                setTimeout(function () {
                                     $(e.target).trigger("change");
                                 });
                             });
@@ -331,8 +347,8 @@
                         showOperators: false,
                         operator: "contains",
                         template: function (args) {
-                            args.element.css("width", "90%").addClass("textBox").keydown(function(e){
-                                setTimeout(function(){
+                            args.element.css("width", "90%").addClass("textBox").keydown(function (e) {
+                                setTimeout(function () {
                                     $(e.target).trigger("change");
                                 });
                             });
@@ -346,8 +362,8 @@
                         showOperators: false,
                         operator: "contains",
                         template: function (args) {
-                            args.element.css("width", "90%").addClass("textBox").keydown(function(e){
-                                setTimeout(function(){
+                            args.element.css("width", "90%").addClass("textBox").keydown(function (e) {
+                                setTimeout(function () {
                                     $(e.target).trigger("change");
                                 });
                             });
@@ -427,12 +443,31 @@
                     $("#txtSubmitDate").val(data.submitDate);
                     $("#txtEmail").val(data.email);
 
+                    $("#asdsa").attr("ticketAttachmentList");
+
+                    var attachList = data.ticketAttachmentList;
+
+                    for (var i = 0; i < attachList.length; i++) {
+
+                        var div = $("<div>").addClass("card").addClass("attachment").addClass("left");
+                        var img = $("<img>").attr("src", "../static/icon/attach.png").attr("onclick", "btnDownloadAttachment('" + attachList[i].fileName + "." + attachList[i].fileType + "');");
+
+                        div.append(img);
+
+                        $("#attachmentArea").append(div);
+                    }
+
+
                     $('#complainWindow').modal('open');
                 }
             });
         } else {
             Materialize.toast('هیچ ردیفی انتخاب نشده است', 4000, 'error-toast');
         }
+    }
+
+    function btnDownloadAttachment(fileName) {
+        window.open("/static/attachment/" + fileName);
     }
 
     function refreshTable() {

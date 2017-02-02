@@ -372,9 +372,12 @@
 
     $(document).ready(function () {
         hospitalId = "${hospitalId}";
+        var hospitalName = "${hospitalImage}";
+        debugger;
 
         $("#ddlHospital").val(hospitalId);
         $(".brand-logo").text($("#ddlHospital option:selected").text());
+        $("#imgHospital").attr("src", "/static/hospitalImage/" + hospitalName);
         ddlHospitalChange();
 
         $("#lblTrackingNumber").persiaNumber();

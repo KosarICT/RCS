@@ -50,6 +50,8 @@ public class OfferController {
         model.addObject("hospitalList", getHospitalLists());
         model.addObject("sectionLists", getSectionLists());
         model.addObject("hospitalId", hospitalId);
+        model.addObject("hospitalImage", getHosptialName(Integer.parseInt(hospitalId)));
+
         return model;
     }
 
@@ -194,6 +196,10 @@ public class OfferController {
             break;
         }
         return trackingNumber;
+    }
+
+    private String getHosptialName(int hospitalId){
+        return hospitalDao.findHospitalById(hospitalId).getImageName();
     }
 }
 

@@ -73,6 +73,7 @@ public class ComplainController {
         model.addObject("sectionLists", getSectionLists());
         model.addObject("hospitalList", getHospitalLists());
         model.addObject("hospitalId", hospitalId);
+        model.addObject("hospitalImage", getHosptialName(Integer.parseInt(hospitalId)));
         return model;
     }
 
@@ -240,6 +241,10 @@ public class ComplainController {
 
     private List<Hospital> getHospitalLists() {
         return hospitalDao.getAllHospitalList();
+    }
+
+    private String getHosptialName(int hospitalId){
+        return hospitalDao.findHospitalById(hospitalId).getImageName();
     }
 
     private int trackingNumber() {

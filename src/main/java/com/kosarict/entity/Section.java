@@ -11,6 +11,7 @@ public class Section {
     private int sectionId;
     private String title;
     private String description;
+    private boolean isView;
     private boolean enable;
 
     @Id
@@ -42,6 +43,16 @@ public class Section {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    @Basic
+    @Column(name = "IsView")
+    public boolean isView() {
+        return isView;
+    }
+
+    public void setView(boolean isView) {
+        this.isView = isView;
     }
 
     @Basic

@@ -32,6 +32,11 @@ public class UserDaoImpl implements UserDao {
         return query.getResultList();
     }
 
+    @Override
+    public List<Users> getAllUsersList(int hospitalId) {
+        return null;
+    }
+
     @Transactional(isolation = Isolation.SERIALIZABLE)
     @Override
     public List<Users> getAllUsersList1() {

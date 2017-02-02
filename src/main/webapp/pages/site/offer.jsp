@@ -234,9 +234,11 @@
 
     $(document).ready(function () {
         var id = "${hospitalId}";
+        var hospitalName = "${hospitalName}";
 
         $("#ddlHospital").val(id);
         $(".brand-logo").text($("#ddlHospital option:selected").text());
+        $("#imgHospital").attr("src", "/static/hospitalImage/" + hospitalName);
         loadSection();
 
         initWindow();

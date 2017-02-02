@@ -54,7 +54,7 @@ public class TabDaoImpl implements TabDao {
         Session session = entityManager.unwrap(Session.class);
 
 
-        String queryString="SELECT Tab.Enable,Tab.Icon,Tab.IsShowInMobile,Tab.Name,Tab.Parent,Tab.Position,Tab.Tab_Id,Tab.Title,Tab.Url" +
+        String queryString="SELECT DISTINCT Tab.Enable,Tab.Icon,Tab.IsShowInMobile,Tab.Name,Tab.Parent,Tab.Position,Tab.Tab_Id,Tab.Title,Tab.Url" +
                 "  FROM UsersHospitalSection" +
                 "  join HospitalSection ON HospitalSection.HospitalSection_Id=UsersHospitalSection.HospitalSection_Id" +
                 "  join Section ON Section.Section_Id=HospitalSection.Section_Id" +

@@ -76,33 +76,33 @@ textarea {
     padding: 0 45px 0 31px !important;
 }
 
-input:not([type]), input[type=text], input[type=password], input[type=email], input[type=url], input[type=time], input[type=date], input[type=datetime], input[type=datetime-local], input[type=tel], input[type=number], input[type=search], textarea.materialize-textarea{
+input:not([type]), input[type=text], input[type=password], input[type=email], input[type=url], input[type=time], input[type=date], input[type=datetime], input[type=datetime-local], input[type=tel], input[type=number], input[type=search], textarea.materialize-textarea {
     font-size: 13px;
     color: #707070;
     font-weight: 400;
 }
 
-input:not([type]), input[type=text], input[type=password], input[type=email], input[type=url], input[type=time], input[type=date], input[type=datetime], input[type=datetime-local], input[type=tel], input[type=number], input[type=search], textarea.materialize-textarea{
+input:not([type]), input[type=text], input[type=password], input[type=email], input[type=url], input[type=time], input[type=date], input[type=datetime], input[type=datetime-local], input[type=tel], input[type=number], input[type=search], textarea.materialize-textarea {
     margin-bottom: 5px !important;
 }
 
-.modal .modal-content{
+.modal .modal-content {
     padding: 10px 24px 10px 24px !important;
 }
 
-[type="radio"]:not(:checked), [type="radio"]:checked{
+[type="radio"]:not(:checked), [type="radio"]:checked {
     left: 0 !important;
 }
 
-[type="checkbox"]:not(:checked), [type="checkbox"]:checked{
+[type="checkbox"]:not(:checked), [type="checkbox"]:checked {
     left: 0 !important;
 }
 
-.side-nav li.active{
+.side-nav li.active {
     background: #ee6e73 !important;
 }
 
-.custom-fixed-action-btn{
+.custom-fixed-action-btn {
     position: fixed;
     left: 15px;
     bottom: 15px;
@@ -111,11 +111,11 @@ input:not([type]), input[type=text], input[type=password], input[type=email], in
     z-index: 998;
 }
 
-.modal{
+.modal {
     max-height: 90% !important;
 }
 
-#complainWindow{
+#complainWindow {
     height: 90% !important;
 }
 
@@ -126,7 +126,7 @@ input:not([type]), input[type=text], input[type=password], input[type=email], in
     vertical-align: middle;
 }
 
-.modalHeight{
+.modalHeight {
     height: 95% !important;
 }
 
@@ -190,7 +190,7 @@ ul.side-nav.fixed {
     color: #FFF;
 }
 
-.windowHeader{
+.windowHeader {
     height: 35px;
     color: #fff;
     background: #2a3f54;
@@ -199,18 +199,15 @@ ul.side-nav.fixed {
     padding: 8px 15px;
 }
 
-.windowToolbarImage{
+.windowToolbarImage {
     margin-left: 12px;
     vertical-align: middle;
 }
 
-.mainTextSize li a{
+.mainTextSize li a {
     font-size: 13px;
     font-weight: 500
 }
-
-
-
 
 ::-webkit-scrollbar {
     width: 4px;
@@ -254,7 +251,7 @@ ul.side-nav.fixed {
     background: transparent;
 }
 
-.textBox{
+.textBox {
     width: 90%;
     border: 1px solid #bfbfbf;
     height: 33px;
@@ -262,7 +259,90 @@ ul.side-nav.fixed {
     color: #a8a8a8;
 }
 
-.textBox:focus:not([readonly]){
+.textBox:focus:not([readonly]) {
     border-bottom: none !important;
     box-shadow: none !important;
+}
+
+.attachment {
+    width: 100px;
+    height: 100px;
+    padding: 17px;
+    cursor: pointer;
+}
+
+.box{
+    padding: 20px !important;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 8px !important;
+    -moz-box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 8px !important;
+    -webkit-box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 8px !important;
+}
+
+input[type=text], input[type=email], input[type=tel], input[type=number], input[type=password], textarea {
+    text-align: right;
+    direction: rtl;
+    width: 98% !important;
+    height: 35px;
+    outline: none !important;
+    border: 1px solid #e5e5e5 !important;
+    border-radius: 2px !important;
+    padding: 3px 3px !important;
+    color: #999 !important;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 8px !important;
+    -moz-box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 8px !important;
+    -webkit-box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 8px !important;
+}
+
+input:not([type]):focus:not([readonly]), input[type=text]:focus:not([readonly]), input[type=password]:focus:not([readonly]), input[type=email]:focus:not([readonly]), input[type=url]:focus:not([readonly]), input[type=time]:focus:not([readonly]), input[type=date]:focus:not([readonly]), input[type=datetime]:focus:not([readonly]), input[type=datetime-local]:focus:not([readonly]), input[type=tel]:focus:not([readonly]), input[type=number]:focus:not([readonly]), input[type=search]:focus:not([readonly]), textarea.materialize-textarea:focus:not([readonly]) {
+
+}
+
+textarea {
+    width: 98% !important;
+    height: 150px !important;
+    line-height: 18px;
+}
+
+label,legend{
+    font-size: 13px;
+    font-weight: 500;
+    color: #707070;
+}
+
+fieldset{
+    border: 2px solid #c0c0c0;
+    padding: 2em 1em 2em;
+}
+
+legend{
+    padding-right: 5px;
+    padding-left: 5px;
+}
+
+input::-webkit-input-placeholder {
+    color: #c0c0c0 !important;
+}
+
+input:-moz-placeholder { /* Firefox 18- */
+    color: #c0c0c0 !important;
+}
+
+input::-moz-placeholder {  /* Firefox 19+ */
+    color: #c0c0c0 !important;
+}
+
+input:-ms-input-placeholder {
+    color: #c0c0c0 !important;
+}
+.tabs .tab a{
+    color: #fff !important;
+    font-weight: 400 !important;
+}
+
+.tabs .indicator{
+    background-color: #fff !important;
+}
+
+.tabs{
+    background-color: #4f6789 !important;
 }

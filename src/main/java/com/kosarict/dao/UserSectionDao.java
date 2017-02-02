@@ -1,5 +1,6 @@
 package com.kosarict.dao;
 
+import com.kosarict.entity.Section;
 import com.kosarict.entity.UsersHospitalSection;
 
 import java.util.List;
@@ -21,4 +22,8 @@ public interface UserSectionDao {
     boolean deleteUserSectionByUserId(int userId);
 
     List<UsersHospitalSection> findUserHospitalSectionByUserId(int userId);
+
+    int saveSection(Section section);
+
+    boolean deleteSection(int sectionId);
 }

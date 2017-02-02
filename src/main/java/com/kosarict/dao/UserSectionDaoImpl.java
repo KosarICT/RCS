@@ -1,5 +1,6 @@
 package com.kosarict.dao;
 
+import com.kosarict.entity.Section;
 import com.kosarict.entity.UsersHospitalSection;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Isolation;
@@ -77,5 +78,22 @@ public class UserSectionDaoImpl implements UserSectionDao {
         String queryString = "SELECT us FROM UsersHospitalSection us WHERE us.user.userId=" + userId;
         Query query = entityManager.createQuery(queryString);
         return query.getResultList();
+    }
+
+    @Transactional(isolation = Isolation.SERIALIZABLE)
+    @Override
+    public int saveSection(Section section) {
+        Section section1 = entityManager.merge(section);
+        return section1.getSectionId();
+    }
+
+    @Transactional(isolation = Isolation.SERIALIZABLE)
+    @Override
+    public boolean deleteSection(int sectionId) {
+        Section section= entityManager.find(Section.class,sectionId);
+
+        section.setEnable(false);
+        entityManager.merge(section);
+        return false;
     }
 }
