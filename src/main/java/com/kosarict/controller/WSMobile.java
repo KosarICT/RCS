@@ -98,7 +98,7 @@ public class WSMobile {
         }
     }
 
-    @RequestMapping(value = "/ws/api/refreshData", method = RequestMethod.POST)
+    @RequestMapping(value = "/ws/api/refreshData", method = RequestMethod.GET)
     public
     @ResponseBody
     String refreshData() {
@@ -117,7 +117,7 @@ public class WSMobile {
         }
     }
 
-    @RequestMapping(value = "ws/api/getTicket",method = RequestMethod.POST)
+    @RequestMapping(value = "ws/api/getTicket",method = RequestMethod.GET)
     public
     @ResponseBody
     String getTicket(){

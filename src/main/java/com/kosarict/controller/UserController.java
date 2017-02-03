@@ -294,7 +294,7 @@ public class UserController {
 
     private List<Users> getUsersList() {
         try {
-            return userDao.getAllUsersList();
+            return userDao.getUserListBuHospitalId(getCurrentHospital());
         } catch (Exception ex) {
             int x = 0;
             return null;

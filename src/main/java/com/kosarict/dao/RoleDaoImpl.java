@@ -1,6 +1,10 @@
 package com.kosarict.dao;
 
+import com.kosarict.entity.Permission;
 import com.kosarict.entity.Role;
+import com.kosarict.entity.RolePermission;
+import com.kosarict.entity.Users;
+import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,6 +43,25 @@ public class RoleDaoImpl implements RoleDao {
         Role role=entityManager.merge(roleModel);
 
         return role.getRoleId();
+    }
+
+    @Transactional(isolation = Isolation.SERIALIZABLE)
+    @Override
+    public List<Permission> getRolePermissionList(int userId) {
+        Session session = entityManager.unwrap(Session.class);
+
+        String queryString = "SELECT\n" +
+                "\tPermission.*\n" +
+                "FROM\n" +
+                "\tRolePermission\n" +
+                "JOIN Permission ON RolePermission.Permission_Id = Permission.Permission_Id\n" +
+                "JOIN UserRole ON UserRole.Role_Id = RolePermission.RoleId\n" +
+                "WHERE UserRole.User_Id = " + userId;
+
+        List query = session.createSQLQuery(queryString).addEntity(Permission.class).list();
+
+
+        return query;
     }
 
 

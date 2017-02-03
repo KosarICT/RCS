@@ -25,7 +25,7 @@ public interface TicketDao {
 
     List<TicketErrand> getTicketListByUserId(int userId);
 
-    List<UsersHospitalSection> forwardTicket(int hospitalId, int sectionId);
+    List<Users> forwardTicket(int hospitalId, int sectionId);
 
     boolean trackingCodeIsExist(String trackingCode);
 

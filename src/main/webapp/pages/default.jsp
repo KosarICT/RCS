@@ -8,6 +8,7 @@
 <script>
 
     $(".brand-logo ").text("${hospitalName}");
+    $("#imgHospital").attr("src", "/static/hospitalImage/" + "${hospitalImage}");
 
     function createDynamicURL(command) {
         var URL = '';

@@ -1,6 +1,8 @@
 package com.kosarict.dao;
 
+import com.kosarict.entity.Permission;
 import com.kosarict.entity.Role;
+import com.kosarict.entity.RolePermission;
 
 import java.util.List;
 
@@ -13,5 +15,7 @@ public interface RoleDao {
     Role getRole(short roleId);
 
     short saveRole(Role role);
+
+    List<Permission> getRolePermissionList(int userId);
 
 }

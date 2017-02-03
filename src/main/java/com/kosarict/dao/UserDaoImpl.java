@@ -1,5 +1,6 @@
 package com.kosarict.dao;
 
+import com.kosarict.entity.Ticket;
 import com.kosarict.entity.Users;
 import org.hibernate.Session;
 import org.hibernate.transform.Transformers;
@@ -30,6 +31,25 @@ public class UserDaoImpl implements UserDao {
         Query query = entityManager.createQuery(queryString);
 
         return query.getResultList();
+    }
+
+    @Transactional(isolation = Isolation.SERIALIZABLE)
+    @Override
+    public List<Users> getUserListBuHospitalId(int hospitalId){
+        Session session = entityManager.unwrap(Session.class);
+
+        String queryString = "SELECT\n" +
+                "\tUsers.*\n" +
+                "FROM\n" +
+                "\tHospitalSection\n" +
+                "JOIN UsersHospitalSection ON HospitalSection.HospitalSection_Id = UsersHospitalSection.HospitalSection_Id\n" +
+                "JOIN Users ON UsersHospitalSection.User_Id = Users.User_Id\n" +
+                "WHERE Users.Enable = 1 AND HospitalSection.Hospital_Id = " + hospitalId;
+
+        List query = session.createSQLQuery(queryString).addEntity(Users.class).list();
+
+
+        return query;
     }
 
     @Override

@@ -6,13 +6,13 @@ html {
 }
 
 body {
-    font-family: IRANSans !important;
-    font-weight: 100 !important;
-    font-size: 14px;
-    margin: 0;
-    direction: rtl;
-    background: #e4e9f4;
-}
+     font-family: IRANSans !important;
+     font-weight: 100 !important;
+     font-size: 14px;
+     margin: 0;
+     direction: rtl;
+     background: #e4e9f4;
+ }
 
 @font-face {
     font-family: BYekan;

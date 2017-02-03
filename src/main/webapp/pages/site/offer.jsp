@@ -377,10 +377,10 @@
             data: JSON.stringify(dataArray),
             success: function (data) {
                 debugger;
-                if (data > 0) {
-                    $('#alertWindow').modal('open');
-                } else {
+                if (data == false) {
                     Materialize.toast('خطا درانجام عملیات', 4000, 'error-toast');
+                } else {
+                    $('#alertWindow').modal('open');
                 }
             }
         });

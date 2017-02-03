@@ -1,6 +1,8 @@
 package com.kosarict.config;
 
+import com.kosarict.dao.RoleDao;
 import com.kosarict.dao.UserDao;
+import com.kosarict.entity.Permission;
 import com.kosarict.entity.Users;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,7 +15,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
 @Service("customUserDetailsService")
@@ -23,6 +27,9 @@ public class CustomUserDetailsService implements UserDetailsService {
 	
 	@Autowired
 	private UserDao userService;
+
+	@Autowired
+    private RoleDao roleDao;
 
 
 	
@@ -40,18 +47,22 @@ public class CustomUserDetailsService implements UserDetailsService {
 	}
 
 	
-	private List<GrantedAuthority> getGrantedAuthorities(Users user){
-		List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
+	private List<GrantedAuthority> getGrantedAuthorities(Users user) {
+        Set<GrantedAuthority> setAuths = new HashSet<GrantedAuthority>();
 
-		authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+        List<Permission> permissionList = roleDao.getRolePermissionList(user.getUserId());
 
-/*		for(UserProfile userProfile : user.getUserProfiles()){
-			logger.info("UserProfile : {}", userProfile);
-			authorities.add(new SimpleGrantedAuthority("ROLE_"+userProfile.getType()));
-		}
-		logger.info("authorities : {}", authorities);*/
-		return authorities;
-	}
+        // Build user's authorities
+        for (Permission permission : permissionList) {
+
+            setAuths.add(new SimpleGrantedAuthority(permission.getTitle()));
+        }
+
+        List<GrantedAuthority> Result = new ArrayList<GrantedAuthority>(
+                setAuths);
+
+        return Result;
+    }
 	
 }
  

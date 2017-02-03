@@ -32,7 +32,7 @@ public class RolePermission {
     }
 
     @ManyToOne
-    @JoinColumn (name = "Section_Id")
+    @JoinColumn (name = "Role_Id")
     public Role getRole() {
         return role;
     }

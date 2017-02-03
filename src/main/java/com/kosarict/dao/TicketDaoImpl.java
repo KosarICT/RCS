@@ -105,21 +105,17 @@ public class TicketDaoImpl implements TicketDao {
 
     @Transactional(isolation = Isolation.SERIALIZABLE)
     @Override
-    public List<UsersHospitalSection> forwardTicket(int hospitalId, int sectionId) {
+    public List<Users> forwardTicket(int hospitalId, int managerRoleId) {
         Session session = entityManager.unwrap(Session.class);
 
-        String queryString = "select \n" +
-                "\tUsersHospitalSection.*\n" +
-                "From \n" +
-                "\tUsersHospitalSection\n" +
-                "JOIN\n" +
-                "\tHospitalSection On UsersHospitalSection.HospitalSection_Id = HospitalSection.HospitalSection_Id\n" +
-                "WHERE\n" +
-                "\tHospitalSection.Section_Id = " + sectionId + " AND\n" +
-                "\tHospitalSection.Hospital_Id = " + hospitalId;
+        String queryString = "SELECT users.* FROM Users " +
+                "JOIN UserRole ON Users.User_Id=UserRole.User_Id " +
+                "JOIN UsersHospitalSection ON Users.User_Id=UsersHospitalSection.User_Id " +
+                "JOIN HospitalSection ON UsersHospitalSection.HospitalSection_Id=HospitalSection.HospitalSection_Id " +
+                "WHERE UserRole.Role_Id = " + managerRoleId + " AND HospitalSection.Hospital_Id = " + hospitalId;
 
 
-        List query = session.createSQLQuery(queryString).addEntity(UsersHospitalSection.class).list();
+        List query = session.createSQLQuery(queryString).addEntity(Users.class).list();
 
 
         return query;

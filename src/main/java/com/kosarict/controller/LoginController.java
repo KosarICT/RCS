@@ -13,6 +13,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.security.Principal;
 
 /**
  * Created by Sadegh-Pc on 11/28/2016.
@@ -35,5 +36,23 @@ public class LoginController {
             message = URLDecoder.decode(Constant.LOGOUT,"UTF-8");
         }
         return new ModelAndView("login", "message", message);
+    }
+
+    @RequestMapping(value = "/403", method = RequestMethod.GET)
+    public ModelAndView accesssDenied(Principal user) {
+
+        ModelAndView model = new ModelAndView();
+
+        if (user != null) {
+            model.addObject("msg", "Hi " + user.getName()
+                    + ", you do not have permission to access this page!");
+        } else {
+            model.addObject("msg",
+                    "You do not have permission to access this page!");
+        }
+
+        model.setViewName("403");
+        return model;
+
     }
 }

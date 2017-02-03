@@ -186,6 +186,7 @@ public class TicketController {
             ticket.setEnable(true);
 
             JSONObject result = new JSONObject();
+
             if (ticketTypeId == Constant.Complaint) {
                 compainer = jsonObject.getInt("compainer");
                 Complainant complainant = complainantDao.findComplainantById(compainer.shortValue());
@@ -204,10 +205,13 @@ public class TicketController {
             long newTicketId = ticketDao.saveTicket(ticket);
 
             Ticket ticket1 = ticketDao.findTicketById(newTicketId);
-            List<UsersHospitalSection> userAdminSections = ticketDao.forwardTicket(hospitalId, Constant.AdminSection);
+            List<Users> userAdminSections = ticketDao.forwardTicket(hospitalId, Constant.ManagerRole);
+
+            if (userAdminSections.size() <= 0) return String.valueOf(false);
+
             TicketUserSeen ticketUserSeen = new TicketUserSeen();
             ticketUserSeen.setTicket(ticket1);
-            ticketUserSeen.setUser(userAdminSections.get(0).getUser());
+            ticketUserSeen.setUser(userAdminSections.get(0));
             ticketUserSeenDao.saveTicketUserSeen(ticketUserSeen);
 
 
@@ -226,24 +230,16 @@ public class TicketController {
                     complainantRelation.setNationalCode(registerNationalCode);
 
                     complainantRelationDao.saveComplainantRelation(complainantRelation);
-
-
                 }
 
 
-                List<UsersHospitalSection> userSections = ticketDao.forwardTicket(hospitalId, sectionId);
-                if (userSections.size() > 0) {
-                    UsersHospitalSection userSection = userSections.get(0);
-                    Users users = userDao.findUserById(userSection.getUser().getUserId());
-                    TicketErrand ticketErrand = new TicketErrand();
+                TicketErrand ticketErrand = new TicketErrand();
 
+                ticketErrand.setTicket(ticket1);
+                ticketErrand.setAssignedUser(userAdminSections.get(0));
+                ticketErrand.setSubmitDate(currentDate);
 
-                    ticketErrand.setTicket(ticket1);
-                    ticketErrand.setAssignedUser(users);
-                    ticketErrand.setSubmitDate(currentDate);
-
-                    ticketErrandDao.saveTicketErrand(ticketErrand);
-                }
+                ticketErrandDao.saveTicketErrand(ticketErrand);
             }
 
             if (!fileName.matches("")) {
@@ -257,7 +253,7 @@ public class TicketController {
             }
 
             result.put("trackingNumber", trackingNumber);
-            return String.valueOf(trackingNumber);
+            return result.toString();
 
         } catch (Exception ex) {
             return String.valueOf(false);

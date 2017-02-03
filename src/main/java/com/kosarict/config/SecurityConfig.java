@@ -49,29 +49,32 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         CharacterEncodingFilter filter = new CharacterEncodingFilter();
         filter.setEncoding("UTF-8");
         filter.setForceEncoding(true);
-        http.addFilterBefore(filter,CsrfFilter.class);
+        http.addFilterBefore(filter, CsrfFilter.class);
 
         http.authorizeRequests()
+                .antMatchers("/admin**").hasAnyAuthority("ADMIN", "MANAGER", "MIDDLE_MANAGER", "USER_APPRECIATION", "USER_COMPLAINT", "USER_OFFER", "USER_CRITICISM", "USER_NOTIFICATION", "USER_ARCHIVE")
+                .antMatchers("/user**").hasAnyAuthority("ADMIN", "MANAGER")
+                .antMatchers("/section**").hasAnyAuthority("ADMIN", "MANAGER")
+                .antMatchers("/adComplain**").hasAnyAuthority("ADMIN", "MANAGER", "USER_COMPLAINT")
+                .antMatchers("/adAppreciation**").hasAnyAuthority("ADMIN", "MANAGER", "USER_APPRECIATION")
+                .antMatchers("/adCriticism**").hasAnyAuthority("ADMIN", "MANAGER", "USER_CRITICISM")
+                .antMatchers("/adOffer**").hasAnyAuthority("ADMIN", "MANAGER", "USER_OFFER")
+                .antMatchers("/adArchive**").hasAnyAuthority("ADMIN", "MANAGER", "USER_ARCHIVE")
+                .antMatchers("/complaintType**").hasAnyAuthority("ADMIN", "MANAGER")
+
+                .antMatchers("/role**").access("hasRole('ADMIN')")
+                .antMatchers("/hospital**").access("hasRole('ADMIN')")
+                .antMatchers("/hospitalSection**").access("hasRole('ADMIN')")
+
                 .antMatchers("/").permitAll()
-                .antMatchers("/{hospitalId}/").permitAll()
+                .antMatchers("/{hospitalId}/**").permitAll()
                 .antMatchers("/login**").permitAll()
 
-                .antMatchers("/admin**").access("hasRole('ADMIN')")
-                .antMatchers("/user**").access("hasRole('ADMIN')")
-                .antMatchers("/section**").access("hasRole('ADMIN')")
-                .antMatchers("/role**").access("hasRole('ADMIN')")
-                .antMatchers("/adComplain**").access("hasRole('ADMIN')")
-                .antMatchers("/adAppreciation**").access("hasRole('ADMIN')")
-                .antMatchers("/adCriticism**").access("hasRole('ADMIN')")
-                .antMatchers("/adOffer**").access("hasRole('ADMIN')")
-                .antMatchers("/hospital**").access("hasRole('ADMIN')")
-                .antMatchers("/complaintType**").access("hasRole('ADMIN')")
-                .antMatchers("/hospitalSection**").access("hasRole('ADMIN')")
                 .and()
                 .formLogin().loginPage("/login").defaultSuccessUrl("/admin").failureUrl("/login?error")
                 .usernameParameter("userName").passwordParameter("password")
                 .and()
-                .logout().logoutSuccessUrl("/login?logout");
+                .logout().logoutSuccessUrl("/login?logout").and().exceptionHandling().accessDeniedPage("/403");
 
         http.csrf().disable();
     }

@@ -37,7 +37,7 @@ public class DefaultController {
 
 
 
-    @RequestMapping(value = "/{hospitalId}", method = RequestMethod.GET)
+    @RequestMapping(value = {"/{hospitalId}", "/{hospitalId}/default"}, method = RequestMethod.GET)
     public ModelAndView getViewPage(@PathVariable(value = "hospitalId") String hospitalId) {
         ModelAndView model = new ModelAndView("default");
         model.addObject("relationLists", getRelationLists());
@@ -46,7 +46,8 @@ public class DefaultController {
         model.addObject("sectionLists", getSectionLists());
         model.addObject("hospitalList", getHospitalLists());
         model.addObject("hospitalId", hospitalId);
-        model.addObject("hospitalName", getHosptialName(Integer.parseInt(hospitalId)));
+        model.addObject("hospitalName", getHosptialName(Integer.parseInt(hospitalId)).getName());
+        model.addObject("hospitalImage", getHosptialName(Integer.parseInt(hospitalId)).getImageName());
 
         return model;
     }
@@ -72,8 +73,8 @@ public class DefaultController {
         return hospitalDao.getAllHospitalList();
     }
 
-    private String getHosptialName(int hospitalId){
-        return hospitalDao.findHospitalById(hospitalId).getName();
+    private Hospital getHosptialName(int hospitalId){
+        return hospitalDao.findHospitalById(hospitalId);
     }
 
 }

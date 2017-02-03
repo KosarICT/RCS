@@ -229,7 +229,8 @@
             </div>
 
             <div class="col s12 m8 l8 input-field left">
-                <textarea maxlength="4000" id="complainDescription" class="materialize-textarea" lang="fa-IR"></textarea>
+                <textarea maxlength="4000" id="complainDescription" class="materialize-textarea"
+                          lang="fa-IR"></textarea>
             </div>
 
         </div>
@@ -577,7 +578,7 @@
                         if (result == false) {
                             Materialize.toast('خطا درانجام عملیات', 4000, 'error-toast');
                         } else {
-                            dataItem["fileName"]=result.fileName;
+                            dataItem["fileName"] = result.fileName;
                             dataArray.push(dataItem);
                             saveComplaint(dataArray);
                         }
@@ -587,7 +588,7 @@
                     }
                 });
             } else {
-                dataItem["fileName"]="";
+                dataItem["fileName"] = "";
                 dataArray.push(dataItem);
                 saveComplaint(dataArray);
             }
@@ -604,8 +605,9 @@
             success: function (data) {
                 debugger;
                 if (data != false) {
+                    debugger;
                     $("#lblTrackingNumber").text("کد رهگیری شکایت شما:" + data.trackingNumber);
-                    $("#lblresponceTime").text("زمان پاسخگویی به شکایت شما"+data.responceTime);
+                    $("#lblresponceTime").text("زمان پاسخگویی به شکایت شما " + data.responceTime);
                     $('#trackingNumberWindow').modal('open');
                 } else {
                     Materialize.toast('خطا درانجام عملیات', 4000, 'error-toast');

@@ -486,11 +486,11 @@
             data: JSON.stringify(dataArray),
             success: function (data) {
                 debugger;
-                if (data > 0) {
+                if (data == false) {
+                    Materialize.toast('خطا درانجام عملیات', 4000, 'error-toast');
+                } else {
                     $("#lblMessage").text("پیام شما با موفقیت ثبت شد");
                     $('#alertWindow').modal('open');
-                } else {
-                    Materialize.toast('خطا درانجام عملیات', 4000, 'error-toast');
                 }
             }
         });
