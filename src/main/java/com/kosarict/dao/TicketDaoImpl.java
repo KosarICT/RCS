@@ -148,18 +148,17 @@ public class TicketDaoImpl implements TicketDao {
     public List<Ticket> getTop10Ticket(Users users) {
         Session session = entityManager.unwrap(Session.class);
 
-        String queryString = "SELECT distinct top 10 [Ticket_Id],Ticket.[TicketType_Id],[ComplainType_Id],Ticket.[Hospital_Id],[Shift_Id],Ticket.[Section_Id]" +
-                "      ,[SendType_Id],[Complainant_Id],[TicketStatus_Id],[FirstName],[LastName],[NationalCode],[PhoneNumber]" +
-                "      ,[Mobile],[PersnolFirstName],[PersnolLastName],[Subject],Ticket.[Description],[Raiting],[SubmitDate]" +
-                "      ,[Email],Ticket.Enable ,[TrackingCode] FROM [Monitoring].[dbo].[Ticket]" +
-                "  join TicketType on TicketType.TicketType_Id=Ticket.TicketType_Id" +
-                "  join Tab on Tab.Tab_Id=TicketType.Tab_Id join TabPermission on TabPermission.Tab_Id=Tab.Tab_Id" +
-                "  join Permission on Permission.Permission_Id=TabPermission.Permission_Id" +
-                "  join SectionPermission on SectionPermission.Permission_Id=Permission.Permission_Id" +
-                "  join Section on Section.Section_Id =SectionPermission.Section_Id" +
-                "  join HospitalSection on HospitalSection.Section_Id=Section.Section_Id" +
-                "  join UsersHospitalSection on UsersHospitalSection.HospitalSection_Id=HospitalSection.HospitalSection_Id" +
-                "  where Ticket.Enable=1 AND Ticket.TicketStatus_Id != 3 and Permission.Enable=1 and Tab.Enable=1 and HospitalSection.Enable=1 and UsersHospitalSection.User_Id=" + users.getUserId();
+        String queryString = "SELECT distinct top 10 Ticket.* " +
+                "FROM [Monitoring].[dbo].[Ticket]" +
+                "join TicketType on TicketType.TicketType_Id=Ticket.TicketType_Id" +
+                "join TicketErrand on TicketErrand.Ticket_Id=Ticket.Ticket_Id" +
+                "join UserRole on UserRole.User_Id=TicketErrand.AssignedUser_Id" +
+                "join Role on Role.Role_Id=UserRole.User_Id" +
+                "join TabRole on TabRole.Role_Id=Role.Role_Id" +
+                "join UsersHospitalSection on UsersHospitalSection.User_Id=UserRole.User_Id" +
+                "join HospitalSection on HospitalSection.HospitalSection_Id=UsersHospitalSection.HospitalSection_Id" +
+                "where Ticket.Enable=1 AND Ticket.TicketStatus_Id != 3 and HospitalSection.Enable=1 and TicketErrand.AssignedUser_Id=" + users.getUserId()+
+                "Order by Ticket.SubmitDate DESC" ;
 
         List query = session.createSQLQuery(queryString).addEntity(Ticket.class).list();
 
