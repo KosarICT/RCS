@@ -178,7 +178,8 @@ public class ADComplainController {
     }
 
     private List<HospitalSection> getSectionList() {
-        return hospitalSectionDao.getHospitalSectionsListByHospitalId(Constant.hospitalId);
+        int hospitalId=getCurrentHospital();
+        return hospitalSectionDao.getHospitalSectionsListByHospitalId(hospitalId);
     }
 
     private Users getCurrentUser() {
@@ -189,4 +190,18 @@ public class ADComplainController {
 
         return user;
     }
+
+    private int getCurrentHospital() {
+        Users user = getCurrentUser();
+        List<UsersHospitalSection> usersHospitalSectionList = userSectionDao.findUserHospitalSectionByUserId(user.getUserId());
+
+        int hospitalId = 0;
+
+        for (UsersHospitalSection usersHospitalSection : usersHospitalSectionList) {
+            hospitalId = usersHospitalSection.getHospitalSection().getHospital().getHospitalId();
+        }
+
+        return hospitalId;
+    }
+
 }

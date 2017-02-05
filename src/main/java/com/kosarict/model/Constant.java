@@ -7,8 +7,6 @@ public class Constant {
 
     public static String CHECK_USER_URL = "http://localhost:8083/ws/api/checkUser?";
 
-    public static int hospitalId = 1;
-
     public static int Complaint = 3;
     public static int Appereciation = 1;
     public static int Criticize = 4;

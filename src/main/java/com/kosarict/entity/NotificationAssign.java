@@ -1,9 +1,6 @@
 package com.kosarict.entity;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 /**
  * Created by Ali-Pc on 2/1/2017.
@@ -11,10 +8,11 @@ import javax.persistence.Id;
 @Entity
 public class NotificationAssign {
     private long notificationAssignId;
-    private long notificationId;
-    private int userId;
+    private Notification notification;
+    private Users user;
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "NotificationAssign_Id")
     public long getNotificationAssignId() {
         return notificationAssignId;
@@ -24,45 +22,24 @@ public class NotificationAssign {
         this.notificationAssignId = notificationAssignId;
     }
 
-    @Basic
-    @Column(name = "Notification_Id")
-    public long getNotificationId() {
-        return notificationId;
+    @ManyToOne
+    @JoinColumn(name = "Notification_Id")
+    public Notification getNotification() {
+        return notification;
     }
 
-    public void setNotificationId(long notificationId) {
-        this.notificationId = notificationId;
+    public void setNotification(Notification notification) {
+        this.notification = notification;
     }
 
-    @Basic
-    @Column(name = "User_Id")
-    public int getUserId() {
-        return userId;
+    @ManyToOne
+    @JoinColumn(name = "User_Id")
+    public Users getUser() {
+        return user;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
+    public void setUser(Users user) {
+        this.user = user;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        NotificationAssign that = (NotificationAssign) o;
-
-        if (notificationAssignId != that.notificationAssignId) return false;
-        if (notificationId != that.notificationId) return false;
-        if (userId != that.userId) return false;
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = (int) (notificationAssignId ^ (notificationAssignId >>> 32));
-        result = 31 * result + (int) (notificationId ^ (notificationId >>> 32));
-        result = 31 * result + userId;
-        return result;
-    }
 }

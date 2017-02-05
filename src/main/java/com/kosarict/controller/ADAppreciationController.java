@@ -2,11 +2,17 @@ package com.kosarict.controller;
 
 import com.kosarict.dao.HospitalSectionDao;
 import com.kosarict.dao.TicketDao;
+import com.kosarict.dao.UserDao;
+import com.kosarict.dao.UserSectionDao;
 import com.kosarict.entity.HospitalSection;
+import com.kosarict.entity.Users;
+import com.kosarict.entity.UsersHospitalSection;
 import com.kosarict.model.Constant;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -26,6 +32,12 @@ public class ADAppreciationController {
 
     @Autowired
     private HospitalSectionDao hospitalSectionDao;
+
+    @Autowired
+    private UserDao userDao;
+
+    @Autowired
+    private UserSectionDao userSectionDao;
 
     @RequestMapping(value = "/adAppreciation", method = RequestMethod.GET)
     public ModelAndView getAppreciationView() {
@@ -66,7 +78,30 @@ public class ADAppreciationController {
     }
 
     private List<HospitalSection> getSectionList() {
-        return hospitalSectionDao.getHospitalSectionsListByHospitalId(Constant.hospitalId);
+        int hospitalId =getCurrentHospital();
+        return hospitalSectionDao.getHospitalSectionsListByHospitalId(hospitalId);
+    }
+
+    private int getCurrentHospital() {
+        Users user = getCurrentUser();
+        List<UsersHospitalSection> usersHospitalSectionList = userSectionDao.findUserHospitalSectionByUserId(user.getUserId());
+
+        int hospitalId = 0;
+
+        for (UsersHospitalSection usersHospitalSection : usersHospitalSectionList) {
+            hospitalId = usersHospitalSection.getHospitalSection().getHospital().getHospitalId();
+        }
+
+        return hospitalId;
+    }
+
+    private Users getCurrentUser() {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        String userName = userDetails.getUsername();
+        Users user = userDao.findUserByUserName(userName);
+
+        return user;
     }
 
 }

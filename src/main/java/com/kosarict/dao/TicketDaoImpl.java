@@ -149,12 +149,11 @@ public class TicketDaoImpl implements TicketDao {
         Session session = entityManager.unwrap(Session.class);
 
         String queryString = "SELECT distinct top 10 Ticket.* " +
-                "FROM [Monitoring].[dbo].[Ticket]" +
+                "FROM Ticket" +
                 "join TicketType on TicketType.TicketType_Id=Ticket.TicketType_Id" +
                 "join TicketErrand on TicketErrand.Ticket_Id=Ticket.Ticket_Id" +
                 "join UserRole on UserRole.User_Id=TicketErrand.AssignedUser_Id" +
                 "join Role on Role.Role_Id=UserRole.User_Id" +
-                "join TabRole on TabRole.Role_Id=Role.Role_Id" +
                 "join UsersHospitalSection on UsersHospitalSection.User_Id=UserRole.User_Id" +
                 "join HospitalSection on HospitalSection.HospitalSection_Id=UsersHospitalSection.HospitalSection_Id" +
                 "where Ticket.Enable=1 AND Ticket.TicketStatus_Id != 3 and HospitalSection.Enable=1 and TicketErrand.AssignedUser_Id=" + users.getUserId()+
