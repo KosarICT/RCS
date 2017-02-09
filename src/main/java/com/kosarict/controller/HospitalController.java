@@ -1,10 +1,16 @@
 package com.kosarict.controller;
 
 import com.kosarict.dao.HospitalDao;
+import com.kosarict.dao.UserDao;
+import com.kosarict.dao.UserSectionDao;
 import com.kosarict.entity.Hospital;
+import com.kosarict.entity.Users;
+import com.kosarict.entity.UsersHospitalSection;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -13,6 +19,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.ServletContext;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -22,10 +29,16 @@ import java.util.List;
 public class HospitalController {
 
     @Autowired
+    private UserDao userDao;
+
+    @Autowired
     private HospitalDao hospitalDao;
 
     @Autowired
     private ServletContext servletContext;
+
+    @Autowired
+    private UserSectionDao userSectionDao;
 
 
 
@@ -173,7 +186,37 @@ public class HospitalController {
         }
     }
 
+    private Users getCurrentUser() {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        String userName = userDetails.getUsername();
+        Users user = userDao.findUserByUserName(userName);
+
+        return user;
+    }
+
+    private int getCurrentHospital() {
+        Users user = getCurrentUser();
+        List<UsersHospitalSection> usersHospitalSectionList = userSectionDao.findUserHospitalSectionByUserId(user.getUserId());
+
+        int hospitalId = 0;
+
+        for (UsersHospitalSection usersHospitalSection : usersHospitalSectionList) {
+            hospitalId = usersHospitalSection.getHospitalSection().getHospital().getHospitalId();
+        }
+
+        return hospitalId;
+    }
+
     private List<Hospital> getHospitalsList() {
-        return hospitalDao.getAllHospitalList();
+        Hospital hospital = hospitalDao.findHospitalById(getCurrentHospital());
+
+        List<Hospital> hospitalList = new ArrayList<Hospital>();
+
+        hospitalList.add(hospital);
+
+        return hospitalList;
+
+        //return hospitalDao.getAllHospitalList();
     }
 }

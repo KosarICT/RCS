@@ -17,10 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLDecoder;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by Sadegh-Pc on 11/30/2016.
@@ -43,6 +40,13 @@ public class WSMobile {
     @Autowired
     private TicketErrandDao ticketErrandDao;
 
+    @Autowired
+    private TicketAttachmentDao ticketAttachmentDao;
+
+
+
+
+
     @RequestMapping(value = "/ws/api/checkUser", method = RequestMethod.POST)
     public
     @ResponseBody
@@ -57,18 +61,19 @@ public class WSMobile {
 
             String userName = URLDecoder.decode(parameter.get("User").get(0), "UTF-8");
             String password = URLDecoder.decode(parameter.get("Password").get(0), "UTF-8");
+            String macAddress = URLDecoder.decode(parameter.get("MacAddress").get(0), "UTF-8");
 
             Users user = userDao.findUserByUserName(userName);
 
-            List<Tab> tabList = tabDao.getAllMobileTabList();
+            List<Tab> tabList = tabDao.getAllTabListByUserId(user.getUserId());
 
-            if (user !=null) {
-                if (user.getPassword()==password && user.getLocked() == 0) {
+            if (user != null) {
+                if (user.getPassword() == password && user.getLocked() == 0) {
                     jsonObject.put("status", "ok");
                     jsonObject.put("description", "ok");
                     jsonObject.put("tabList", tabList);
 
-                }else if(user.getPassword()!=password){
+                } else if (user.getPassword() != password) {
                     jsonObject.put("status", "disable");
                     jsonObject.put("description", "wrong password");
                 } else {
@@ -117,40 +122,91 @@ public class WSMobile {
         }
     }
 
-    @RequestMapping(value = "ws/api/getTicket",method = RequestMethod.GET)
+    @RequestMapping(value = "ws/api/getTicketList", method = RequestMethod.POST)
     public
     @ResponseBody
-    String getTicket(){
-        List<Ticket> tickets=ticketDao.getAllTicketList();
-
+    String getTicketList(@RequestBody String model) {
+        JSONArray jsonArray = new JSONArray();
         JSONObject jsonObject = new JSONObject();
-        JSONArray jsonArray = new org.json.JSONArray();
 
-        jsonObject.put("tickets",tickets);
-        jsonArray.put(jsonObject);
+        try {
+            URL url = new URL(Constant.CHECK_USER_URL + model);
 
-        return jsonArray.toString();
+            Map<String, List<String>> parameter = splitQuery(url);
 
+            String userName = URLDecoder.decode(parameter.get("User").get(0), "UTF-8");
+            String ticketTypeId = URLDecoder.decode(parameter.get("TicketTypeId").get(0), "UTF-8");
+
+            Users user = userDao.findUserByUserName(userName);
+
+            List<Ticket> tickets = ticketDao.getTicketListByTicketTypeId(Short.parseShort(ticketTypeId), user.getUserId());
+
+            jsonObject.put("status", "ok");
+            jsonObject.put("tickets", tickets);
+            jsonArray.put(jsonObject);
+
+            return jsonArray.toString();
+        } catch (Exception ex) {
+            jsonObject.put("status", "error");
+            jsonObject.put("description", ex.toString());
+
+            jsonArray.put(jsonObject);
+
+            return jsonArray.toString();
+        }
     }
 
-    @RequestMapping(value = "ws/api/Ended",method = RequestMethod.POST)
+    @RequestMapping(value = "ws/api/getTicket", method = RequestMethod.POST)
     public
     @ResponseBody
-    void EndedTicket(@RequestBody String ticketId){
+    String getTicket(@RequestBody String model) {
+        JSONArray jsonArray = new JSONArray();
+        JSONObject jsonObject = new JSONObject();
+
+        try {
+            URL url = new URL(Constant.CHECK_USER_URL + model);
+
+            Map<String, List<String>> parameter = splitQuery(url);
+
+            String ticketId = URLDecoder.decode(parameter.get("TicketId").get(0), "UTF-8");
+
+            Ticket ticket = ticketDao.findTicketById(Long.parseLong(ticketId));
+            List<TicketAttachment> ticketAttachmentList = ticketAttachmentDao.getTicketAttachmentListByTicketId(Long.parseLong(ticketId));
+
+            jsonObject.put("status", "ok");
+            jsonObject.put("tickets", ticket);
+            jsonObject.put("tickets", ticketAttachmentList);
+            jsonArray.put(jsonObject);
+
+            return jsonArray.toString();
+        } catch (Exception ex) {
+            jsonObject.put("status", "error");
+            jsonObject.put("description", ex.toString());
+
+            jsonArray.put(jsonObject);
+
+            return jsonArray.toString();
+        }
+    }
+
+    @RequestMapping(value = "ws/api/Ended", method = RequestMethod.POST)
+    public
+    @ResponseBody
+    void EndedTicket(@RequestBody String ticketId) {
         Long id = Long.parseLong(ticketId);
         Ticket ticket = ticketDao.findTicketById(id);
 
-        TicketStatus ticketStatus=ticketStatusDao.findTicketStatusById(Constant.Ended);
+        TicketStatus ticketStatus = ticketStatusDao.findTicketStatusById(Constant.Ended);
 
         ticket.setTicketStatus(ticketStatus);
 
         ticketDao.saveTicket(ticket);
     }
 
-    @RequestMapping(value = "ws/api/Errand",method = RequestMethod.POST)
+    @RequestMapping(value = "ws/api/Errand", method = RequestMethod.POST)
     public
     @ResponseBody
-    void ErrandTicket(@RequestBody String model){
+    void ErrandTicket(@RequestBody String model) {
         JSONArray jsonArray = new JSONArray(model);
         JSONObject jsonObject = jsonArray.getJSONObject(0);
 
@@ -159,8 +215,8 @@ public class WSMobile {
         int assignedlId = jsonObject.getInt("assigneId");
         String description = jsonObject.getString("description");
         Ticket ticket = ticketDao.findTicketById(ticketId);
-        Users creatorUser=userDao.findUserById(creatorId);
-        Users assignedUser=userDao.findUserById(assignedlId);
+        Users creatorUser = userDao.findUserById(creatorId);
+        Users assignedUser = userDao.findUserById(assignedlId);
         PersianCalendar persianCalendar = new PersianCalendar();
         String currentDate = persianCalendar.getIranianSimpleDate();
 

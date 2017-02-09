@@ -44,9 +44,14 @@
     .k-dropdown span{
         margin-top: 5px !important;
     }
+
+    .k-operator-hidden{
+        padding-right: 0 !important;
+    }
+
 </style>
 
-<div class="row">
+<div>
     <div class="k-rtl">
         <div id="grvArchive"></div>
     </div>
@@ -162,6 +167,7 @@
 
         initGrid();
         initWindow();
+        resizeGird();
     });
 
     function initGrid() {
@@ -385,6 +391,11 @@
 
     function archiveWindowToolbarButtonClick() {
         $('#archiveWindow').modal('close');
+    }
+
+    function resizeGird() {
+        var height = $(window).height() - 70;
+        $("#grvArchive").css('height', height)
     }
 
 </script>

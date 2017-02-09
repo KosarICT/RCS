@@ -44,9 +44,13 @@
     .k-dropdown span{
         margin-top: 5px !important;
     }
+
+    .k-operator-hidden{
+        padding-right: 0 !important;
+    }
 </style>
 
-<div class="row">
+<div>
 
     <div class="k-rtl">
         <div id="grvAppreciation"></div>
@@ -141,6 +145,7 @@
 
         initGrid();
         initWindow();
+        resizeGird();
     });
 
     function initGrid() {
@@ -393,6 +398,11 @@
                 }
             }
         });
+    }
+
+    function resizeGird() {
+        var height = $(window).height() - 70;
+        $("#grvAppreciation").css('height', height)
     }
 
 </script>

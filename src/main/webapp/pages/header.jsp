@@ -64,6 +64,17 @@
         .side-nav .collapsible-header, .side-nav.fixed .collapsible-header{
             padding: 0 10px !important;
         }
+
+        .loader {
+            position: fixed;
+            left: 0px;
+            top: 0px;
+            width: 100%;
+            height: 100%;
+            z-index: 9999;
+            background: url('/static/icon/loading-image.gif') 50% 50% no-repeat rgb(249, 249, 249);
+            /*background: url('/resources/content/images/page-loader.gif') 50% 50% no-repeat rgb(249,249,249);*/
+        }
     </style>
 
     <script>
@@ -161,6 +172,7 @@
 
 
                         $('.collapsible').collapsible();
+                        $(".loader").fadeOut(1000);
                     }
                 }
             });
@@ -171,7 +183,6 @@
 
             switch (url) {
                 case "/admin":
-                    debugger;
                     $("#nav-mobile li a[href=admin]").parent().addClass("active");
                     break;
                 case "/adAppreciation":
@@ -229,6 +240,8 @@
     <div class="jawn"></div>
 </div>
 --%>
+
+<div class="loader"></div>
 
 <header>
     <ul id="dropdown1" class="dropdown-content" style="padding-right: 0; background: #fff !important;">

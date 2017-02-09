@@ -4,7 +4,7 @@
 
 <html>
 <head>
-    <title>Title</title>
+    <title>سیستم تکریم بیماران</title>
     <link rel="icon"
           type="image/png"
           href="/static/hospitalImage/heart.png">

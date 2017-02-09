@@ -60,11 +60,6 @@
     </table>
 </div>
 
-<div>
-    <a class="btn-floating btn-large waves-effect waves-light slideColor " href="#" onclick="showHospitalWindow();"
-       style="float: left; margin-left: 4%"><i class="material-icons">add</i></a>
-</div>
-
 
 <div id="hospitalWindow" class="modal modal-fixed-footer modalHeight">
     <div class="windowHeader">

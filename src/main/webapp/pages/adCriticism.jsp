@@ -44,9 +44,13 @@
     .k-dropdown span{
         margin-top: 5px !important;
     }
+
+    .k-operator-hidden{
+        padding-right: 0 !important;
+    }
 </style>
 
-<div class="row">
+<div>
 
     <div class="k-rtl">
         <div id="grvCriticism"></div>
@@ -139,6 +143,7 @@
 
         initGrid();
         initWindow();
+        resizeGird();
     });
 
     function initGrid() {
@@ -385,6 +390,7 @@
                 break;
         }
     }
+
     function finishCriticism() {
         var ticketId = $("#hiddenTicketId").val();
 
@@ -405,6 +411,12 @@
             }
         });
     }
+
+    function resizeGird() {
+        var height = $(window).height() - 70;
+        $("#grvCriticism").css('height', height)
+    }
+
 </script>
 
 <%@include file="footer.jsp" %>

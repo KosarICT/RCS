@@ -52,9 +52,13 @@
     .k-dropdown span {
         margin-top: 5px !important;
     }
+
+    .k-operator-hidden{
+        padding-right: 0 !important;
+    }
 </style>
 
-<div class="row">
+<div>
     <div class="k-rtl">
         <div id="grvComplaint"></div>
     </div>
@@ -236,6 +240,8 @@
 
         initGrid();
         initWindow();
+
+        resizeGird();
     });
 
     function initGrid() {
@@ -281,7 +287,7 @@
                 var gridData = grid.dataSource.view();
 
                 for (var i = 0; i < gridData.length; i++) {
-debugger;
+
                     var calender = new PersianDate();
 
                     var responseDay = gridData[i].responseTime;
@@ -705,6 +711,11 @@ debugger;
                 }
             }
         });
+    }
+
+    function resizeGird() {
+        var height = $(window).height() - 70;
+        $("#grvComplaint").css('height', height)
     }
 </script>
 

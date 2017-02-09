@@ -107,7 +107,7 @@ public class ADComplainController {
     String getUserOfSection(@RequestBody String sectionId) {
         int id = Integer.parseInt(sectionId);
 
-        List<UsersHospitalSection> userSectionList = userSectionDao.getUserSectionBySectionId(id);
+        List<UsersHospitalSection> userSectionList = userSectionDao.getUserSectionBySectionId(id, getCurrentHospital());
 
         JSONArray jsonArray = new JSONArray();
 
@@ -178,8 +178,7 @@ public class ADComplainController {
     }
 
     private List<HospitalSection> getSectionList() {
-        int hospitalId=getCurrentHospital();
-        return hospitalSectionDao.getHospitalSectionsListByHospitalId(hospitalId);
+        return hospitalSectionDao.getHospitalSectionsListByHospitalId(getCurrentHospital());
     }
 
     private Users getCurrentUser() {
@@ -203,5 +202,4 @@ public class ADComplainController {
 
         return hospitalId;
     }
-
 }

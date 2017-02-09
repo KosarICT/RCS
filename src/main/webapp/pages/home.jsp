@@ -40,6 +40,10 @@
     .k-dropdown span{
         margin-top: 5px !important;
     }
+
+    .k-operator-hidden{
+        padding-right: 0 !important;
+    }
 </style>
 
 <%--<div class="row">
@@ -77,27 +81,23 @@
         </div>
     </div>
 </div>--%>
+
+
+
 <div>
     <div id="grvAdminTicket"></div>
 </div>
-<%--<div class="row">--%>
-<%--<canvas id="myChart" width="400" height="125"></canvas>--%>
-<%--</div>--%>
 
 <script>
 
     jQuery(document).ready(function ($) {
-
-//        $('.number-widget').counterUp({
-//            delay: 10,
-//            time: 1000
-//        });
-        initGrid();
         $(".page-title").text("صفحه اصلی");
+
+        initGrid();
+        resizeGird();
     });
 
     function initGrid() {
-
         $("#grvAdminTicket").kendoGrid({
             dataSource: {
                 transport: {
@@ -109,6 +109,9 @@
                     }
                 },
                 pageSize: 5
+            },
+            filterable: {
+                mode: "row"
             },
             sortable: {
                 mode: "single",
@@ -278,40 +281,11 @@
         });
     }
 
-    //    var ctx = $("#myChart");
-    //
-    //    var myLineChart = new Chart(ctx, {
-    //        type: 'line',
-    //        data: data,
-    //    });
-    //
-    //    var data = {
-    //        labels: ["فروردین", "اردیبهشت", "خرداد", "تیر", "مرداد", "شهریور", "مهر", "آبان", "آذر", "دی", "بهمن", "اسفند"],
-    //        datasets: [
-    //            {
-    //                label: "تست",
-    //                fill: true,
-    //                lineTension: 0.1,
-    //                backgroundColor: "rgba(42,63,84,0.4)",
-    //                borderColor: "rgba(42,63,84,1)",
-    //                borderCapStyle: 'butt',
-    //                borderDash: [],
-    //                borderDashOffset: 0.0,
-    //                borderJoinStyle: 'miter',
-    //                pointBorderColor: "rgba(85,156,160,1)",
-    //                pointBackgroundColor: "#fff",
-    //                pointBorderWidth: 1,
-    //                pointHoverRadius: 5,
-    //                pointHoverBackgroundColor: "rgba(42,63,84,1)",
-    //                pointHoverBorderColor: "rgba(220,220,220,1)",
-    //                pointHoverBorderWidth: 2,
-    //                pointRadius: 1,
-    //                pointHitRadius: 10,
-    //                data: [65, 59, 80, 81, 56, 55, 40],
-    //                spanGaps: false,
-    //            }
-    //        ]
-    //    };
+    function resizeGird() {
+        var height = $(window).height() - 70;
+        $("#grvAdminTicket").css('height', height)
+    }
+
     function getColor(value) {
         //value from 0 to 1
         var hue = ((1 - value) * 120).toString(10);

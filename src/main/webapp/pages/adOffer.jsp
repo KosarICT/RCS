@@ -34,6 +34,10 @@
         color: #a8a8a8;
     }
 
+    .k-operator-hidden{
+        padding-right: 0 !important;
+    }
+
     .k-grid-pager a{
         margin-top: 3px !important;
     }
@@ -46,7 +50,7 @@
     }
 </style>
 
-<div class="row">
+<div>
     <%--    <nav>
             <div class="nav-wrapper grey lighten-4" style="border: 1px solid #e0e0e0">
                 <ul class="left ">
@@ -190,6 +194,7 @@
 
         initGrid();
         initWindow();
+        resizeGird();
     });
 
     function initGrid() {
@@ -428,7 +433,7 @@
     }
     function finishOffer() {
         var ticketId = $("#hiddenTicketId").val();
-        debugger;
+
         $.ajax({
             type: "POST",
             url: "/adComplain/api/finishTicket",
@@ -445,6 +450,11 @@
                 }
             }
         });
+    }
+
+    function resizeGird() {
+        var height = $(window).height() - 70;
+        $("#grvOffer").css('height', height)
     }
 
 </script>
