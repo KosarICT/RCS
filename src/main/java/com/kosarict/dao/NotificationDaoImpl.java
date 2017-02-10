@@ -2,6 +2,8 @@ package com.kosarict.dao;
 
 import com.kosarict.entity.Hospital;
 import com.kosarict.entity.Notification;
+import com.kosarict.entity.Ticket;
+import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,15 +22,19 @@ public class NotificationDaoImpl implements NotificationDao {
     @PersistenceContext(unitName = "persistenceUnit", type = PersistenceContextType.TRANSACTION)
     EntityManager entityManager;
 
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     @Override
     public List<Notification> getNotificationByUserId(int userId) {
-        String queryString = " SELECT notification FROM Notification notification where notification.submitUser.userId=:userId ";
+        Session session = entityManager.unwrap(Session.class);
 
-        Query query = entityManager.createQuery(queryString);
-        query.setParameter("userId", userId);
+        String queryString = "SELECT DISTINCT Notification.* FROM Notification notification " +
+                "LEFT JOIN NotificationAnswer notificationAnswer ON notification.Notification_Id=notificationAnswer.Notification_Id\n" +
+                "where notification.SubmitUser_Id="+userId+" OR notificationAnswer.SubmitUser_Id="+userId;
+
+        List query = session.createSQLQuery(queryString).addEntity(Notification.class).list();
 
 
-        return query.getResultList();
+        return query;
 
     }
 

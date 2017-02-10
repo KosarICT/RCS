@@ -21,8 +21,7 @@ public class Users {
     private boolean enable;
     private boolean isSuperUser;
     private String personalNumber;
-
-
+    private String macAddress;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -153,5 +152,32 @@ public class Users {
 
     public void setPersonalNumber(String personalNumber) {
         this.personalNumber = personalNumber;
+    }
+
+    @Basic
+    @Column(name = "MacAddress")
+    public String getMacAddress() {
+        return macAddress;
+    }
+
+    public void setMacAddress(String macAddress) {
+        this.macAddress = macAddress;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Users users = (Users) o;
+
+        if (macAddress != null ? !macAddress.equals(users.macAddress) : users.macAddress != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return macAddress != null ? macAddress.hashCode() : 0;
     }
 }

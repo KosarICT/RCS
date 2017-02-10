@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.util.*;
@@ -68,7 +69,7 @@ public class WSMobile {
             List<Tab> tabList = tabDao.getAllTabListByUserId(user.getUserId());
 
             if (user != null) {
-                if (user.getPassword() == password && user.getLocked() == 0) {
+                if (user.getPassword() == password && user.getLocked() == 0 && macAddress==user.getMacAddress()) {
                     jsonObject.put("status", "ok");
                     jsonObject.put("description", "ok");
                     jsonObject.put("tabList", tabList);
@@ -106,11 +107,13 @@ public class WSMobile {
     @RequestMapping(value = "/ws/api/refreshData", method = RequestMethod.GET)
     public
     @ResponseBody
-    String refreshData() {
+    String refreshData(@RequestBody String model) {
         JSONArray jsonArray = new JSONArray();
         JSONObject jsonObject = new JSONObject();
 
         try {
+            if(!isLogin(model))
+                return String.valueOf(false);
             return jsonArray.toString();
         } catch (Exception ex) {
             jsonObject.put("status", "error");
@@ -122,6 +125,23 @@ public class WSMobile {
         }
     }
 
+    boolean isLogin(String model){
+        try {
+            URL url = new URL(Constant.CHECK_USER_URL + model);
+
+            Map<String, List<String>> parameter = splitQuery(url);
+            String userName = URLDecoder.decode(parameter.get("User").get(0), "UTF-8");
+            String macAddress = URLDecoder.decode(parameter.get("MacAddress").get(0), "UTF-8");
+
+            Users user = userDao.findUserByUserName(userName);
+            if(user.getMacAddress()==macAddress)
+                return true;
+
+            return false;
+        } catch (Exception e) {
+            return false;
+        }
+    }
     @RequestMapping(value = "ws/api/getTicketList", method = RequestMethod.POST)
     public
     @ResponseBody
@@ -129,6 +149,8 @@ public class WSMobile {
         JSONArray jsonArray = new JSONArray();
         JSONObject jsonObject = new JSONObject();
 
+        if(!isLogin(model))
+            return String.valueOf(false);
         try {
             URL url = new URL(Constant.CHECK_USER_URL + model);
 
@@ -163,6 +185,8 @@ public class WSMobile {
         JSONArray jsonArray = new JSONArray();
         JSONObject jsonObject = new JSONObject();
 
+        if(!isLogin(model))
+            return String.valueOf(false);
         try {
             URL url = new URL(Constant.CHECK_USER_URL + model);
 
@@ -192,24 +216,40 @@ public class WSMobile {
     @RequestMapping(value = "ws/api/Ended", method = RequestMethod.POST)
     public
     @ResponseBody
-    void EndedTicket(@RequestBody String ticketId) {
-        Long id = Long.parseLong(ticketId);
-        Ticket ticket = ticketDao.findTicketById(id);
+    String EndedTicket(@RequestBody String model)  {
+        try {
+            if(!isLogin(model))
+                return String.valueOf(false);
+            URL url = new URL(Constant.CHECK_USER_URL + model);
 
-        TicketStatus ticketStatus = ticketStatusDao.findTicketStatusById(Constant.Ended);
+            Map<String, List<String>> parameter = splitQuery(url);
 
-        ticket.setTicketStatus(ticketStatus);
+            String ticketId = URLDecoder.decode(parameter.get("TicketId").get(0), "UTF-8");
 
-        ticketDao.saveTicket(ticket);
+            Long id = Long.parseLong(ticketId);
+            Ticket ticket = ticketDao.findTicketById(id);
+
+            TicketStatus ticketStatus = ticketStatusDao.findTicketStatusById(Constant.Ended);
+
+            ticket.setTicketStatus(ticketStatus);
+
+            ticketDao.saveTicket(ticket);
+
+            return String.valueOf(true);
+        }catch (Exception ex){
+            return String.valueOf(false);
+        }
     }
 
     @RequestMapping(value = "ws/api/Errand", method = RequestMethod.POST)
     public
     @ResponseBody
-    void ErrandTicket(@RequestBody String model) {
+    String ErrandTicket(@RequestBody String model) {
         JSONArray jsonArray = new JSONArray(model);
         JSONObject jsonObject = jsonArray.getJSONObject(0);
 
+        if(!isLogin(model))
+            return String.valueOf(false);
         long ticketId = jsonObject.getLong("ticketId");
         Integer creatorId = jsonObject.getInt("creatorId");
         int assignedlId = jsonObject.getInt("assigneId");
@@ -229,6 +269,7 @@ public class WSMobile {
 
         ticketErrandDao.saveTicketErrand(ticketErrand);
 
+        return String.valueOf(true);
     }
 
     private Map<String, List<String>> splitQuery(URL url) throws UnsupportedEncodingException {

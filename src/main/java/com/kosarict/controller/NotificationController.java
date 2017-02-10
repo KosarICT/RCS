@@ -38,6 +38,9 @@ public class NotificationController {
     @Autowired
     private NotificationAssignDao notificationAssignDao;
 
+    @Autowired
+    private NotificationAnswerDao notificationAnswerDao;
+
     @RequestMapping(value = "/notification", method = RequestMethod.GET)
     public ModelAndView notification() {
         ModelAndView model = new ModelAndView("notification");
@@ -82,7 +85,7 @@ public class NotificationController {
         return notifications;
     }
 
-    @RequestMapping(value = "/NotificationController/api/getData", method = RequestMethod.GET)
+    @RequestMapping(value = "/notificationController/api/getData", method = RequestMethod.GET)
     public
     @ResponseBody
     List<Notification> getData(){
@@ -93,7 +96,7 @@ public class NotificationController {
         return getNotification();
     }
 
-    @RequestMapping(value = "/NotificationController/api/save", method = RequestMethod.POST)
+    @RequestMapping(value = "/notificationController/api/save", method = RequestMethod.POST)
     public
     @ResponseBody
     String save(@RequestBody String model) {
@@ -136,6 +139,72 @@ public class NotificationController {
             return String.valueOf(false);
         }
     }
+
+    @RequestMapping(value = "/notificationController/api/getNotification", method = RequestMethod.POST)
+    public
+    @ResponseBody
+    String getNotification(@RequestBody String notificationId){
+        try {
+            JSONArray jsonArray = new JSONArray();
+            long id = Long.parseLong(notificationId);
+            Users currentUser = getCurrentUser();
+            List<NotificationAnswer> notificationAnswers;
+            List<NotificationAssign> notificationAssigns;
+
+            Notification notification=notificationDao.findNotification(id);
+
+            if(notification != null){
+
+                JSONObject jsonObject = new JSONObject();
+                JSONArray userList = new JSONArray();
+
+                notificationAssigns = notificationAssignDao.getNotificationAssinByNotification(id);
+                if(currentUser.getUserId()==notification.getSubmitUser().getUserId()) {
+                    notificationAnswers = notificationAnswerDao.getNotificationAnswerByNotification(id);
+                }else {
+                    notificationAnswers=notificationAnswerDao.getNotificationAnswerByNotificationUser(id,currentUser.getUserId());
+                }
+
+                jsonObject.put("subjct",notification.getSubject());
+                jsonObject.put("body",notification.getBody());
+                jsonObject.put("dateTime",notification.getDatetime());
+                jsonObject.put("notificationId",notification.getNotificationId());
+                jsonObject.put("notificationAnswers",notificationAnswers);
+
+                for (NotificationAssign user : notificationAssigns) {
+                    JSONObject jsonObject1 = new JSONObject();
+
+                    jsonObject1.put("userId", user.getUser().getUserId());
+                    jsonObject1.put("name", user.getUser().getFirstName() + " " + user.getUser().getLastName());
+
+                    userList.put(jsonObject1);
+                }
+
+                jsonObject.put("notificationAssigns",userList);
+
+                if(currentUser.getUserId()==notification.getSubmitUser().getUserId()) {
+                    userList=new JSONArray();
+                    JSONObject jsonObject1 = new JSONObject();
+
+                    jsonObject1.put("userId", currentUser.getUserId());
+                    jsonObject1.put("name", currentUser.getFirstName() + " " + currentUser.getLastName());
+
+                    userList.put(jsonObject1);
+                }
+
+                jsonObject.put("userCanGetAnswer",userList);
+                jsonArray.put(jsonObject);
+            }
+
+            return jsonArray.toString();
+        }catch (Exception ex){
+            return String.valueOf(false);
+        }
+
+    }
+
+
+
 
     }
 
