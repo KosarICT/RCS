@@ -27,4 +27,6 @@ public interface UserDao {
     boolean deleteUser(int userId);
 
     boolean existUserName(String userName);
+
+    boolean isManagerOrMiddleManager(int userId);
 }

@@ -12,6 +12,7 @@ public class NotificationAnswer {
     private String datetime;
     private String body;
     private Users submitUser;
+    private Users assignUser;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -63,5 +64,16 @@ public class NotificationAnswer {
     public void setSubmitUser(Users submitUser) {
         this.submitUser = submitUser;
     }
+
+    @ManyToOne
+    @JoinColumn(name = "AssignUser_Id")
+    public Users getAssignUser() {
+        return assignUser;
+    }
+
+    public void setAssignUser(Users assignUser) {
+        this.assignUser = assignUser;
+    }
+
 
 }

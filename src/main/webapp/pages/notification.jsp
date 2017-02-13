@@ -50,7 +50,7 @@
         margin-top: 5px !important;
     }
 </style>
-
+<input id="isShowAddButton" value="${isManagerOrMiddleManager}" type="hidden" >
 <div class="row">
     <div class="k-rtl">
         <div id="grvNotification"></div>
@@ -115,19 +115,19 @@
         <div class="row">
             <div class="col  m1 l1"></div>
             <div class="col s12 m10 l10">
-                <input disabled id="notificationId" type="text" class="validate notification-text" hidden>
+                <input disabled id="notificationId" type="text" class="notification-text" hidden>
 
                 <div class="row">
                     <label for="txtDateTime" style="font-size: 13px; font-weight: 500; color: #707070"> تاریخ اطلاعیه</label>
-                    <input disabled id="txtDateTime" type="text" class="validate notification-text">
+                    <input disabled id="txtDateTime" type="text" class=" notification-text">
                 </div>
                 <div class="row">
                     <label for="txtShowSubject" style="font-size: 13px; font-weight: 500; color: #707070"> موضوع اطلاعیه</label>
-                    <input disabled id="txtShowSubject" type="text" class="validate notification-text">
+                    <input disabled id="txtShowSubject" type="text" class=" notification-text">
                 </div>
                 <div class="row">
                     <label for="txtShowBody" style="font-size: 13px; font-weight: 500; color: #707070">متن اطلاعیه</label>
-                    <input disabled id="txtShowBody" type="text" class="validate notification-text">
+                    <input disabled id="txtShowBody" type="text" class=" notification-text">
                 </div>
                 <div>
                     <label for="ddlSelectUser" style="font-size: 13px; font-weight: 500; color: #707070">کاربران</label>
@@ -152,21 +152,37 @@
     </div>
 </div>
 
-<div id="answerInfo" class="modal modal-fixed-footer modalHeight">
+<div id="answerInfo" class="modal modal-fixed-footer modalHeight" style="width: 400px;height: 300px !important">
     <div class="windowHeader">
 پاسخ
     </div>
     <div>
         <div class="row">
             <label style="font-size: 13px; font-weight: 500; color: #707070">انتخاب کاربر:</label>
-            <select id="ddAnswelUser" multiple="multiple" data-placeholder="Select attendees...">
+            <select id="ddlAnswerUser" multiple="multiple" data-placeholder="Select attendees...">
             </select>
         </div>
+        <div class="row">
+            <label for="txtAnswerBody" style="font-size: 13px; font-weight: 500; color: #707070">متن پاسخ</label>
+            <input id="txtAnswerBody" type="text" class=" notification-text">
+        </div>
+        <div >
+            <a href="#" id="btnSaveAnswerOk" class="modal-action waves-effect waves-light btn-flat notification-text"
+               onclick="saveAnswerWindowToolBarItemClick(this)">
+                <img src="/static/icon/ok3.png" class="windowToolbarImage">پاسخ
+            </a>
+            <a href="#" id="btnSaveAnswerCancel"
+               class="modal-action waves-effect waves-light btn-flat notification-text"
+               onclick="saveAnswerWindowToolBarItemClick(this)">
+                <img src="/static/icon/cancel2.png" class="windowToolbarImage">انصراف
+            </a>
+        </div>
+    </div>
     </div>
 </div>
 
 
-<div class="custom-fixed-action-btn">
+<div id="btnAdd" class="custom-fixed-action-btn">
     <a class="btn-floating btn-large waves-effect waves-light slideColor " href="#" onclick="showNotificationWindow();"
        style="bottom: 35px; left: 35px;">
         <i class="material-icons">add</i>
@@ -185,6 +201,11 @@
             $(this).addClass('selected').siblings().removeClass("selected");
         });
 
+        var isShowAddButton=$("#isShowAddButton").val();
+        debugger;
+        if(isShowAddButton==="false"){
+            $("#btnAdd").hide();
+        }
         initGrid();
         initWindow();
         initMultiSelect();
@@ -228,6 +249,16 @@
                 ending_top: '10%',
             }
         );
+
+        $('#answerInfo').modal({
+                dismissible: false,
+                opacity: .5,
+                in_duration: 300,
+                out_duration: 200,
+                starting_top: '4%',
+                ending_top: '10%',
+            }
+        );
     }
 
     function notificationWindowToolBarItemClick(sender) {
@@ -245,14 +276,96 @@
     function answerWindowToolBarItemClick(sender) {
         var id = sender.id;
         switch (id){
-            case "btnNotificationOk":
+            case "btnAnswerOk":
                 $('#answerInfo').modal('open');
                 break;
-            case "btnNotificationCancel":
+            case "btnAnswerCancel":
                 $('#notificationInfoWindow').modal('close');
                 break
         }
     }
+
+    function saveAnswerWindowToolBarItemClick(sender) {
+        var id = sender.id;
+        switch (id){
+            case "btnSaveAnswerOk":
+                saveNotificationAnswer();
+                break;
+            case "btnSaveAnswerCancel":
+                $('#answerInfo').modal('close');
+                break
+        }
+    }
+
+    function saveNotificationAnswer() {
+        var dataArray = [];
+        var dataItem = {};
+        var  notificationId=$("#notificationId").val();
+        var body=$("#txtAnswerBody").val();
+        var userIds = $("#ddlAnswerUser").data('kendoMultiSelect').value();
+
+        dataItem["notificationId"] = notificationId;
+        dataItem["body"] = body;
+        dataItem["userIds"] = userIds;
+
+        dataArray.push(dataItem);
+        $.ajax({
+            type: "POST",
+            url: "/notificationController/api/saveAnswer",
+            contentType: "application/json; charset=utf-8",
+            dataType: 'json',
+            data: JSON.stringify(dataArray),
+            success: function (data) {
+                if (data) {
+                    clearAnswerForm();
+                    var info=data[0];
+                    var answers=info.notificationAnswers;
+                    updateAnswer(answers);
+                    Materialize.toast('عملیات با موفقیت انجام شد', 4000, 'success-toast');
+                } else {
+                    Materialize.toast('خطا در انجام عملیات!', 4000, 'error-toast');
+                }
+            }
+        });
+
+    }
+
+    function updateAnswer(answers) {
+        $("#pnlAnswers").empty();
+        $.each(answers, function (index, dataItem) {
+            var div = $("<div>").css("border", "1px solid #c0c0c0").addClass("shadow");
+            var header = $("<div>");
+            var date = $("<div>");
+            var body = $("<div>");
+            var line = $("<hr>").css("margin-bottom", "5px");
+
+            if (index % 2 == 0) {
+                div.css("background", "#efefef")
+            } else {
+                div.css("background", "#fff")
+            }
+
+            header.text(dataItem.submitUser.firstName +" "+dataItem.submitUser.lastName+" به "+ dataItem.assignUser.firstName +" "+dataItem.assignUser.lastName);
+            date.text(dataItem.datetime);
+            body.text(dataItem.body);
+
+            div.append(header);
+            div.append(line);
+            div.append(date);
+            div.append(body);
+
+            $("#pnlAnswers").append(div);
+        });
+    }
+
+    function clearAnswerForm() {
+        $('#answerInfo').modal('close');
+        $("#txtAnswerBody").val("")
+        var multi = $("#ddlAnswerUser").data("kendoMultiSelect");
+        multi.value("");
+
+    }
+
     function saveNotification() {
         var subject = $("#txtSubject").val();
         var body = $("#txtBody").val();
@@ -274,8 +387,8 @@
             data: JSON.stringify(dataArray),
             success: function (data) {
                 if (data) {
-                    $('#addNotificationWindow').modal('close');
                     Materialize.toast('عملیات با موفقیت انجام شد', 4000, 'success-toast');
+                    window.location.reload();
                 } else {
                     Materialize.toast('خطا در انجام عملیات!', 4000, 'error-toast');
                 }
@@ -375,6 +488,12 @@
             dataValueField: "userId",
             dataSource:userList
         });
+
+        $("#ddlAnswerUser").kendoMultiSelect({
+            dataTextField: "name",
+            dataValueField: "userId",
+            dataSource:answerUser
+        });
     }
 
     function btnViewNotificationClick(dataItem) {
@@ -393,8 +512,9 @@
                     $("#txtShowBody").val(info.body);
                     $("#txtDateTime").val(info.dateTime);
                     userList = info.notificationAssigns;
-
+                    answerUser = info.userCanGetAnswer;
                     var answers=info.notificationAnswers;
+                    $("#notificationId").val(info.notificationId);
 
 
                     $('#notificationInfoWindow').modal('open');
@@ -406,9 +526,11 @@
 
                     ctrl.value(selectedUser);
 
+                    var ctrl1 = $("#ddlAnswerUser").data('kendoMultiSelect');
+                    ctrl1.setDataSource(new kendo.data.DataSource({ data: answerUser }));
+
                     $("#pnlAnswers").empty();
                     $.each(answers, function (index, dataItem) {
-                        debugger;
                             var div = $("<div>").css("border", "1px solid #c0c0c0").addClass("shadow");
                             var header = $("<div>");
                             var date = $("<div>");
@@ -421,7 +543,7 @@
                                 div.css("background", "#fff")
                             }
 
-                            header.text(dataItem.submitUser.firstName +" "+dataItem.submitUser.lastName);
+                            header.text(dataItem.submitUser.firstName +" "+dataItem.submitUser.lastName+" به "+ dataItem.assignUser.firstName +" "+dataItem.assignUser.lastName);
                             date.text(dataItem.datetime);
                             body.text(dataItem.body);
 

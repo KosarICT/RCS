@@ -39,7 +39,7 @@ public class NotificationAnswerDaoImpl implements NotificationAnswerDao {
 
     @Override
     public List<NotificationAnswer> getNotificationAnswerByNotificationUser(long notificationId, int userId) {
-        String queryString = "SELECT notificationAnswer FROM NotificationAnswer notificationAnswer WHERE notificationAnswer.notification.notificationId=:notificationId AND notificationAnswer.submitUser.userId=:userId";
+        String queryString = "SELECT notificationAnswer FROM NotificationAnswer notificationAnswer WHERE notificationAnswer.notification.notificationId=:notificationId AND (notificationAnswer.submitUser.userId=:userId OR notificationAnswer.assignUser.userId=:userId)";
 
         Query query = entityManager.createQuery(queryString);
         query.setParameter("notificationId", notificationId);

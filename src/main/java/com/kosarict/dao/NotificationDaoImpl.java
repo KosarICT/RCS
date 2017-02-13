@@ -28,8 +28,8 @@ public class NotificationDaoImpl implements NotificationDao {
         Session session = entityManager.unwrap(Session.class);
 
         String queryString = "SELECT DISTINCT Notification.* FROM Notification notification " +
-                "LEFT JOIN NotificationAnswer notificationAnswer ON notification.Notification_Id=notificationAnswer.Notification_Id\n" +
-                "where notification.SubmitUser_Id="+userId+" OR notificationAnswer.SubmitUser_Id="+userId;
+                "LEFT JOIN NotificationAssign notificationAssign ON notification.Notification_Id=notificationAssign.Notification_Id\n" +
+                "where notification.SubmitUser_Id="+userId+" OR notificationAssign.User_Id="+userId;
 
         List query = session.createSQLQuery(queryString).addEntity(Notification.class).list();
 

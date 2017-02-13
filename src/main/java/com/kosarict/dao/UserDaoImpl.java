@@ -2,6 +2,7 @@ package com.kosarict.dao;
 
 import com.kosarict.entity.Ticket;
 import com.kosarict.entity.Users;
+import com.kosarict.model.Constant;
 import org.hibernate.Session;
 import org.hibernate.transform.Transformers;
 import org.springframework.stereotype.Repository;
@@ -12,6 +13,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceContextType;
 import javax.persistence.Query;
+import javax.validation.Constraint;
 import java.util.List;
 
 /**
@@ -131,6 +133,16 @@ public class UserDaoImpl implements UserDao {
         String queryString = "SELECT user FROM Users user  WHERE user.userName=:userName ";
         Query query = entityManager.createQuery(queryString);
         query.setParameter("userName", userName);
+        return query.getResultList().size() > 0;
+    }
+
+    @Override
+    public boolean isManagerOrMiddleManager(int userId) {
+        String queryString = "SELECT userRple FROM UserRole userRple  WHERE userRple.users.userId=:userId and (userRple.role.roleId=:managerRole or userRple.role.roleId=:middelManagerRole)";
+        Query query = entityManager.createQuery(queryString);
+        query.setParameter("userId", userId);
+        query.setParameter("middelManagerRole", Constant.MiddelManagerRole);
+        query.setParameter("managerRole", Constant.ManagerRole);
         return query.getResultList().size() > 0;
     }
 }

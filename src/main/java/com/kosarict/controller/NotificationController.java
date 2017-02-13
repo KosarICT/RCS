@@ -46,10 +46,16 @@ public class NotificationController {
         ModelAndView model = new ModelAndView("notification");
         model.addObject("notificationLists", getNotification());
         model.addObject("hospitalSectionList", getSectionList());
+        model.addObject("isManagerOrMiddleManager", isManagerOrMiddleManager());
         return model;
 
     }
 
+    private boolean isManagerOrMiddleManager(){
+        Users users = getCurrentUser();
+
+        return userDao.isManagerOrMiddleManager(users.getUserId());
+    }
 
     private List<HospitalSection> getSectionList() {
         int hospitalId=getCurrentHospital();
@@ -182,12 +188,12 @@ public class NotificationController {
 
                 jsonObject.put("notificationAssigns",userList);
 
-                if(currentUser.getUserId()==notification.getSubmitUser().getUserId()) {
+                if(currentUser.getUserId()!=notification.getSubmitUser().getUserId()) {
                     userList=new JSONArray();
                     JSONObject jsonObject1 = new JSONObject();
 
-                    jsonObject1.put("userId", currentUser.getUserId());
-                    jsonObject1.put("name", currentUser.getFirstName() + " " + currentUser.getLastName());
+                    jsonObject1.put("userId", notification.getSubmitUser().getUserId());
+                    jsonObject1.put("name", notification.getSubmitUser().getFirstName() + " " + notification.getSubmitUser().getLastName());
 
                     userList.put(jsonObject1);
                 }
@@ -203,6 +209,55 @@ public class NotificationController {
 
     }
 
+
+
+    @RequestMapping(value = "/notificationController/api/saveAnswer", method = RequestMethod.POST)
+    public
+    @ResponseBody
+    String SaveAnswer(@RequestBody String model){
+        try {
+            JSONArray jsonArray = new JSONArray(model);
+            JSONObject jsonObject = jsonArray.getJSONObject(0);
+
+            String body=jsonObject.getString("body");
+            long notificationId=jsonObject.getLong("notificationId");
+
+
+            Notification notification=notificationDao.findNotification(notificationId);
+            JSONArray userIds=jsonObject.getJSONArray("userIds");
+            Users currentUser=getCurrentUser();
+            PersianCalendar persianCalendar = new PersianCalendar();
+            String currentDate = persianCalendar.getIranianSimpleDate();
+
+            int i=0;
+            for (;i<userIds.length();i++){
+                int userId= userIds.getInt(i);
+                Users users=userDao.findUserById(userId);
+                NotificationAnswer notificationAnswer=new NotificationAnswer();
+                notificationAnswer.setDatetime(currentDate);
+                notificationAnswer.setNotification(notification);
+                notificationAnswer.setSubmitUser(currentUser);
+                notificationAnswer.setAssignUser(users);
+                notificationAnswer.setBody(body);
+
+                notificationAnswerDao.save(notificationAnswer);
+
+            }
+            List<NotificationAnswer> notificationAnswers;
+            if(currentUser.getUserId()==notification.getSubmitUser().getUserId()) {
+                notificationAnswers = notificationAnswerDao.getNotificationAnswerByNotification(notificationId);
+            }else {
+                notificationAnswers=notificationAnswerDao.getNotificationAnswerByNotificationUser(notificationId,currentUser.getUserId());
+            }
+            JSONObject jsonObject1 = new JSONObject();
+            JSONArray jsonArray1 = new JSONArray();
+            jsonObject1.put("notificationAnswers",notificationAnswers);
+            jsonArray1.put(jsonObject1);
+            return jsonArray1.toString();
+        }catch (Exception ex){
+            return String.valueOf(false);
+        }
+    }
 
 
 
