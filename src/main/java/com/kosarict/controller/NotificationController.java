@@ -41,10 +41,13 @@ public class NotificationController {
     @Autowired
     private NotificationAnswerDao notificationAnswerDao;
 
+    @Autowired
+    private NotificationUserSeenDao notificationUserSeenDao;
+
     @RequestMapping(value = "/notification", method = RequestMethod.GET)
     public ModelAndView notification() {
         ModelAndView model = new ModelAndView("notification");
-        model.addObject("notificationLists", getNotification());
+        //model.addObject("notificationLists", getNotification());
         model.addObject("hospitalSectionList", getSectionList());
         model.addObject("isManagerOrMiddleManager", isManagerOrMiddleManager());
         return model;
@@ -83,6 +86,7 @@ public class NotificationController {
 
         return hospitalId;
     }
+
     private List<Notification> getNotification() {
         Users users = getCurrentUser();
 
@@ -94,12 +98,21 @@ public class NotificationController {
     @RequestMapping(value = "/notificationController/api/getData", method = RequestMethod.GET)
     public
     @ResponseBody
-    List<Notification> getData(){
+    String getData(){
+        Users users=getCurrentUser();
+
         JSONArray dataArray = new JSONArray();
-        JSONObject dataItem = new JSONObject();
-        dataItem.put("list",getNotification());
-        dataArray.put(dataItem);
-        return getNotification();
+
+        List<Notification> notificationList=getNotification();
+        for (Notification notification: notificationList){
+            JSONObject dataItem = new JSONObject();
+            dataItem.put("notificationId",notification.getNotificationId());
+            dataItem.put("datetime",notification.getDatetime());
+            dataItem.put("subject",notification.getSubject());
+            dataItem.put("isNew",notificationUserSeenDao.isNewit(notification.getNotificationId(),users.getUserId()));
+            dataArray.put(dataItem);
+        }
+        return dataArray.toString();
     }
 
     @RequestMapping(value = "/notificationController/api/save", method = RequestMethod.POST)
@@ -139,6 +152,14 @@ public class NotificationController {
                 notificationAssign.setUser(users1);
 
                 notificationAssignDao.save(notificationAssign);
+
+                NotificationUserSeen notificationUserSeen=new NotificationUserSeen();
+                notificationUserSeen.setNotification(notification1);
+                notificationUserSeen.setUser(users1);
+
+                notificationUserSeenDao.save(notificationUserSeen);
+
+
             }
             return String.valueOf(true);
         } catch (Exception ex) {
@@ -197,6 +218,8 @@ public class NotificationController {
 
                     userList.put(jsonObject1);
                 }
+
+                notificationUserSeenDao.delete(notification.getNotificationId(),currentUser.getUserId());
 
                 jsonObject.put("userCanGetAnswer",userList);
                 jsonArray.put(jsonObject);

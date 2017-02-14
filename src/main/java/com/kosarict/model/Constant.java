@@ -25,6 +25,8 @@ public class Constant {
     public static short Errand = 2;
     public static short Ended = 3;
 
+    public static int NotificationTabId = 6;
+
     public static short AdminSection = 1;
     public static short ManagerRole=1;
     public static short MiddelManagerRole=2;

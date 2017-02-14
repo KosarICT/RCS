@@ -202,7 +202,6 @@
         });
 
         var isShowAddButton=$("#isShowAddButton").val();
-        debugger;
         if(isShowAddButton==="false"){
             $("#btnAdd").hide();
         }
@@ -471,7 +470,19 @@
                         }
                     }, title: "&nbsp;", width: "120px"
                 }
-            ]
+            ],
+            dataBound:function (e) {
+                var grid=$("#grvNotification").data("kendoGrid");
+                var gridData = grid.dataSource.view();
+                debugger;
+                for (var i = 0; i < gridData.length; i++) {
+                    var isNew=gridData[i].isNew;
+
+                    if(isNew==true){
+                        $('tr[data-uid="' + gridData[i].uid + '"] ').css("background-color", "red");
+                    }
+                }
+            }
         });
 
     }

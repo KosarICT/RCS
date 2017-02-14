@@ -2,6 +2,7 @@ package com.kosarict.controller;
 
 import com.kosarict.dao.*;
 import com.kosarict.entity.*;
+import com.kosarict.model.Constant;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +50,8 @@ public class HomeController {
     @Autowired
     private TicketDao ticketDao;
 
+    @Autowired
+    private NotificationUserSeenDao notificationUserSeenDao;
 
     @RequestMapping(value = "/admin", method = RequestMethod.GET)
     public ModelAndView home() {
@@ -83,7 +86,12 @@ public class HomeController {
             for (Tab tab : tabList) {
                 List<Tab> childTab = tabDao.getChildTabByParentId(tab.getTabId());
 
-                int countOfNew = tabDao.getNumberOfNew(tab.getTabId(),users.getUserId());
+                int countOfNew = 0;
+                if(tab.getTabId()== Constant.NotificationTabId){
+                       countOfNew = notificationUserSeenDao.numderOfNotification(users.getUserId());
+                }else {
+                    countOfNew = tabDao.getNumberOfNew(tab.getTabId(), users.getUserId());
+                }
                 JSONObject jsonObject = new JSONObject();
 
                 jsonObject.put("title", tab.getTitle());
