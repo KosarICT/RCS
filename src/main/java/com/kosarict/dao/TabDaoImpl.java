@@ -67,6 +67,25 @@ public class TabDaoImpl implements TabDao {
         return query;
     }
 
+    @Transactional(isolation = Isolation.SERIALIZABLE)
+    @Override
+    public List<Tab> getAllMobileTabListByUserId(int userId) {
+        Session session = entityManager.unwrap(Session.class);
+
+
+        String queryString="SELECT DISTINCT Tab.Enable,Tab.Icon,Tab.IsShowInMobile,Tab.Name,Tab.Parent,Tab.Position,Tab.Tab_Id,Tab.Title,Tab.Url" +
+                "  FROM Tab" +
+                "  join TabRole ON Tab.Tab_Id=TabRole.Tab_Id" +
+                "  join Role ON Role.Role_Id=TabRole.Role_Id" +
+                "  join UserRole ON UserRole.Role_Id=Role.Role_Id" +
+                "  where UserRole.User_Id="+userId+" AND Tab.Parent = 0 AND Tab.IsShowInMobile = 1 AND Tab.Enable=1 And Role.Enable=1" +
+                "  order by Tab.Position";
+        List query =
+                session.createSQLQuery(queryString).addEntity(Tab.class).list();
+
+        return query;
+    }
+
     @Override
     public List<Tab> getAllTabListByRoleId(int roleId) {
         return null;

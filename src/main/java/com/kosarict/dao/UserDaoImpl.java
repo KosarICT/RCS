@@ -114,6 +114,44 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
+    public Users findUserByPersonalNumber(String personalNumber) {
+        try {
+            Users user;
+
+            String queryString = "SELECT user FROM Users user  WHERE user.personalNumber=:personalNumber AND user.enable = true ";
+
+            Query query = entityManager.createQuery(queryString);
+            query.setParameter("personalNumber", personalNumber);
+
+            user = (Users) query.getResultList().get(0);
+
+            return user;
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
+
+    @Override
+    public Users findUserByMacAddress(String macAddress) {
+        try {
+            Users user;
+
+            String queryString = "SELECT user FROM Users user  WHERE user.macAddress=:macAddress AND user.enable = true ";
+
+            Query query = entityManager.createQuery(queryString);
+            query.setParameter("macAddress", macAddress);
+
+            user = (Users) query.getResultList().get(0);
+
+            return user;
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
+
+    @Override
     public Users findUserById(int userId) {
         return entityManager.find(Users.class, userId);
     }

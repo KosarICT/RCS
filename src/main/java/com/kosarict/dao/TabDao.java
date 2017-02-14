@@ -16,6 +16,8 @@ public interface TabDao {
 
     List<Tab> getAllTabListByUserId(int userId);
 
+    List<Tab> getAllMobileTabListByUserId(int userId);
+
     List<Tab> getAllTabListByRoleId(int roleId);
 
     List<Tab> getAllTabListByPermissionId(int permissionId);

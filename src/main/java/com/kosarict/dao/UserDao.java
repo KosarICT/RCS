@@ -29,4 +29,8 @@ public interface UserDao {
     boolean existUserName(String userName);
 
     boolean isManagerOrMiddleManager(int userId);
+
+    Users findUserByMacAddress(String macAddress);
+
+    Users findUserByPersonalNumber(String personalNumner);
 }

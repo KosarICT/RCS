@@ -93,6 +93,11 @@ public class ADComplainController {
             ticketUserSeen.setUser(user);
             ticketUserSeenDao.saveTicketUserSeen(ticketUserSeen);
 
+            TicketStatus ticketStatus = ticketStatusDao.findTicketStatusById(Constant.Errand);
+            ticket.setTicketStatus(ticketStatus);
+
+            ticketDao.saveTicket(ticket);
+
 
             return String.valueOf(true);
 

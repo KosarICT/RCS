@@ -1,6 +1,7 @@
 package com.kosarict.entity;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 
 /**
  * Created by Sadegh-Pc on 11/28/2016.
@@ -22,6 +23,8 @@ public class Users {
     private boolean isSuperUser;
     private String personalNumber;
     private String macAddress;
+    private String image;
+    private Timestamp lastRequestFromMobile;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -164,20 +167,13 @@ public class Users {
         this.macAddress = macAddress;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Users users = (Users) o;
-
-        if (macAddress != null ? !macAddress.equals(users.macAddress) : users.macAddress != null) return false;
-
-        return true;
+    @Basic
+    @Column(name = "LastRequestFromMobile")
+    public Timestamp getLastRequestFromMobile() {
+        return lastRequestFromMobile;
     }
 
-    @Override
-    public int hashCode() {
-        return macAddress != null ? macAddress.hashCode() : 0;
+    public void setLastRequestFromMobile(Timestamp lastRequestFromMobile) {
+        this.lastRequestFromMobile = lastRequestFromMobile;
     }
 }

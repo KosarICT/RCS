@@ -22,6 +22,7 @@ public class Constant {
     public static short finishTicketStatus = 3;
 
     public static short Pending = 1;
+    public static short Errand = 2;
     public static short Ended = 3;
 
     public static short AdminSection = 1;

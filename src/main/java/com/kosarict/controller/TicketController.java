@@ -231,15 +231,6 @@ public class TicketController {
 
                     complainantRelationDao.saveComplainantRelation(complainantRelation);
                 }
-
-
-                TicketErrand ticketErrand = new TicketErrand();
-
-                ticketErrand.setTicket(ticket1);
-                ticketErrand.setAssignedUser(userAdminSections.get(0));
-                ticketErrand.setSubmitDate(currentDate);
-
-                ticketErrandDao.saveTicketErrand(ticketErrand);
             }
 
             if (!fileName.matches("")) {
@@ -251,6 +242,14 @@ public class TicketController {
 
                 ticketAttachmentDao.saveTicketAttachment(ticketAttachment);
             }
+
+            TicketErrand ticketErrand = new TicketErrand();
+
+            ticketErrand.setTicket(ticket1);
+            ticketErrand.setAssignedUser(userAdminSections.get(0));
+            ticketErrand.setSubmitDate(currentDate);
+
+            ticketErrandDao.saveTicketErrand(ticketErrand);
 
             result.put("trackingNumber", trackingNumber);
             return result.toString();
