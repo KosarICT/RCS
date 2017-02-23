@@ -30,7 +30,9 @@ public interface UserDao {
 
     boolean isManagerOrMiddleManager(int userId);
 
-    Users findUserByMacAddress(String macAddress);
+    Users findUserByImei(String imei);
+
+    Users findUserByNationalCode(String nationalCode);
 
     Users findUserByPersonalNumber(String personalNumner);
 }

@@ -329,9 +329,7 @@
         <br/>
         <br/>
         <label id="lblTrackingNumber"></label>
-        <br/>
-        <br/>
-        <label id="lblresponceTime"></label>
+        <label id="lblresponceTime" style="display: none"></label>
         <label>روز</label>
     </div>
     <div class="divider"></div>
@@ -374,7 +372,11 @@
     $(document).ready(function () {
         hospitalId = "${hospitalId}";
         var hospitalName = "${hospitalImage}";
-        debugger;
+        var webUrl = "${webUrl}";
+
+        $("#webURL").val(webUrl);
+
+        $("#hospitalUrl").attr("href",  $("#webURL").val());
 
         $("#ddlHospital").val(hospitalId);
         $(".brand-logo").text($("#ddlHospital option:selected").text());
@@ -413,6 +415,9 @@
                 $("#registerNationalCode").attr('disabled', 'disabled');
             }
         });
+
+
+        $("#sickName, #sickFamily, #compalainerName,#compalainerFamily, #complainSubject, #complainDescription").farsiInput();
     });
 
     function initWindow() {

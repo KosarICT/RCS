@@ -10,6 +10,7 @@ import javax.persistence.*;
 public class Shift {
     private short shiftId;
     private String title;
+    private String hourWork;
     private boolean enable;
 
     @Id
@@ -20,6 +21,16 @@ public class Shift {
 
     public void setShiftId(short shiftId) {
         this.shiftId = shiftId;
+    }
+
+    @Basic
+    @Column(name = "HourWork")
+    public String getHourWork() {
+        return hourWork;
+    }
+
+    public void setHourWork(String hourWork) {
+        this.hourWork = hourWork;
     }
 
     @Basic

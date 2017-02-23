@@ -62,6 +62,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/adArchive**").hasAnyAuthority("ADMIN", "MANAGER", "USER_ARCHIVE")
                 .antMatchers("/complaintType**").hasAnyAuthority("ADMIN", "MANAGER")
                 .antMatchers("/hospital**").hasAnyAuthority("ADMIN", "MANAGER")
+                .antMatchers("/adRequestList**").hasAnyAuthority("ADMIN", "MANAGER")
 
                 .antMatchers("/role**").access("hasRole('ADMIN')")
                 .antMatchers("/hospitalSection**").access("hasRole('ADMIN')")

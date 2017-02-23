@@ -6,10 +6,10 @@ import javax.persistence.*;
  * Created by Ali-Pc on 1/2/2017.
  */
 @Entity
-@Table(name = "TicketErrand", schema = "dbo", catalog = "")
+@Table(name = "TicketErrand", schema = "dbo", catalog = "Monitoring")
 public class TicketErrand {
     private long ticketErrandId;
-    private String submitDate;
+    private String submitDateTime;
     private boolean isView;
     private String description;
 
@@ -29,13 +29,13 @@ public class TicketErrand {
     }
 
     @Basic
-    @Column(name = "SubmitDate")
+    @Column(name = "SubmitDateTime")
     public String getSubmitDate() {
-        return submitDate;
+        return submitDateTime;
     }
 
-    public void setSubmitDate(String submitDate) {
-        this.submitDate = submitDate;
+    public void setSubmitDate(String submitDateTime) {
+        this.submitDateTime = submitDateTime;
     }
 
     @Basic

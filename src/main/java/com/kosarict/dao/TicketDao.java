@@ -21,6 +21,8 @@ public interface TicketDao {
 
     Ticket findTicketById(long ticketId);
 
+    Ticket findTicketByTrackingCode(String trackingCode);
+
     boolean deleteTicket(long ticketId);
 
     List<TicketErrand> getTicketListByUserId(int userId);

@@ -22,7 +22,8 @@ public class Users {
     private boolean enable;
     private boolean isSuperUser;
     private String personalNumber;
-    private String macAddress;
+    private String nationalCode;
+    private String imei;
     private String image;
     private Timestamp lastRequestFromMobile;
 
@@ -158,13 +159,23 @@ public class Users {
     }
 
     @Basic
-    @Column(name = "MacAddress")
-    public String getMacAddress() {
-        return macAddress;
+    @Column(name = "NationalCode")
+    public String getNationalCode() {
+        return nationalCode;
     }
 
-    public void setMacAddress(String macAddress) {
-        this.macAddress = macAddress;
+    public void setNationalCode(String nationalCode) {
+        this.nationalCode = nationalCode;
+    }
+
+    @Basic
+    @Column(name = "IMEI")
+    public String getImei() {
+        return imei;
+    }
+
+    public void setImei(String imei) {
+        this.imei = imei;
     }
 
     @Basic

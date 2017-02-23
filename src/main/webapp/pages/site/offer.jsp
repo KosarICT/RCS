@@ -236,12 +236,18 @@
         var id = "${hospitalId}";
         var hospitalName = "${hospitalName}";
 
+        $("#webURL").val(webUrl);
+
+        $("#hospitalUrl").attr("href",  $("#webURL").val());
+
         $("#ddlHospital").val(id);
         $(".brand-logo").text($("#ddlHospital option:selected").text());
         $("#imgHospital").attr("src", "/static/hospitalImage/" + hospitalName);
         loadSection();
 
         initWindow();
+
+        $("#name, #family, #offerSubject, #offerDescription").farsiInput();
     });
 
     function initWindow() {

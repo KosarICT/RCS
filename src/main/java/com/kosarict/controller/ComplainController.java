@@ -73,7 +73,9 @@ public class ComplainController {
         model.addObject("sectionLists", getSectionLists());
         model.addObject("hospitalList", getHospitalLists());
         model.addObject("hospitalId", hospitalId);
-        model.addObject("hospitalImage", getHosptialName(Integer.parseInt(hospitalId)));
+        model.addObject("hospitalImage", getHosptialName(Integer.parseInt(hospitalId)).getImageName());
+        model.addObject("webUrl", getHosptialName(Integer.parseInt(hospitalId)).getWebSite());
+
         return model;
     }
 
@@ -243,8 +245,8 @@ public class ComplainController {
         return hospitalDao.getAllHospitalList();
     }
 
-    private String getHosptialName(int hospitalId){
-        return hospitalDao.findHospitalById(hospitalId).getImageName();
+    private Hospital getHosptialName(int hospitalId){
+        return hospitalDao.findHospitalById(hospitalId);
     }
 
     private int trackingNumber() {

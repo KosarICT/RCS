@@ -44,6 +44,7 @@ public class AppreciationController {
         model.addObject("hospitalList", getHospitalLists());
         model.addObject("hospitalId", hospitalId);
         model.addObject("hospitalImage", getHosptialName(Integer.parseInt(hospitalId)));
+        model.addObject("webUrl", getHosptialName(Integer.parseInt(hospitalId)).getWebSite());
         return model;
     }
 
@@ -75,8 +76,8 @@ public class AppreciationController {
         return trackingNumber;
     }
 
-    private String getHosptialName(int hospitalId){
-        return hospitalDao.findHospitalById(hospitalId).getImageName();
+    private Hospital getHosptialName(int hospitalId){
+        return hospitalDao.findHospitalById(hospitalId);
     }
 
     @RequestMapping(value = "/appreciation/api/saveAppreciation", method = RequestMethod.POST)

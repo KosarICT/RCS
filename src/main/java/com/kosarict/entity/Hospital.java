@@ -17,6 +17,7 @@ public class Hospital {
     private String address;
     private String imageName;
     private String description;
+    private String webSite;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -107,5 +108,15 @@ public class Hospital {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    @Basic
+    @Column(name = "WebSite")
+    public String getWebSite() {
+        return webSite;
+    }
+
+    public void setWebSite(String webSite) {
+        this.webSite = webSite;
     }
 }

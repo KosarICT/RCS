@@ -1,6 +1,7 @@
 package com.kosarict.controller;
 
 import com.kosarict.dao.HospitalDao;
+import com.kosarict.entity.Hospital;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,11 +24,12 @@ public class FollowController {
         ModelAndView model = new ModelAndView("/site/follow");
         model.addObject("hospitalId", hospitalId);
         model.addObject("hospitalImage", getHosptialName(Integer.parseInt(hospitalId)));
+        model.addObject("webUrl", getHosptialName(Integer.parseInt(hospitalId)).getWebSite());
 
         return model;
     }
 
-    private String getHosptialName(int hospitalId){
-        return hospitalDao.findHospitalById(hospitalId).getImageName();
+    private Hospital getHosptialName(int hospitalId){
+        return hospitalDao.findHospitalById(hospitalId);
     }
 }

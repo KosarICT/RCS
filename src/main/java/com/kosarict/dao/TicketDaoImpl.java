@@ -95,6 +95,23 @@ public class TicketDaoImpl implements TicketDao {
     }
 
     @Override
+    public Ticket findTicketByTrackingCode(String trackingCode) {
+        String queryString = "SELECT ticket FROM Ticket ticket " +
+                "WHERE ticket.trackingCode =:trackingCode ";
+
+        Query query = entityManager.createQuery(queryString);
+        query.setParameter("trackingCode", trackingCode);
+
+        List<Ticket> ticketList = query.getResultList();
+
+        if(ticketList.size() > 0){
+            return ticketList.get(0);
+        }else{
+            return null;
+        }
+    }
+
+    @Override
     public boolean deleteTicket(long complainId) {
         Ticket ticket = findTicketById(complainId);
         ticket.setEnable(false);

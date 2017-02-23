@@ -13,7 +13,8 @@
                 <ul>
                     <li>
                         <%--<img src="../static/icon/menu/back.png">--%>
-                        <a class="grey-text text-lighten-3" href="#!" style="font-size: 18px;font-weight: 400">سایت
+                        <a id="hospitalUrl" class="grey-text text-lighten-3"
+                           style="font-size: 18px;font-weight: 400">سایت
                             بیمارستان</a>
                     </li>
 
@@ -61,7 +62,7 @@
 <script>
     function myMap() {
         var mapOptions = {
-            center: new google.maps.LatLng(35.7489889,51.3805624),
+            center: new google.maps.LatLng(35.7489889, 51.3805624),
             zoom: 15,
             mapTypeId: google.maps.MapTypeId.ROADMAP
         };
@@ -70,7 +71,7 @@
         var map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
 
         var marker = new google.maps.Marker({
-            position: new google.maps.LatLng(35.7489889,51.3805624),
+            position: new google.maps.LatLng(35.7489889, 51.3805624),
             map: map,
             title: 'دانشگاه علوم پزشکی ایران'
         });

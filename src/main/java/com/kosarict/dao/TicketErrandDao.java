@@ -13,6 +13,8 @@ public interface TicketErrandDao {
 
     List<TicketErrand> getTicketErrandListByTicketId(long ticketId);
 
+    List<TicketErrand> getTicketErrandListByTicketId(long ticketId, int userId);
+
     long saveTicketErrand(TicketErrand ticketErrandModel);
 
     TicketErrand findTicketErrandById(long ticketErrandId);

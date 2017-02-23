@@ -281,14 +281,18 @@
         var id = "${hospitalId}";
         var hospitalName = "${hospitalName}";
 
+        $("#webURL").val(webUrl);
+
+        $("#hospitalUrl").attr("href",  $("#webURL").val());
+
         $("#ddlHospital").val(id);
         $(".brand-logo").text($("#ddlHospital option:selected").text());
         $("#imgHospital").attr("src", "/static/hospitalImage/" + hospitalName);
         ddlHospitalChange();
 
         initWindow();
-        var arabicNumbers = ['۰', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
 
+        $("#appreciationName, #appreciationFamily, #appreciationUserName,#appreciationUserFamily, #appreciationSubject, #appreciationDescription").farsiInput();
     });
 
     $('.translate').text(function(i, v) {

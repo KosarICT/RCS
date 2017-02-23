@@ -224,6 +224,10 @@
                     $("#nav-mobile li a[href=section]").parent().parent().parent().css("display", "block");
                     $("#nav-mobile li a[href=section]").parent().addClass("active");
                     break;
+                    case "/adRequestList":
+                    $("#nav-mobile li a[href=adRequestList]").parent().parent().parent().css("display", "block");
+                    $("#nav-mobile li a[href=adRequestList]").parent().addClass("active");
+                    break;
             }
         }
     </script>

@@ -133,14 +133,32 @@ public class UserDaoImpl implements UserDao {
 
 
     @Override
-    public Users findUserByMacAddress(String macAddress) {
+    public Users findUserByImei(String imei) {
         try {
             Users user;
 
-            String queryString = "SELECT user FROM Users user  WHERE user.macAddress=:macAddress AND user.enable = true ";
+            String queryString = "SELECT user FROM Users user  WHERE user.imei=:imei AND user.enable = true ";
 
             Query query = entityManager.createQuery(queryString);
-            query.setParameter("macAddress", macAddress);
+            query.setParameter("imei", imei);
+
+            user = (Users) query.getResultList().get(0);
+
+            return user;
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
+    @Override
+    public Users findUserByNationalCode(String nationalCode) {
+        try {
+            Users user;
+
+            String queryString = "SELECT user FROM Users user  WHERE user.nationalCode=:nationalCode AND user.enable = true ";
+
+            Query query = entityManager.createQuery(queryString);
+            query.setParameter("nationalCode", nationalCode);
 
             user = (Users) query.getResultList().get(0);
 

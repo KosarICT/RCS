@@ -48,6 +48,7 @@ public class DefaultController {
         model.addObject("hospitalId", hospitalId);
         model.addObject("hospitalName", getHosptialName(Integer.parseInt(hospitalId)).getName());
         model.addObject("hospitalImage", getHosptialName(Integer.parseInt(hospitalId)).getImageName());
+        model.addObject("webUrl", getHosptialName(Integer.parseInt(hospitalId)).getWebSite());
 
         return model;
     }

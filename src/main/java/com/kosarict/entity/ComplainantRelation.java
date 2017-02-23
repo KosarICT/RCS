@@ -6,6 +6,7 @@ import javax.persistence.*;
  * Created by Sadegh-Pc on 11/28/2016.
  */
 @Entity
+@Table(name = "TicketUserSeen", schema = "dbo", catalog = "Monitoring")
 public class ComplainantRelation {
     private long complainantRelationId;
     private short relationId;

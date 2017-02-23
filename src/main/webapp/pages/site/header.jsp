@@ -18,7 +18,7 @@
     <script type="text/javascript" src="<c:url value='/static/js/jquery.min.js'/>"></script>
     <script type="text/javascript" src="<c:url value='/static/js/materialize.min.js'/>"></script>
     <script type="text/javascript" src="<c:url value='/static/js/persiaNumber.min.js'/>"></script>
-    <script type="text/javascript" src="<c:url value='/static/js/FarsiType.js'/>"></script>
+    <script type="text/javascript" src="<c:url value='/static/js/jquery.farsiInput.js'/>"></script>
 
     <style>
         #map-canvas {
@@ -44,6 +44,7 @@
 <body >
 
 <nav class="blue-grey darken-1">
+    <input type="hidden" id="webURL">
     <div class="nav-wrapper">
         <img id="imgHospital" class="responsive-img right"  src="../static/icon/logouu.png"
              style="display: inline-block; margin-top: 7px;margin-right: 8px; width: 50px; height: 50px">
