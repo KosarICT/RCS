@@ -46,7 +46,7 @@ public class CriticismController {
         model.addObject("sectionLists", getSectionLists());
         model.addObject("hospitalList", getHospitalLists());
         model.addObject("hospitalId", hospitalId);
-        model.addObject("hospitalImage", getHosptialName(Integer.parseInt(hospitalId)));
+        model.addObject("hospitalImage", getHosptialName(Integer.parseInt(hospitalId)).getImageName());
         model.addObject("webUrl", getHosptialName(Integer.parseInt(hospitalId)).getWebSite());
         return model;
     }

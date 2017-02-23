@@ -94,19 +94,32 @@ public class WSMobile {
             Hospital hospital = hospitalDao.findHospitalById(Integer.parseInt(hospitalId));
             RequestStatus requestStatus = requestStatusDao.findRequestStatusById(Constant.PendingStatus);
 
-            Request request = new Request();
-            request.setRequestId(0);
-            request.setHospital(hospital);
-            request.setUser(user);
-            request.setRequestStatus(requestStatus);
+            if (user != null) {
 
-            int newRequestId = requestDao.saveRequest(request);
+                Request requestItem = requestDao.findRequestByUserIdAndHospitalId(user.getUserId(), Integer.parseInt(hospitalId));
 
-            user.setImei(imei);
+                if (requestItem != null) {
+                    jsonObject.put("status", "801");
+                    jsonObject.put("description", "Request submited");
+                } else {
+                    Request request = new Request();
+                    request.setRequestId(0);
+                    request.setHospital(hospital);
+                    request.setUser(user);
+                    request.setRequestStatus(requestStatus);
 
-            int newUserId = userDao.saveUser(user);
+                    int newRequestId = requestDao.saveRequest(request);
 
-            jsonObject.put("status", "ok");
+                    user.setImei(imei);
+
+                    int newUserId = userDao.saveUser(user);
+
+                    jsonObject.put("status", "ok");
+                }
+            } else {
+                jsonObject.put("status", "800");
+                jsonObject.put("description", "User not found");
+            }
 
 
             jsonArray.put(jsonObject);
@@ -147,7 +160,7 @@ public class WSMobile {
 
             jsonObject.put("status", "ok");
 
-            if(user != null) {
+            if (user != null) {
                 List<Request> requestList = requestDao.getRequestList(user.getUserId());
 
                 for (Request request : requestList) {
@@ -213,7 +226,7 @@ public class WSMobile {
                     jsonObject.put("description", "ok");
                     jsonObject.put("userServerId", user.getUserId());
 
-                    for (Tab tab : tabList) {
+/*                    for (Tab tab : tabList) {
                         JSONObject dataObject = new JSONObject();
 
                         int countOfNew = tabDao.getNumberOfNew(tab.getTabId(), user.getUserId());
@@ -224,7 +237,7 @@ public class WSMobile {
                         dataObject.put("count", countOfNew);
 
                         tabArray.put(dataObject);
-                    }
+                    }*/
 
                     jsonObject.put("tabList", tabArray);
 
@@ -310,6 +323,7 @@ public class WSMobile {
 
                         JSONObject jsonObjectItem = new JSONObject();
 
+                        jsonObjectItem.put("ticketId", ticket.getTicketId());
                         jsonObjectItem.put("date", ticket.getSubmitDate());
                         jsonObjectItem.put("trackingCode", ticket.getTrackingCode());
                         jsonObjectItem.put("sendTypeId", ticket.getSendType().getSendTypeId());
@@ -504,26 +518,37 @@ public class WSMobile {
 
                     jsonObject.put("status", "ok");
                     jsonObject.put("ticket_Id", ticket.getTicketId());
-                    jsonObject.put("ticketTypeId", ticket.getTicketType().getTicketTypeId());
+/*                    jsonObject.put("ticketTypeId", ticket.getTicketType().getTicketTypeId());
                     jsonObject.put("ticketTypeTitle", URLEncoder.encode(ticket.getTicketType().getTitle(), "UTF-8"));
                     jsonObject.put("hospitalName", URLEncoder.encode(ticket.getHospital().getName(), "UTF-8"));
                     jsonObject.put("hospitalId", ticket.getHospital().getHospitalId());
                     jsonObject.put("sectionTitle", URLEncoder.encode(ticket.getSection().getTitle(), "UTF-8"));
-                    jsonObject.put("sendType", URLEncoder.encode(ticket.getSendType().getTitle(), "UTF-8"));
-                    jsonObject.put("name", URLEncoder.encode(ticket.getFirstName(), "UTF-8") + " " + URLEncoder.encode(ticket.getLastName(), "UTF-8"));
-                    jsonObject.put("nationalCode", ticket.getNationalCode());
+
+
+
                     jsonObject.put("phoneNumber", ticket.getPhoneNumber());
-                    jsonObject.put("mobile", ticket.getMobile());
+
                     jsonObject.put("tel", ticket.getPhoneNumber());
-                    jsonObject.put("subject", URLEncoder.encode(ticket.getSubject(), "UTF-8"));
-                    jsonObject.put("description", URLEncoder.encode(ticket.getDescription(), "UTF-8"));
+
+
                     jsonObject.put("submitDate", ticket.getSubmitDate());
                     jsonObject.put("email", ticket.getEmail());
                     jsonObject.put("trackingCode", ticket.getTrackingCode());
-                    jsonObject.put("ticketAttachmentList", ticketAttachmentList);
-                    jsonObject.put("statusId", ticket.getTicketStatus().getTicketStatusId());
 
-                    if (ticket.getTicketType().getTicketTypeId() == Constant.Complaint) {
+                    jsonObject.put("statusId", ticket.getTicketStatus().getTicketStatusId());*/
+
+                    jsonObject.put("trackingCode", ticket.getTrackingCode());
+                    jsonObject.put("name", URLEncoder.encode(ticket.getFirstName(), "UTF-8") + " " + URLEncoder.encode(ticket.getLastName(), "UTF-8") + "-" + ticket.getComplainant().getTitle());
+                    jsonObject.put("mobile", ticket.getMobile());
+                    jsonObject.put("nationalCode", ticket.getNationalCode());
+                    jsonObject.put("date", ticket.getSubmitDate());
+                    jsonObject.put("description", URLEncoder.encode(ticket.getDescription(), "UTF-8"));
+                    jsonObject.put("sendType", URLEncoder.encode(ticket.getSendType().getTitle(), "UTF-8"));
+                    jsonObject.put("sendTypeId", ticket.getSendType().getSendTypeId());
+                    jsonObject.put("ticketAttachmentList", ticketAttachmentList);
+                    jsonObject.put("subject", URLEncoder.encode(ticket.getSubject(), "UTF-8"));
+
+/*                    if (ticket.getTicketType().getTicketTypeId() == Constant.Complaint) {
                         jsonObject.put("complaintTypeTitle", URLEncoder.encode(ticket.getComplaintType().getTitle(), "UTF-8"));
                         jsonObject.put("complainantTitle", URLEncoder.encode(ticket.getComplainant().getTitle(), "UTF-8"));
 
@@ -549,7 +574,7 @@ public class WSMobile {
 
                     List<TicketErrand> ticketErrandList = ticketErrandDao.getTicketErrandListByTicketId(Long.parseLong(ticketId));
 
-                    jsonObject.put("ticketErrand", ticketErrandList);
+                    jsonObject.put("ticketErrand", ticketErrandList);*/
 
 
                     jsonArray.put(jsonObject);

@@ -50,7 +50,7 @@ public class OfferController {
         model.addObject("hospitalList", getHospitalLists());
         model.addObject("sectionLists", getSectionLists());
         model.addObject("hospitalId", hospitalId);
-        model.addObject("hospitalImage", getHosptialName(Integer.parseInt(hospitalId)));
+        model.addObject("hospitalImage", getHosptialName(Integer.parseInt(hospitalId)).getImageName());
         model.addObject("webUrl", getHosptialName(Integer.parseInt(hospitalId)).getWebSite());
 
         return model;
