@@ -42,9 +42,12 @@
                 <label for="ddlShift">شیفت کاری:</label>
             </div>
 
-            <div class="col s12 m8 l8 left">
-                <select id='ddlShift'>
+            <div class="col s12 m6 l6 right">
+                <select id='ddlShift' onchange="ddlShiftChange(this)">
                 </select>
+            </div>
+            <div class="col s12 m2 l2 left">
+                <label id="lblHourWork"></label>
             </div>
         </div>
 
@@ -96,7 +99,7 @@
             </div>
 
             <div class="col s12 m8 l8 left">
-                <input id="sickName" type="text" class="validate" maxlength="100" lang="fa-IR">
+                <input id="sickName" placeholder="نام بیمار: علی" onblur="sickNameBlur(this)" type="text" class="validate" maxlength="100" lang="fa-IR">
             </div>
 
         </div>
@@ -108,7 +111,7 @@
             </div>
 
             <div class="col s12 m8 l8 left">
-                <input maxlength="100" id="sickFamily" type="text" class="validate" lang="fa-IR">
+                <input maxlength="100" id="sickFamily" onblur="sickFamilyBlur(this)" placeholder="نام خانوادگی بیمار: رضایی" type="text" class="validate" lang="fa-IR">
             </div>
 
         </div>
@@ -120,7 +123,7 @@
             </div>
 
             <div class="col s12 m8 l8 left">
-                <input maxlength="10" id="nationalCode" type="tel" class="validate"
+                <input maxlength="10" id="nationalCode" onblur="nationalCodeBlur(this)" placeholder="کد ملی: 09212678392" type="tel" class="validate"
                        onkeypress='return event.charCode >= 48 && event.charCode <= 57;'>
             </div>
 
@@ -133,7 +136,7 @@
             </div>
 
             <div class="col s12 m8 l8 left">
-                <input maxlength="12" id="telephone" type="tel" class="validate"
+                <input maxlength="12" id="telephone" type="tel" placeholder="تلفن ثابت: 02188468290" class="validate"
                        onkeypress='return event.charCode >= 48 && event.charCode <= 57;'>
             </div>
 
@@ -146,7 +149,7 @@
             </div>
 
             <div class="col s12 m8 l8 left">
-                <input maxlength="12" id="mobile" type="tel" class="validate"
+                <input maxlength="12" id="mobile" type="tel" placeholder="تلفن همراه:09121187653" class="validate"
                        onkeypress='return event.charCode >= 48 && event.charCode <= 57;'>
             </div>
 
@@ -159,7 +162,7 @@
             </div>
 
             <div class="col s12 m8 l8 left">
-                <input maxlength="100" id="compalainerName" type="text" class="validate" disabled lang="fa-IR">
+                <input maxlength="100" id="compalainerName" placeholder="نام شکایت کننده:علی" type="text" class="validate" disabled lang="fa-IR">
             </div>
 
         </div>
@@ -171,7 +174,7 @@
             </div>
 
             <div class="col s12 m8 l8 left">
-                <input maxlength="100" id="compalainerFamily" type="text" class="validate" disabled lang="fa-IR">
+                <input maxlength="100" id="compalainerFamily" placeholder="نام خانوادگی شکایت کننده:اصغری" type="text" class="validate" disabled lang="fa-IR">
             </div>
 
         </div>
@@ -183,7 +186,7 @@
             </div>
 
             <div class="col s12 m8 l8 left">
-                <input maxlength="10" id="registerNationalCode" type="text" class="validate" disabled
+                <input maxlength="10" id="registerNationalCode"  placeholder="کد ملی ثبت کننده:09645893578" type="text" class="validate" disabled
                        onkeypress='return event.charCode >= 48 && event.charCode <= 57;'>
             </div>
 
@@ -217,7 +220,7 @@
             </div>
 
             <div class="col s12 m8 l8 left">
-                <input maxlength="500" id="complainSubject" type="text" class="validate" lang="fa-IR">
+                <input maxlength="500" id="complainSubject" placeholder="موضوع" type="text" class="validate" lang="fa-IR">
             </div>
 
         </div>
@@ -229,7 +232,7 @@
             </div>
 
             <div class="col s12 m8 l8 input-field left">
-                <textarea maxlength="4000" id="complainDescription" class="materialize-textarea"
+                <textarea maxlength="4000" id="complainDescription" placeholder="متن شکایت" class="materialize-textarea"
                           lang="fa-IR"></textarea>
             </div>
 
@@ -242,7 +245,7 @@
             </div>
 
             <div class="col s12 m8 l8 input-field left">
-                <input maxlength="100" id="complainEmail" type="email" class="validate">
+                <input maxlength="100" id="complainEmail" placeholder="ایمیل:ali@gmail.com" type="email" class="validate">
             </div>
 
         </div>
@@ -301,7 +304,7 @@
                 <label>کد امنیتی :</label>
             </div>
             <div class="col s12 m8 l8 left">
-                <input type="text" id="txtInput"/>
+                <input type="text" id="txtInput" />
             </div>
         </div>
 
@@ -352,6 +355,21 @@
     </div>
 </div>
 
+<div id="reviewWindow" class="modal modal-fixed-footer modalHeight">
+    <div class="windowHeader">
+        بازبینی اطلاعات
+    </div>
+    <div class="modal-content">
+        <div class="row">
+            <div class="col s12 m12 l8">
+                <div class="col s12 m4 l4 right marginTop">
+                    <label>نام بیمارستان</label>
+                </div>
+                <label id="lblHospitalShow"></label>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script>
     var captchaString = "";
@@ -441,6 +459,38 @@
                 ending_top: '10%',
             }
         );
+
+        $('#reviewWindow').modal({
+                dismissible: false,
+                opacity: .5,
+                in_duration: 300,
+                out_duration: 200,
+                starting_top: '10%',
+                ending_top: '10%',
+            }
+        );
+    }
+
+    function sickNameBlur(sender) {
+        var compainer = $("input[type=radio]:checked").val();
+        if(compainer==1)
+            $("#compalainerName").val(sender.value)
+    }
+
+    function sickFamilyBlur(sender) {
+        var compainer = $("input[type=radio]:checked").val();
+        if(compainer==1)
+            $("#compalainerFamily").val(sender.value)
+    }
+
+    function nationalCodeBlur(sender) {
+        var compainer = $("input[type=radio]:checked").val();
+        if(compainer==1)
+            $("#registerNationalCode").val(sender.value)
+    }
+
+    function showReview() {
+
     }
 
     /**
@@ -610,9 +660,8 @@
             success: function (data) {
                 debugger;
                 if (data != false) {
-                    debugger;
                     $("#lblTrackingNumber").text("کد رهگیری شکایت شما:" + data.trackingNumber);
-                    $("#lblresponceTime").text("زمان پاسخگویی به شکایت شما " + data.responceTime);
+//                    $("#lblresponceTime").text("زمان پاسخگویی به شکایت شما " + data.responceTime);
                     $('#trackingNumberWindow').modal('open');
                 } else {
                     Materialize.toast('خطا درانجام عملیات', 4000, 'error-toast');
@@ -657,6 +706,12 @@
 
     }
 
+    function ddlShiftChange() {
+        debugger;
+        var hourWork = $("#ddlShift option:selected").attr("hourWork");
+        $("#lblHourWork").text(hourWork);
+    }
+
     function ddlHospitalChange() {
         var hospitalId = $("#ddlHospital option:selected").val();
 
@@ -693,7 +748,7 @@
 
                     $.each(data[0].shifits, function (index, dataItem) {
                         var option = $("<option>");
-                        option.text(dataItem.title).attr("value", dataItem.shiftId);
+                        option.text(dataItem.title).attr("value", dataItem.shiftId).attr("hourWork",dataItem.hourWork);
 
                         $("#ddlShift").append(option);
                     });

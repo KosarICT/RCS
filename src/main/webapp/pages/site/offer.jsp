@@ -2,6 +2,12 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <%@include file="header.jsp" %>
+
+<style>
+    .textColor{
+        color: red;
+    }
+</style>
 <div class="row">
     <div class="col m1 l3"></div>
 
@@ -44,7 +50,7 @@
             </div>
 
             <div class="col s12 m8 l8 m12 left">
-                <input id="name" type="text" class="validate" maxlength="100" lang="fa-IR">
+                <input id="name" type="text" placeholder="نام پیشنهاد دهنده:علی" class="validate" maxlength="100" lang="fa-IR">
             </div>
         </div>
 
@@ -55,7 +61,7 @@
             </div>
 
             <div class="col s12 m8 l8 m12 left">
-                <input id="family" type="text" class="validate" maxlength="100" lang="fa-IR">
+                <input id="family" type="text" class="validate" placeholder="نام خانوادگی پیشنهاد دهنده:وحیدی" maxlength="100" lang="fa-IR">
             </div>
         </div>
 
@@ -66,7 +72,7 @@
             </div>
 
             <div class="col s12 m8 l8 m12 left">
-                <input maxlength="10" id="nationalCode" type="text" class="validate"
+                <input maxlength="10" id="nationalCode" type="text" class="validate" placeholder="کد ملی: 09212678392"
                        onkeypress='return event.charCode >= 48 && event.charCode <= 57;'>
             </div>
 
@@ -79,7 +85,7 @@
             </div>
 
             <div class="col s12 m8 l8 m12 left">
-                <input maxlength="12" id="telephone" type="text" class="validate"
+                <input maxlength="12" id="telephone" type="text" class="validate" placeholder="تلفن ثابت: 02188468290"
                        onkeypress='return event.charCode >= 48 && event.charCode <= 57;'>
             </div>
 
@@ -92,7 +98,7 @@
             </div>
 
             <div class="col s12 m8 l8 m12 left">
-                <input maxlength="12" id="mobile" type="text" class="validate"
+                <input maxlength="12" id="mobile" type="text" class="validate" placeholder="تلفن همراه:09121187653"
                        onkeypress='return event.charCode >= 48 && event.charCode <= 57;'>
             </div>
 
@@ -105,7 +111,7 @@
             </div>
 
             <div class="col s12 m8 l8 m12 left">
-                <input maxlength="500" id="offerSubject" type="text" class="validate" lang="fa-IR">
+                <input maxlength="500" id="offerSubject" type="text" placeholder="موضوع" class="validate" lang="fa-IR">
             </div>
 
         </div>
@@ -117,7 +123,7 @@
             </div>
 
             <div class="col s12 m8 l8 m12 input-field left">
-                <textarea maxlength="4000" id="offerDescription" class="materialize-textarea" lang="fa-IR"></textarea>
+                <textarea maxlength="4000" id="offerDescription" placeholder="متن پیشنهاد" class="materialize-textarea" lang="fa-IR"></textarea>
             </div>
 
         </div>
@@ -129,7 +135,7 @@
             </div>
 
             <div class="col s12 m8 l8 m12 input-field left">
-                <input maxlength="100" id="email" type="email" class="validate">
+                <input maxlength="100" id="email" type="email" placeholder="ایمیل:ali@gmail.com" class="validate">
             </div>
 
         </div>
@@ -200,7 +206,7 @@
             </div>
 
             <a class="waves-effect waves-light btn"
-               onclick="offerSubmit()">ثبت پیشنهاد
+               onclick="showReview()">ثبت پیشنهاد
 
             </a>
 
@@ -233,14 +239,14 @@
     });
 
     $(document).ready(function () {
-        var id = "${hospitalId}";
-        var hospitalName = "${hospitalName}";
-
+        var hospitalName = "${hospitalImage}";
+        var webUrl = "${webUrl}";
+        var hospitalId = "${hospitalId}";
         $("#webURL").val(webUrl);
 
-        $("#hospitalUrl").attr("href",  $("#webURL").val());
+        $("#hospitalUrl").attr("href", $("#webURL").val());
 
-        $("#ddlHospital").val(id);
+        $("#ddlHospital").val(hospitalId);
         $(".brand-logo").text($("#ddlHospital option:selected").text());
         $("#imgHospital").attr("src", "/static/hospitalImage/" + hospitalName);
         loadSection();
@@ -261,6 +267,112 @@
                 ending_top: '10%',
             }
         );
+
+        $('#reviewWindow').modal({
+                dismissible: false,
+                opacity: .5,
+                in_duration: 300,
+                out_duration: 200,
+                starting_top: '10%',
+                ending_top: '10%',
+            }
+        );
+    }
+
+    function showReview() {
+
+        if (!validCaptcha()) {
+            Materialize.toast('کدامنیتی بدرستی وارد نشده است', 3000, 'info-toast');
+            $("#txtInput").focus();
+            return;
+        }
+        debugger;
+        var hospitalId = $("#ddlHospital option:selected").val();
+        var sectionId = $("#ddlSection option:selected").val();
+        var shiftId = $("#ddlShift option:selected").val();
+        var name = $("#name").val();
+        var family = $("#family").val();
+        var nationalCode = $("#nationalCode").val();
+        var tel = $("#telephone").val();
+        var mobile = $("#mobile").val();
+        var offerSubject = $("#offerSubject").val();
+        var offerDescription = $("#offerDescription").val();
+        var email = $("#email").val();
+
+        if (hospitalId == 0) {
+            $("#ddlHospital").focus();
+        } else {
+
+            var dataArray = [];
+            var dataItem = {};
+
+            dataItem["ticketId"] = 0;
+            dataItem["ticketTypeId"] = 2;
+            dataItem["hospitalId"] = hospitalId;
+            dataItem["sectionId"] = sectionId;
+            dataItem["shiftId"] = shiftId;
+            dataItem["name"] = name;
+            dataItem["family"] = family;
+            dataItem["nationalCode"] = nationalCode;
+            dataItem["tel"] = tel;
+            dataItem["mobile"] = mobile;
+            dataItem["subject"] = offerSubject;
+            dataItem["description"] = offerDescription;
+            dataItem["email"] = email;
+
+
+            if ($('input[type=file]')[0].files.length > 0) {
+                var oMyForm = new FormData();
+
+                var file_data = $('input[type=file]')[0].files[0];
+
+                oMyForm.append('file', file_data);
+                imageName = file_data.name;
+
+                $.ajax({
+                    dataType: 'json',
+                    url: "/upload/api/uploadAttachment",
+                    data: oMyForm,
+                    type: "POST",
+                    enctype: 'multipart/form-data',
+                    processData: false,
+                    contentType: false,
+                    async: false,
+                    success: function (result) {
+                        if (result == false) {
+                            Materialize.toast('خطا درانجام عملیات', 4000, 'error-toast');
+
+                        } else {
+                            dataItem["fileName"] = result.fileName;
+                            dataArray.push(dataItem);
+                            saveOffer(dataArray)
+                        }
+                    },
+                    error: function (result) {
+                        alert("error");
+                    }
+                });
+            } else {
+                dataItem["fileName"] = "";
+                dataArray.push(dataItem);
+                $.ajax({
+                    type: "POST",
+                    url: "/ticket/api/redirect",
+                    contentType: "application/json; charset=utf-8",
+                    dataType: 'json',
+                    data: JSON.stringify(dataArray),
+                    success: function (data) {
+                        debugger;
+                        if (data == false) {
+                            Materialize.toast('خطا درانجام عملیات', 4000, 'error-toast');
+                        } else {
+                            $('#alertWindow').modal('open');
+                        }
+                    }
+                });
+            }
+        }
+
     }
 
     function offerSubmit() {

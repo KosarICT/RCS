@@ -57,7 +57,7 @@
             </div>
 
             <div class="col s12 m8 l8 left">
-                <input maxlength="100" id="criticismName" type="text" class="validate" lang="fa-IR">
+                <input maxlength="100" id="criticismName" placeholder="نام:علی" type="text" class="validate" lang="fa-IR">
             </div>
 
         </div>
@@ -69,7 +69,7 @@
             </div>
 
             <div class="col s12 m8 l8 left">
-                <input maxlength="100" id="criticismFamily" type="text" class="validate" lang="fa-IR">
+                <input maxlength="100" id="criticismFamily" type="text" placeholder="نام خانوادگی:رضایی" class="validate" lang="fa-IR">
             </div>
 
         </div>
@@ -81,7 +81,7 @@
             </div>
 
             <div class="col s12 m8 l8 left">
-                <input maxlength="10" id="nationalCode" type="text" class="validate"
+                <input maxlength="10" id="nationalCode" type="text" class="validate" placeholder="کد ملی: 09212678392"
                        onkeypress='return event.charCode >= 48 && event.charCode <= 57;'>
             </div>
 
@@ -94,7 +94,7 @@
             </div>
 
             <div class="col s12 m8 l8 left">
-                <input maxlength="12" id="telephone" type="text" class="validate"
+                <input maxlength="12" id="telephone" type="text" class="validate" placeholder="تلفن ثابت: 02188468290"
                        onkeypress='return event.charCode >= 48 && event.charCode <= 57;'>
             </div>
 
@@ -107,7 +107,7 @@
             </div>
 
             <div class="col s12 m8 l8 left">
-                <input maxlength="12" id="mobile" type="text" class="validate"
+                <input maxlength="12" id="mobile" type="text" class="validate" placeholder="تلفن همراه:09121187653"
                        onkeypress='return event.charCode >= 48 && event.charCode <= 57;'>
             </div>
 
@@ -120,7 +120,7 @@
             </div>
 
             <div class="col s12 m8 l8 left">
-                <input maxlength="500" id="criticismSubject" type="text" class="validate" lang="fa-IR">
+                <input maxlength="500" id="criticismSubject" type="text" class="validate" placeholder="موضوع" lang="fa-IR">
             </div>
 
         </div>
@@ -132,7 +132,7 @@
             </div>
 
             <div class="col s12 m8 l8 left input-field" >
-                <textarea maxlength="4000" id="criticismDescription" class="materialize-textarea" lang="fa-IR"></textarea>
+                <textarea maxlength="4000" id="criticismDescription" placeholder="متن انتقاد" class="materialize-textarea" lang="fa-IR"></textarea>
             </div>
 
         </div>
@@ -144,7 +144,7 @@
             </div>
 
             <div class="col s12 m8 l8 left" class="input-field">
-                <input maxlength="100" id="criticismEmail" type="email" class="validate">
+                <input maxlength="100" id="criticismEmail" placeholder="ایمیل:ali@gmail.com" type="email" class="validate">
             </div>
 
         </div>
@@ -251,14 +251,14 @@
     });
 
     $(document).ready(function () {
-        var id = "${hospitalId}";
-        var hospitalName = "${hospitalName}";
-
+        var hospitalName = "${hospitalImage}";
+        var webUrl = "${webUrl}";
+        var hospitalId = "${hospitalId}";
         $("#webURL").val(webUrl);
 
-        $("#hospitalUrl").attr("href",  $("#webURL").val());
+        $("#hospitalUrl").attr("href", $("#webURL").val());
 
-        $("#ddlHospital").val(id);
+        $("#ddlHospital").val(hospitalId);
         $(".brand-logo").text($("#ddlHospital option:selected").text());
         $("#imgHospital").attr("src", "/static/hospitalImage/" + hospitalName);
         ddlHospitalChange();

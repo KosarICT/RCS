@@ -7,7 +7,7 @@ import javax.persistence.*;
  */
 @Entity
 public class NotificationUserSeen {
-    private long notificationUserSeenId;
+        private long notificationUserSeenId;
     private Notification notification;
     private Users user;
 

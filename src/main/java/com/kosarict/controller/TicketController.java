@@ -10,9 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.ServletContext;
 import java.io.File;
@@ -258,6 +260,43 @@ public class TicketController {
             return String.valueOf(false);
         }
     }
+
+    @RequestMapping(value = "/ticket/api/redirect", method = RequestMethod.POST)
+    public
+    @ResponseBody
+    ModelAndView redirect(@RequestBody String model){
+        JSONArray jsonArray = new JSONArray(model);
+        JSONObject jsonObject = jsonArray.getJSONObject(0);
+
+        long ticketId = jsonObject.getLong("ticketId");
+        Integer ticketTypeId = jsonObject.getInt("ticketTypeId");
+        int hospitalId = jsonObject.getInt("hospitalId");
+        int sectionId = jsonObject.getInt("sectionId");
+        String shiftId = "0";
+        if (ticketTypeId != Constant.Offer)
+            shiftId = jsonObject.getString("shiftId").matches("") ? "0" : jsonObject.getString("shiftId");
+        Integer compainer = 0;
+
+        String sickName = jsonObject.getString("name");
+        String sickFamily = jsonObject.getString("family");
+        String sickNationalCode = jsonObject.getString("nationalCode");
+        String sickTel = jsonObject.getString("tel");
+        String sickMobile = jsonObject.getString("mobile");
+
+        String complainSubject = jsonObject.getString("subject");
+        String complainDescription = jsonObject.getString("description");
+        String complainEmail = jsonObject.getString("email");
+        String fileName = jsonObject.getString("fileName");
+
+        ModelAndView modelAndView = new ModelAndView(new RedirectView("/site/review"));
+        modelAndView.addObject("sickName", sickName);
+        modelAndView.addObject("sickFamily", sickFamily);
+
+
+        return modelAndView;
+
+    }
+
 
     @RequestMapping(value = "/ticket/api/findTicketByTicketId", method = RequestMethod.POST)
     public

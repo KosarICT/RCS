@@ -79,12 +79,20 @@
 
             <div class="col s12 m6 l6 right">
                 <div class="card blue-grey darken-1">
-                    <div class="card-content white-text">
-                        <span class="card-title">پیگیری</span>
-                        <p>پیگیری از وضعیت درخواست های ثبت شده شما</p>
+                    <div class="row">
+                        <div class="card-content white-text">
+                            <span class="card-title">کد پیگیری:</span>
+                        </div>
+
+                        <div style="width: 100%">
+                            <input maxlength="100" id="txtTrackingCode" type="text" class="validate">
+                        </div>
+
                     </div>
-                    <div class="card-action">
-                        <a href="javascript:window.location=createDynamicURL('follow');">سیستم پیگیری</a>
+                    <div class="row">
+                        <div class="col s12 m4 l4 right marginTop"></div>
+
+                        <a class="waves-effect waves-light btn">جستجو                        </a>
                     </div>
                 </div>
             </div>

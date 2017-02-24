@@ -58,7 +58,7 @@
             </div>
 
             <div class="col s12 m8 l8 left">
-                <input maxlength="100" id="appreciationName" type="text" class="validate" lang="fa-IR">
+                <input maxlength="100" id="appreciationName" placeholder="نام:علی" type="text" class="validate" lang="fa-IR">
             </div>
 
         </div>
@@ -70,7 +70,7 @@
             </div>
 
             <div class="col s12 m8 l8 left">
-                <input maxlength="100" id="appreciationFamily" type="text" class="validate" lang="fa-IR">
+                <input maxlength="100" id="appreciationFamily" placeholder="نام خانوادگی:رضایی" type="text" class="validate" lang="fa-IR">
             </div>
 
         </div>
@@ -82,7 +82,7 @@
             </div>
 
             <div class="col s12 m8 l8 left">
-                <input maxlength="10" id="nationalCode" type="text" class="validate"
+                <input maxlength="10" id="nationalCode" placeholder="کد ملی: 09212678392" type="text" class="validate"
                        onkeypress='return event.charCode >= 48 && event.charCode <= 57;'>
             </div>
 
@@ -95,7 +95,7 @@
             </div>
 
             <div class="col s12 m8 l8 left">
-                <input maxlength="12" id="telephone" type="text" class="validate"
+                <input maxlength="12" id="telephone" type="text" class="validate" placeholder="تلفن ثابت: 02188468290"
                        onkeypress='return event.charCode >= 48 && event.charCode <= 57;'>
             </div>
 
@@ -108,7 +108,7 @@
             </div>
 
             <div class="col s12 m8 l8 left">
-                <input maxlength="12" id="mobile" type="text" class="validate"
+                <input maxlength="12" id="mobile" type="text" class="validate" placeholder="تلفن همراه:09121187653"
                        onkeypress='return event.charCode >= 48 && event.charCode <= 57;'>
             </div>
 
@@ -122,7 +122,7 @@
 
             <div class="col s12 m8 l8 left">
                 <input maxlength="100" id="appreciationUserName" type="text" class="validate persian-digit"
-                       lang="fa-IR"/>
+                       placeholder="نام پرسنل: احمد" lang="fa-IR"/>
             </div>
 
         </div>
@@ -134,7 +134,7 @@
             </div>
 
             <div class="col s12 m8 l8 left">
-                <input maxlength="100" id="appreciationUserFamily" type="text" class="translate" lang="fa-IR"/>
+                <input maxlength="100" id="appreciationUserFamily" placeholder="نام خانوادگی پرسنل: شریفی" type="text" class="translate" lang="fa-IR"/>
             </div>
 
         </div>
@@ -146,7 +146,7 @@
             </div>
 
             <div class="col s12 m8 l8 left">
-                <input maxlength="500" id="appreciationSubject" type="text" class="translate" lang="fa-IR"/>
+                <input maxlength="500" id="appreciationSubject" type="text" placeholder="موضوع" class="translate" lang="fa-IR"/>
             </div>
 
         </div>
@@ -158,7 +158,7 @@
             </div>
 
             <div class="col s12 m8 l8 left" class="input-field">
-                <textarea maxlength="4000" id="appreciationDescription" class="materialize-textarea"
+                <textarea maxlength="4000" id="appreciationDescription" placeholder="متن قدردانی" class="materialize-textarea"
                           lang="fa-IR"></textarea>
             </div>
 
@@ -171,7 +171,7 @@
             </div>
 
             <div class="col s12 m8 l8 left" class="input-field">
-                <input maxlength="100" id="appreciationEmail" type="email" class="validate">
+                <input maxlength="100" id="appreciationEmail" type="email" placeholder="ایمیل:ali@gmail.com" class="validate">
             </div>
 
         </div>
@@ -278,14 +278,14 @@
     });
 
     $(document).ready(function () {
-        var id = "${hospitalId}";
-        var hospitalName = "${hospitalName}";
-
+        var hospitalName = "${hospitalImage}";
+        var webUrl = "${webUrl}";
+        var hospitalId = "${hospitalId}";
         $("#webURL").val(webUrl);
 
-        $("#hospitalUrl").attr("href",  $("#webURL").val());
+        $("#hospitalUrl").attr("href", $("#webURL").val());
 
-        $("#ddlHospital").val(id);
+        $("#ddlHospital").val(hospitalId);
         $(".brand-logo").text($("#ddlHospital option:selected").text());
         $("#imgHospital").attr("src", "/static/hospitalImage/" + hospitalName);
         ddlHospitalChange();
