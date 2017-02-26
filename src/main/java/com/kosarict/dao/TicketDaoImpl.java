@@ -1,6 +1,7 @@
 package com.kosarict.dao;
 
 import com.kosarict.entity.*;
+import com.kosarict.model.Constant;
 import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Isolation;
@@ -57,6 +58,32 @@ public class TicketDaoImpl implements TicketDao {
                 "JOIN TicketType ON Ticket.TicketType_Id = TicketType.TicketType_Id \n" +
                 "WHERE  \n" +
                 "\tTicket.TicketType_Id = " + ticketTypeId + " AND  \n" +
+                "\tTicketErrand.AssignedUser_Id = " + userId + " AND  \n" +
+                "\tTicketStatus.TicketStatus_Id != 3 \n" +
+                "ORDER BY  \n" +
+                "\tTicket.Ticket_Id DESC";
+
+        List query = session.createSQLQuery(queryString).addEntity(Ticket.class).list();
+
+
+        return query;
+    }
+
+    @Transactional(isolation = Isolation.SERIALIZABLE)
+    @Override
+    public List<Ticket> getTicketList(short ticketTypeId, int userId, int hospitalId) {
+        Session session = entityManager.unwrap(Session.class);
+
+        String queryString = "Select distinct \n" +
+                "\tTicket.* \n" +
+                "FROM  \n" +
+                "\tTicket \n" +
+                "JOIN TicketErrand ON Ticket.Ticket_Id = TicketErrand.Ticket_Id\n" +
+                "JOIN TicketStatus ON Ticket.TicketStatus_Id = TicketStatus.TicketStatus_Id \n" +
+                "JOIN TicketType ON Ticket.TicketType_Id = TicketType.TicketType_Id \n" +
+                "WHERE  \n" +
+                "\tTicket.TicketType_Id = " + ticketTypeId + " AND  \n" +
+                "\tTicket.Hospital_Id = " + hospitalId + " AND  \n" +
                 "\tTicketErrand.AssignedUser_Id = " + userId + " AND  \n" +
                 "\tTicketStatus.TicketStatus_Id != 3 \n" +
                 "ORDER BY  \n" +
@@ -193,5 +220,71 @@ public class TicketDaoImpl implements TicketDao {
         query.setParameter("finishStatus", (short) 3);
 
         return query.getResultList();
+    }
+
+    @Transactional(isolation = Isolation.SERIALIZABLE)
+    @Override
+    public int getTicketErrandedCount(int userId, int ticketTypeId) {
+        Session session = entityManager.unwrap(Session.class);
+
+        String queryString = "SELECT\n" +
+                "\tTicket.*\n" +
+                "FROM\n" +
+                "\tTicket\n" +
+                "JOIN\n" +
+                "\tTicketErrand ON Ticket.Ticket_Id = TicketErrand.Ticket_Id\n" +
+                "WHERE\n" +
+                "\tTicket.Enable = 1 AND\n" +
+                "\tTicket.TicketType_Id = " + ticketTypeId + " AND\n" +
+                "\tTicketErrand.AssignedUser_Id = " + userId + " AND\n" +
+                "\tTicket.TicketStatus_Id = 2";
+
+        List query = session.createSQLQuery(queryString).addEntity(Ticket.class).list();
+
+        return query.size();
+    }
+
+    @Transactional(isolation = Isolation.SERIALIZABLE)
+    @Override
+    public int getReadTicket(int userId, int ticketTypeId) {
+        Session session = entityManager.unwrap(Session.class);
+
+        String queryString = "SELECT\n" +
+                "\tTicket.*\n" +
+                "FROM\n" +
+                "\tTicket\n" +
+                "JOIN\n" +
+                "\tTicketErrand ON Ticket.Ticket_Id = TicketErrand.Ticket_Id\n" +
+                "WHERE\n" +
+                "\tTicket.Enable = 1 AND\n" +
+                "\tTicket.TicketType_Id = " + ticketTypeId + " AND\n" +
+                "\tTicketErrand.AssignedUser_Id = " + userId + " AND\n" +
+                "\tTicket.TicketStatus_Id = 4";
+
+        List query = session.createSQLQuery(queryString).addEntity(Ticket.class).list();
+
+        return query.size();
+    }
+
+    @Transactional(isolation = Isolation.SERIALIZABLE)
+    @Override
+    public int getUnReadTicket(int userId, int ticketTypeId) {
+        Session session = entityManager.unwrap(Session.class);
+
+        String queryString = "SELECT\n" +
+                "\tTicket.*\n" +
+                "FROM\n" +
+                "\tTicket\n" +
+                "JOIN\n" +
+                "\tTicketErrand ON Ticket.Ticket_Id = TicketErrand.Ticket_Id\n" +
+                "WHERE\n" +
+                "\tTicket.Enable = 1 AND\n" +
+                "\tTicket.TicketType_Id = " + ticketTypeId + " AND\n" +
+                "\tTicketErrand.AssignedUser_Id = " + userId + " AND\n" +
+                "\tTicket.TicketStatus_Id = 1";
+
+        List query = session.createSQLQuery(queryString).addEntity(Ticket.class).list();
+
+        return query.size();
     }
 }

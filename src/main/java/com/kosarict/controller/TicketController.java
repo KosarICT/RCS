@@ -14,6 +14,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.ServletContext;
@@ -262,9 +263,7 @@ public class TicketController {
     }
 
     @RequestMapping(value = "/ticket/api/redirect", method = RequestMethod.POST)
-    public
-    @ResponseBody
-    ModelAndView redirect(@RequestBody String model){
+    public String redirect(@RequestBody String model, RedirectAttributes rattrs){
         JSONArray jsonArray = new JSONArray(model);
         JSONObject jsonObject = jsonArray.getJSONObject(0);
 
@@ -288,12 +287,15 @@ public class TicketController {
         String complainEmail = jsonObject.getString("email");
         String fileName = jsonObject.getString("fileName");
 
-        ModelAndView modelAndView = new ModelAndView(new RedirectView("/site/review"));
+        ModelAndView modelAndView = new ModelAndView("redirect:/1/review");
         modelAndView.addObject("sickName", sickName);
         modelAndView.addObject("sickFamily", sickFamily);
 
+        rattrs.addAttribute("string", "this will be converted into string, if not already");
+        rattrs.addFlashAttribute("pojo", "this can be POJO as it will be stored on session during the redirect");
+        return "redirect:/1/review";
 
-        return modelAndView;
+        //return modelAndView;
 
     }
 
@@ -364,6 +366,12 @@ public class TicketController {
             ticketJson.put("trackingCode", ticket.getTrackingCode());
             ticketJson.put("ticketAttachmentList", ticketAttachmentList);
 
+            TicketStatus ticketStatus = ticketStatusDao.findTicketStatusById((short) Constant.IsRead);
+
+            ticket.setTicketStatus(ticketStatus);
+
+            ticketDao.saveTicket(ticket);
+
             Users users = getCurrentUser();
             ticketUserSeenDao.deleteTicketUserSeen(id, users.getUserId());
             return ticketJson.toString();
@@ -371,6 +379,8 @@ public class TicketController {
             return String.valueOf(false);
         }
     }
+
+
 
     private Users getCurrentUser() {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();

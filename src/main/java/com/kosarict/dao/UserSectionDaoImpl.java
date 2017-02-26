@@ -62,6 +62,18 @@ public class UserSectionDaoImpl implements UserSectionDao {
         return query.getResultList();
     }
 
+
+    @Override
+    public List<UsersHospitalSection> getUserSectionByHospitalId(int hospitalId) {
+        String queryString = "SELECT us FROM UsersHospitalSection us " +
+                "WHERE us.hospitalSection.hospital.hospitalId =:hospitalId ";
+
+        Query query = entityManager.createQuery(queryString);
+        query.setParameter("hospitalId",hospitalId);
+
+        return query.getResultList();
+    }
+
     @Transactional(isolation = Isolation.SERIALIZABLE)
     @Override
     public int saveUserHospitalSection(UsersHospitalSection userHospitalSectionModel) {

@@ -50,7 +50,7 @@
             </div>
 
             <div class="col s12 m8 l8 m12 left">
-                <input id="name" type="text" placeholder="نام پیشنهاد دهنده:علی" class="validate" maxlength="100" lang="fa-IR">
+                <input id="name" type="text" placeholder="نام پیشنهاد دهنده:علی"  maxlength="100" lang="fa-IR">
             </div>
         </div>
 
@@ -61,7 +61,7 @@
             </div>
 
             <div class="col s12 m8 l8 m12 left">
-                <input id="family" type="text" class="validate" placeholder="نام خانوادگی پیشنهاد دهنده:وحیدی" maxlength="100" lang="fa-IR">
+                <input id="family" type="text"  placeholder="نام خانوادگی پیشنهاد دهنده:وحیدی" maxlength="100" lang="fa-IR">
             </div>
         </div>
 
@@ -72,7 +72,7 @@
             </div>
 
             <div class="col s12 m8 l8 m12 left">
-                <input maxlength="10" id="nationalCode" type="text" class="validate" placeholder="کد ملی: 09212678392"
+                <input maxlength="10" id="nationalCode" type="text"  placeholder="کد ملی: 09212678392"
                        onkeypress='return event.charCode >= 48 && event.charCode <= 57;'>
             </div>
 
@@ -85,7 +85,7 @@
             </div>
 
             <div class="col s12 m8 l8 m12 left">
-                <input maxlength="12" id="telephone" type="text" class="validate" placeholder="تلفن ثابت: 02188468290"
+                <input maxlength="12" id="telephone" type="text"  placeholder="تلفن ثابت: 02188468290"
                        onkeypress='return event.charCode >= 48 && event.charCode <= 57;'>
             </div>
 
@@ -98,7 +98,7 @@
             </div>
 
             <div class="col s12 m8 l8 m12 left">
-                <input maxlength="12" id="mobile" type="text" class="validate" placeholder="تلفن همراه:09121187653"
+                <input maxlength="12" id="mobile" type="text"  placeholder="تلفن همراه:09121187653"
                        onkeypress='return event.charCode >= 48 && event.charCode <= 57;'>
             </div>
 
@@ -111,7 +111,7 @@
             </div>
 
             <div class="col s12 m8 l8 m12 left">
-                <input maxlength="500" id="offerSubject" type="text" placeholder="موضوع" class="validate" lang="fa-IR">
+                <input maxlength="500" id="offerSubject" type="text" placeholder="موضوع"  lang="fa-IR">
             </div>
 
         </div>
@@ -135,7 +135,7 @@
             </div>
 
             <div class="col s12 m8 l8 m12 input-field left">
-                <input maxlength="100" id="email" type="email" placeholder="ایمیل:ali@gmail.com" class="validate">
+                <input maxlength="100" id="email" type="email" placeholder="ایمیل:ali@gmail.com" >
             </div>
 
         </div>

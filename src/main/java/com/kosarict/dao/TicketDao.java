@@ -17,6 +17,8 @@ public interface TicketDao {
 
     List<Ticket> getTicketListByTicketTypeId(short ticketTypeId, int userId);
 
+    List<Ticket> getTicketList(short ticketTypeId, int userId, int hospitalId);
+
     long saveTicket(Ticket ticketModel);
 
     Ticket findTicketById(long ticketId);
@@ -34,4 +36,10 @@ public interface TicketDao {
     List<Ticket> getTop10Ticket(Users users);
 
     List<Ticket> getTicketArchiveList();
+
+    int getTicketErrandedCount(int userId, int ticketTypeId);
+
+    int getReadTicket(int userId, int ticketTypeId);
+
+    int getUnReadTicket(int userId, int ticketTypeId);
 }

@@ -213,40 +213,31 @@ public class WSMobile {
             String imei = URLDecoder.decode(parameter.get("IMEI").get(0), "UTF-8");
 
             Users user = userDao.findUserByUserName(userName);
-            Request request = requestDao.findRequestByUserIdAndHospitalId(user.getUserId(), Integer.parseInt(hospitalId));
-
-            List<Tab> tabList = tabDao.getAllMobileTabListByUserId(user.getUserId());
-
-            JSONArray tabArray = new JSONArray();
-            JSONArray userArray = new JSONArray();
 
             if (user != null) {
+                Request request = requestDao.findRequestByUserIdAndHospitalId(user.getUserId(), Integer.parseInt(hospitalId));
+                Hospital hospital = hospitalDao.findHospitalById(Integer.parseInt(hospitalId));
+
+                List<UserRole> role = userRoleDao.getUserRole(user.getUserId());
+
+                JSONArray tabArray = new JSONArray();
+                JSONArray userArray = new JSONArray();
+
+
                 if (user.getPassword().matches(password) && request.getRequestStatus().getRequestStatusId() == Constant.EnableStatus && imei.matches(user.getImei())) {
                     jsonObject.put("status", "ok");
                     jsonObject.put("description", "ok");
                     jsonObject.put("userServerId", user.getUserId());
 
-/*                    for (Tab tab : tabList) {
-                        JSONObject dataObject = new JSONObject();
-
-                        int countOfNew = tabDao.getNumberOfNew(tab.getTabId(), user.getUserId());
-
-                        dataObject.put("tabId", tab.getTabId());
-                        dataObject.put("title", URLEncoder.encode(tab.getTitle()));
-                        dataObject.put("url", tab.getUrl());
-                        dataObject.put("count", countOfNew);
-
-                        tabArray.put(dataObject);
-                    }*/
 
                     jsonObject.put("tabList", tabArray);
 
                     JSONObject userObject = new JSONObject();
                     userObject.put("fullName", URLEncoder.encode(user.getFirstName() + " " + user.getLastName(), "UTF-8"));
                     userObject.put("imageUrl", Constant.userImageUrl + user.getImageName());
-                    userObject.put("role", URLEncoder.encode(getSectionList(user).get(0).getSection().getTitle()
-                            + " "
-                            + getCurrentHospital(user).get(0).getHospitalSection().getHospital().getName(), "UTF-8"));
+                    userObject.put("role", URLEncoder.encode(
+                            role.get(0).getRole().getName() + " "
+                                    + hospital.getName(), "UTF-8"));
 
                     userArray.put(userObject);
 
@@ -300,6 +291,7 @@ public class WSMobile {
             Map<String, List<String>> parameter = splitQuery(url);
 
             String ticketTypeId = URLDecoder.decode(parameter.get("TicketTypeId").get(0), "UTF-8");
+            String hospitalId = URLDecoder.decode(parameter.get("HospitalId").get(0), "UTF-8");
             String imei = URLDecoder.decode(parameter.get("IMEI").get(0), "UTF-8");
 
             Users user = userDao.findUserByImei(imei);
@@ -312,12 +304,23 @@ public class WSMobile {
                     if (ticketTypeId.matches("6")) {
                         tickets = ticketDao.getTicketArchiveList();
                     } else {
-                        tickets = ticketDao.getTicketListByTicketTypeId(Short.parseShort(ticketTypeId), user.getUserId());
+                        tickets = ticketDao.getTicketList(Short.parseShort(ticketTypeId), user.getUserId(), Integer.parseInt(hospitalId));
                     }
                     jsonObject.put("status", "ok");
 
+
+                    int ticketUnReadCount = ticketDao.getUnReadTicket(user.getUserId(), Integer.parseInt(ticketTypeId));
+                    int ticketErrandCount = ticketDao.getTicketErrandedCount(user.getUserId(), Integer.parseInt(ticketTypeId));
+                    int ticketReadCount = ticketDao.getReadTicket(user.getUserId(), Integer.parseInt(ticketTypeId));
+
+
+                    jsonObject.put("unreadCount", ticketUnReadCount);
+                    jsonObject.put("errandCount", ticketErrandCount);
+                    jsonObject.put("readCount", ticketReadCount);
+
                     JSONObject jsonItem = new JSONObject();
                     JSONArray arrayItem = new JSONArray();
+
 
                     for (Ticket ticket : tickets) {
 
@@ -328,6 +331,7 @@ public class WSMobile {
                         jsonObjectItem.put("trackingCode", ticket.getTrackingCode());
                         jsonObjectItem.put("sendTypeId", ticket.getSendType().getSendTypeId());
                         jsonObjectItem.put("subject", URLEncoder.encode(ticket.getSubject(), "UTF-8"));
+                        jsonObjectItem.put("responceDay", ticket.getComplaintType().getResponceTime());
 
                         TicketErrand ticketErrand = getErrand(ticket.getTicketId(), user.getUserId());
 
@@ -460,6 +464,8 @@ public class WSMobile {
                     } else {
                         jsonObject.put("status", "900");
                         jsonObject.put("description", "Ticket not found!!!");
+
+                        jsonArray.put(jsonObject);
                     }
 
                     return jsonArray.toString();
@@ -518,12 +524,111 @@ public class WSMobile {
 
                     jsonObject.put("status", "ok");
                     jsonObject.put("ticket_Id", ticket.getTicketId());
-/*                    jsonObject.put("ticketTypeId", ticket.getTicketType().getTicketTypeId());
+
+                    jsonObject.put("trackingCode", ticket.getTrackingCode());
+                    jsonObject.put("name", URLEncoder.encode(ticket.getFirstName(), "UTF-8") + " " + URLEncoder.encode(ticket.getLastName(), "UTF-8") + "-" + URLEncoder.encode(ticket.getComplainant().getTitle(), "UTF-8"));
+                    jsonObject.put("mobile", ticket.getMobile());
+                    jsonObject.put("nationalCode", ticket.getNationalCode());
+                    jsonObject.put("date", ticket.getSubmitDate());
+                    jsonObject.put("description", URLEncoder.encode(ticket.getDescription(), "UTF-8"));
+                    jsonObject.put("sendType", URLEncoder.encode(ticket.getSendType().getTitle(), "UTF-8"));
+                    jsonObject.put("sendTypeId", ticket.getSendType().getSendTypeId());
+                    jsonObject.put("ticketAttachmentList", ticketAttachmentList);
+                    jsonObject.put("subject", URLEncoder.encode(ticket.getSubject(), "UTF-8"));
+
+                    List<TicketErrand> ticketErrandList = ticketErrandDao.getTicketErrandListByTicketId(Long.parseLong(ticketId));
+
+
+                    JSONArray errandArray = new JSONArray();
+
+                    for (TicketErrand ticketErrand : ticketErrandList) {
+
+                        if(ticketErrand.getCreateUser() == null){
+                            continue;
+                        }
+                        JSONObject object = new JSONObject();
+
+                        List<UserRole> role = userRoleDao.getUserRole(ticketErrand.getCreateUser().getUserId());
+
+                        object.put("fullName", URLEncoder.encode(ticketErrand.getCreateUser().getFirstName() + " " + ticketErrand.getCreateUser().getLastName() + "-" + role.get(0).getRole().getName(), "UTF-8"));
+                        object.put("description", URLEncoder.encode(ticketErrand.getDescription(), "UTF-8"));
+                        object.put("date", ticketErrand.getSubmitDate());
+
+                        errandArray.put(object);
+                    }
+
+                    jsonObject.put("ticketErrand", errandArray);
+
+
+                    TicketStatus ticketStatus = ticketStatusDao.findTicketStatusById((short) Constant.IsRead);
+
+                    ticket.setTicketStatus(ticketStatus);
+
+                    ticketDao.saveTicket(ticket);
+
+                    jsonArray.put(jsonObject);
+
+                    return jsonArray.toString();
+                } else {
+                    jsonObject.put("status", "101");
+                    jsonObject.put("description", "Session failed");
+
+                    jsonArray.put(jsonObject);
+
+                    return jsonArray.toString();
+                }
+            } else {
+                jsonObject.put("status", "100");
+                jsonObject.put("description", "Session failed");
+
+                jsonArray.put(jsonObject);
+
+                return jsonArray.toString();
+            }
+
+        } catch (Exception ex) {
+            jsonObject.put("status", "error");
+            jsonObject.put("description", ex.toString());
+
+            jsonArray.put(jsonObject);
+
+            return jsonArray.toString();
+        }
+    }
+
+
+    /**
+     * get all ticket info
+     */
+    @RequestMapping(value = "ws/api/getTicketDescription", method = RequestMethod.POST)
+    public
+    @ResponseBody
+    String getTicketDescription(@RequestBody String model) {
+        JSONArray jsonArray = new JSONArray();
+        JSONObject jsonObject = new JSONObject();
+
+        try {
+            URL url = new URL(Constant.CHECK_USER_URL + model);
+
+            Map<String, List<String>> parameter = splitQuery(url);
+
+            String ticketId = URLDecoder.decode(parameter.get("TicketId").get(0), "UTF-8");
+            String imei = URLDecoder.decode(parameter.get("IMEI").get(0), "UTF-8");
+
+            Users user = userDao.findUserByImei(imei);
+
+            if (checkUserSessionIsActive(user)) {
+                if (checkUserImei(user, imei)) {
+                    Ticket ticket = ticketDao.findTicketById(Long.parseLong(ticketId));
+                    List<TicketAttachment> ticketAttachmentList = ticketAttachmentDao.getTicketAttachmentListByTicketId(Long.parseLong(ticketId));
+
+                    jsonObject.put("status", "ok");
+                    jsonObject.put("ticket_Id", ticket.getTicketId());
+                    jsonObject.put("ticketTypeId", ticket.getTicketType().getTicketTypeId());
                     jsonObject.put("ticketTypeTitle", URLEncoder.encode(ticket.getTicketType().getTitle(), "UTF-8"));
                     jsonObject.put("hospitalName", URLEncoder.encode(ticket.getHospital().getName(), "UTF-8"));
                     jsonObject.put("hospitalId", ticket.getHospital().getHospitalId());
                     jsonObject.put("sectionTitle", URLEncoder.encode(ticket.getSection().getTitle(), "UTF-8"));
-
 
 
                     jsonObject.put("phoneNumber", ticket.getPhoneNumber());
@@ -535,7 +640,7 @@ public class WSMobile {
                     jsonObject.put("email", ticket.getEmail());
                     jsonObject.put("trackingCode", ticket.getTrackingCode());
 
-                    jsonObject.put("statusId", ticket.getTicketStatus().getTicketStatusId());*/
+                    jsonObject.put("statusId", ticket.getTicketStatus().getTicketStatusId());
 
                     jsonObject.put("trackingCode", ticket.getTrackingCode());
                     jsonObject.put("name", URLEncoder.encode(ticket.getFirstName(), "UTF-8") + " " + URLEncoder.encode(ticket.getLastName(), "UTF-8") + "-" + ticket.getComplainant().getTitle());
@@ -548,7 +653,7 @@ public class WSMobile {
                     jsonObject.put("ticketAttachmentList", ticketAttachmentList);
                     jsonObject.put("subject", URLEncoder.encode(ticket.getSubject(), "UTF-8"));
 
-/*                    if (ticket.getTicketType().getTicketTypeId() == Constant.Complaint) {
+                    if (ticket.getTicketType().getTicketTypeId() == Constant.Complaint) {
                         jsonObject.put("complaintTypeTitle", URLEncoder.encode(ticket.getComplaintType().getTitle(), "UTF-8"));
                         jsonObject.put("complainantTitle", URLEncoder.encode(ticket.getComplainant().getTitle(), "UTF-8"));
 
@@ -574,7 +679,70 @@ public class WSMobile {
 
                     List<TicketErrand> ticketErrandList = ticketErrandDao.getTicketErrandListByTicketId(Long.parseLong(ticketId));
 
-                    jsonObject.put("ticketErrand", ticketErrandList);*/
+                    jsonObject.put("ticketErrand", ticketErrandList);
+
+
+                    jsonArray.put(jsonObject);
+
+                    return jsonArray.toString();
+                } else {
+                    jsonObject.put("status", "101");
+                    jsonObject.put("description", "Session failed");
+
+                    jsonArray.put(jsonObject);
+
+                    return jsonArray.toString();
+                }
+            } else {
+                jsonObject.put("status", "100");
+                jsonObject.put("description", "Session failed");
+
+                jsonArray.put(jsonObject);
+
+                return jsonArray.toString();
+            }
+
+        } catch (Exception ex) {
+            jsonObject.put("status", "error");
+            jsonObject.put("description", ex.toString());
+
+            jsonArray.put(jsonObject);
+
+            return jsonArray.toString();
+        }
+    }
+
+
+    /**
+     * set answer for ticket
+     */
+    @RequestMapping(value = "ws/api/setTicketAnswer", method = RequestMethod.POST)
+    public
+    @ResponseBody
+    String setTicketAnswer(@RequestBody String model) {
+        JSONArray jsonArray = new JSONArray();
+        JSONObject jsonObject = new JSONObject();
+
+        try {
+            URL url = new URL(Constant.CHECK_USER_URL + model);
+
+            Map<String, List<String>> parameter = splitQuery(url);
+
+            String ticketId = URLDecoder.decode(parameter.get("TicketId").get(0), "UTF-8");
+            String Answer = URLDecoder.decode(parameter.get("Answer").get(0), "UTF-8");
+            String imei = URLDecoder.decode(parameter.get("IMEI").get(0), "UTF-8");
+
+            Users user = userDao.findUserByImei(imei);
+
+            if (checkUserSessionIsActive(user)) {
+                if (checkUserImei(user, imei)) {
+                    Ticket ticket = ticketDao.findTicketById(Long.parseLong(ticketId));
+
+                    ticket.setAnswer(Answer);
+
+                    ticketDao.saveTicket(ticket);
+
+                    jsonObject.put("status", "ok");
 
 
                     jsonArray.put(jsonObject);
@@ -790,10 +958,11 @@ public class WSMobile {
 
             Map<String, List<String>> parameter = splitQuery(url);
 
-            String ticketId = URLDecoder.decode(parameter.get("TicketId").get(0), "UTF-8");
-            String userList = URLDecoder.decode(parameter.get("UserList").get(0), "UTF-8");
+            String errandArray = URLDecoder.decode(parameter.get("ErrandArray").get(0), "UTF-8");
+            String userList = URLDecoder.decode(parameter.get("UserArray").get(0), "UTF-8");
             String description = URLDecoder.decode(parameter.get("Description").get(0), "UTF-8");
             String imei = URLDecoder.decode(parameter.get("IMEI").get(0), "UTF-8");
+            String ticketId = URLDecoder.decode(parameter.get("TicketId").get(0), "UTF-8");
 
             Users user = userDao.findUserByImei(imei);
 
@@ -802,16 +971,23 @@ public class WSMobile {
                 if (checkUserImei(user, imei)) {
 
                     Ticket ticket = ticketDao.findTicketById(Long.parseLong(ticketId));
+
+                    Calendar calendar = Calendar.getInstance();
                     PersianCalendar persianCalendar = new PersianCalendar();
-                    String currentDate = persianCalendar.getIranianSimpleDate();
+                    String currentDate = persianCalendar.getIranianSimpleDate() + " " + calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE);
 
-                    String[] assignedUser = userList.split("_");
+                    JSONArray errandJsonArray = new JSONArray(errandArray);
 
-                    for (int i = 1; i < assignedUser.length; i++) {
+                    for (int i = 0; i < errandJsonArray.length(); i++) {
+                        JSONObject object = errandJsonArray.getJSONObject(i);
 
-                        int userId = Integer.parseInt(assignedUser[i]);
+                        int userId = Integer.parseInt(object.getString("id"));
 
                         Users users = userDao.findUserById(userId);
+
+                        if(users.getUserId() == user.getUserId()){
+                            continue;
+                        }
 
                         TicketErrand ticketErrand = new TicketErrand();
                         ticketErrand.setTicket(ticket);
@@ -819,6 +995,31 @@ public class WSMobile {
                         ticketErrand.setCreateUser(user);
                         ticketErrand.setSubmitDate(currentDate);
                         ticketErrand.setDescription(description);
+                        ticketErrand.setView(true);
+
+                        ticketErrandDao.saveTicketErrand(ticketErrand);
+                    }
+
+                    JSONArray userJsonArray = new JSONArray(userList);
+
+                    for (int i = 0; i < userJsonArray.length(); i++) {
+                        JSONObject object = userJsonArray.getJSONObject(i);
+
+                        int userId = Integer.parseInt(object.getString("id"));
+
+                        Users users = userDao.findUserById(userId);
+
+                        if(users.getUserId() == user.getUserId()){
+                            continue;
+                        }
+
+                        TicketErrand ticketErrand = new TicketErrand();
+                        ticketErrand.setTicket(ticket);
+                        ticketErrand.setAssignedUser(users);
+                        ticketErrand.setCreateUser(user);
+                        ticketErrand.setSubmitDate(currentDate);
+                        ticketErrand.setDescription(description);
+                        ticketErrand.setView(false);
 
                         ticketErrandDao.saveTicketErrand(ticketErrand);
                     }
@@ -829,6 +1030,81 @@ public class WSMobile {
                     ticketDao.saveTicket(ticket);
 
                     jsonObject.put("status", "ok");
+                    jsonArray.put(jsonObject);
+
+                    return jsonArray.toString();
+                } else {
+                    jsonObject.put("status", "101");
+                    jsonObject.put("description", "Session failed");
+
+                    jsonArray.put(jsonObject);
+
+                    return jsonArray.toString();
+                }
+            } else {
+                jsonObject.put("status", "100");
+                jsonObject.put("description", "Session failed");
+
+                jsonArray.put(jsonObject);
+
+                return jsonArray.toString();
+            }
+        } catch (Exception ex) {
+            jsonObject.put("status", "error");
+            jsonObject.put("description", ex.toString());
+
+            jsonArray.put(jsonObject);
+
+            return jsonArray.toString();
+        }
+    }
+
+
+    /***/
+    @RequestMapping(value = "ws/api/getSectionAndUser", method = RequestMethod.POST)
+    public
+    @ResponseBody
+    String getSectionAndUser(@RequestBody String model) {
+        JSONArray jsonArray = new JSONArray();
+        JSONObject jsonObject = new JSONObject();
+
+        try {
+            URL url = new URL(Constant.CHECK_USER_URL + model);
+
+            Map<String, List<String>> parameter = splitQuery(url);
+
+            String hospitalId = URLDecoder.decode(parameter.get("HospitalId").get(0), "UTF-8");
+            String imei = URLDecoder.decode(parameter.get("IMEI").get(0), "UTF-8");
+
+            Users user = userDao.findUserByImei(imei);
+
+
+            if (checkUserSessionIsActive(user)) {
+                if (checkUserImei(user, imei)) {
+
+                    List<UsersHospitalSection> userSectionList = userSectionDao.getUserSectionByHospitalId(Integer.parseInt(hospitalId));
+
+                    jsonObject.put("status", "ok");
+                    jsonArray.put(jsonObject);
+
+                    JSONArray userItemArray = new JSONArray();
+
+                    for (UsersHospitalSection userSection : userSectionList) {
+                        JSONObject userItem = new JSONObject();
+
+                        Users userDataItem = userDao.findUserById(userSection.getUser().getUserId());
+
+                        List<UserRole> role = userRoleDao.getUserRole(userDataItem.getUserId());
+
+
+                        userItem.put("userId", userDataItem.getUserId());
+                        userItem.put("fullName", URLEncoder.encode(userDataItem.getFirstName() + " " + userDataItem.getLastName() + "-" + role.get(0).getRole().getName(), "UTF-8"));
+
+                        userItemArray.put(userItem);
+                    }
+
+                    jsonObject.put("sectionList", userItemArray);
+
                     jsonArray.put(jsonObject);
 
                     return jsonArray.toString();
@@ -1022,94 +1298,6 @@ public class WSMobile {
 
                         return jsonArray.toString();
                     }
-                } else {
-                    jsonObject.put("status", "101");
-                    jsonObject.put("description", "Session failed");
-
-                    jsonArray.put(jsonObject);
-
-                    return jsonArray.toString();
-                }
-            } else {
-                jsonObject.put("status", "100");
-                jsonObject.put("description", "Session failed");
-
-                jsonArray.put(jsonObject);
-
-                return jsonArray.toString();
-            }
-        } catch (Exception ex) {
-            jsonObject.put("status", "error");
-            jsonObject.put("description", ex.toString());
-
-            jsonArray.put(jsonObject);
-
-            return jsonArray.toString();
-        }
-    }
-
-    @RequestMapping(value = "ws/api/getSectionAndUser", method = RequestMethod.POST)
-    public
-    @ResponseBody
-    String getSectionAndUser(@RequestBody String model) {
-        JSONArray jsonArray = new JSONArray();
-        JSONObject jsonObject = new JSONObject();
-
-        try {
-            URL url = new URL(Constant.CHECK_USER_URL + model);
-
-            Map<String, List<String>> parameter = splitQuery(url);
-
-            String hospitalId = URLDecoder.decode(parameter.get("HospitalId").get(0), "UTF-8");
-            String imei = URLDecoder.decode(parameter.get("IMEI").get(0), "UTF-8");
-
-            Users user = userDao.findUserByImei(imei);
-
-
-            if (checkUserSessionIsActive(user)) {
-                if (checkUserImei(user, imei)) {
-
-                    List<HospitalSection> hospitalSectionList = hospitalSectionDao.getHospitalSectionsListByHospitalId(Integer.parseInt(hospitalId));
-                    jsonObject.put("status", "ok");
-                    jsonArray.put(jsonObject);
-
-                    JSONObject sectionObject = new JSONObject();
-                    JSONArray sectionArray = new JSONArray();
-
-                    for (HospitalSection hospitalSection : hospitalSectionList) {
-                        JSONObject sectionItem = new JSONObject();
-
-                        int sectionId = hospitalSection.getSection().getSectionId();
-
-                        sectionItem.put("sectionId", sectionId);
-                        sectionItem.put("Title", URLEncoder.encode(hospitalSection.getSection().getTitle(), "UTF-8"));
-
-
-                        List<UsersHospitalSection> userSectionList = userSectionDao.getUserSectionBySectionId(sectionId, Integer.parseInt(hospitalId));
-
-                        JSONArray userItemArray = new JSONArray();
-
-                        for (UsersHospitalSection userSection : userSectionList) {
-                            JSONObject userItem = new JSONObject();
-
-                            Users userDataItem = userDao.findUserById(userSection.getUser().getUserId());
-
-                            userItem.put("userId", userDataItem.getUserId());
-                            userItem.put("name", URLEncoder.encode(userDataItem.getFirstName(), "UTF-8") + " " + URLEncoder.encode(userDataItem.getLastName(), "UTF-8"));
-
-                            userItemArray.put(userItem);
-                        }
-
-                        sectionItem.put("userList", userItemArray);
-
-                        sectionArray.put(sectionItem);
-                    }
-
-                    sectionObject.put("sectionList", sectionArray);
-
-                    jsonArray.put(sectionObject);
-
-                    return jsonArray.toString();
                 } else {
                     jsonObject.put("status", "101");
                     jsonObject.put("description", "Session failed");

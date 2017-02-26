@@ -28,8 +28,9 @@
             <div class="col s12 m6 l3 right">
                 <div class="card blue-grey darken-1">
                     <div class="card-content white-text">
-                        <span class="card-title">شکایات</span>
-                        <p>شما میتوانید شکایت خود را در این قسمت وارد و برای ما ارسال نمائید</p>
+                        <img style="width: 40px; height: 40px; margin-left: 10px" src="${pageContext.request.contextPath}/static/icon/complaint.png">
+                        <span style="vertical-align: bottom" class="card-title">شکایات</span>
+                        <p style="margin-top: 10px">شما میتوانید شکایت خود را در این قسمت وارد و برای ما ارسال نمائید</p>
                     </div>
                     <div class="card-action">
                         <a href="javascript:window.location=createDynamicURL('complaint');">ثبت شکایت</a>
@@ -40,8 +41,9 @@
             <div class="col s12 m6 l3 right">
                 <div class="card blue-grey darken-1">
                     <div class="card-content white-text">
-                        <span class="card-title">انتقادات</span>
-                        <p>انتقادات خود را در جهت بهبود عملکرد مجموعه برای ما ارسال نمائید</p>
+                        <img style="width: 40px; height: 40px; margin-left: 10px" src="${pageContext.request.contextPath}/static/icon/criticize.png">
+                        <span style="vertical-align: bottom" class="card-title">انتقادات</span>
+                        <p style="margin-top: 10px">انتقادات خود را در جهت بهبود عملکرد مجموعه برای ما ارسال نمائید</p>
                     </div>
                     <div class="card-action">
                         <a href="javascript:window.location=createDynamicURL('criticisms');">ثبت انتقاد</a>
@@ -52,8 +54,9 @@
             <div class="col s12 m6 l3 right">
                 <div class="card blue-grey darken-1">
                     <div class="card-content white-text">
-                        <span class="card-title">پیشنهادات</span>
-                        <p>پیشنهادات خود را در جهت بهبود عملکرد مجموعه برای ما ارسال نمائید</p>
+                        <img style="width: 40px; height: 40px; margin-left: 10px" src="${pageContext.request.contextPath}/static/icon/offer.png">
+                        <span style="vertical-align: bottom" class="card-title">پیشنهادات</span>
+                        <p style="margin-top: 10px">پیشنهادات خود را در جهت بهبود عملکرد مجموعه برای ما ارسال نمائید</p>
                     </div>
                     <div class="card-action">
                         <a href="javascript:window.location=createDynamicURL('offer');">ثبت پیشنهاد</a>
@@ -64,8 +67,9 @@
             <div class="col s12 m6 l3 right">
                 <div class="card blue-grey darken-1">
                     <div class="card-content white-text">
-                        <span class="card-title">تقدیر و تشکر</span>
-                        <p>ثبت تقدیر و تشکرات شما از مجموعه و پرسنل جهت بهبود</p>
+                        <img style="width: 40px; height: 35px; margin-left: 10px" src="${pageContext.request.contextPath}/static/icon/appreciation.png">
+                        <span style="vertical-align: bottom" class="card-title">تقدیر و تشکر</span>
+                        <p style="margin-top: 10px"> ثبت تقدیر و تشکرات شما از مجموعه و پرسنل جهت بهبود</p>
                     </div>
                     <div class="card-action">
                         <a href="javascript:window.location=createDynamicURL('appreciation');">ثبت تقدیر و تشکر</a>
@@ -78,21 +82,16 @@
             <div class="col m3 l3 right"></div>
 
             <div class="col s12 m6 l6 right">
-                <div class="card blue-grey darken-1">
-                    <div class="row">
-                        <div class="card-content white-text">
-                            <span class="card-title">کد پیگیری:</span>
+                <div class="card">
+                    <div class="card-content white-text">
+                        <span class="card-title" style="color: #4d4d4d">کد پیگیری:</span>
+                        <div class="col s12 m8 l8 left">
+                            <input maxlength="12" id="txtTrackingCode" type="text" style="color: #4d4d4d; text-align: center"
+                                   onkeypress='return event.charCode >= 48 && event.charCode <= 57;'>
                         </div>
-
-                        <div style="width: 100%">
-                            <input maxlength="100" id="txtTrackingCode" type="text" class="validate">
-                        </div>
-
                     </div>
-                    <div class="row">
-                        <div class="col s12 m4 l4 right marginTop"></div>
-
-                        <a class="waves-effect waves-light btn">جستجو                        </a>
+                    <div class="card-action">
+                        <a href="#">جستجو</a>
                     </div>
                 </div>
             </div>
@@ -102,6 +101,16 @@
     </div>
     <div class="col m1 l1"></div>
 </div>
+
+<script>
+    $(document).ready(function () {
+        var webUrl = "${webUrl}";
+
+        $("#webURL").val(webUrl);
+
+        $("#hospitalUrl").attr("href",  $("#webURL").val());
+    });
+</script>
 
 <%@include file="site/footer.jsp" %>
 

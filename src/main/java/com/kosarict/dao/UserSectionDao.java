@@ -19,6 +19,8 @@ public interface UserSectionDao {
 
     List<UsersHospitalSection> getUserSectionBySectionId(int sectionId, int hospitalId);
 
+    List<UsersHospitalSection> getUserSectionByHospitalId(int hospitalId);
+
     int saveUserHospitalSection(UsersHospitalSection userHospitalSectionModel);
 
     boolean deleteUserSectionByUserId(int userId);

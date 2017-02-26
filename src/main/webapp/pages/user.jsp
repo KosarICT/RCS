@@ -144,7 +144,7 @@
                             <legend>اطلاعات فردی</legend>
 
                             <div class="input-field ">
-                                <input placeholder="شماره پرسنلی" id="txtPersonalNumber" type="text" maxlength="10"
+                                <input placeholder="کد ملی" id="txtNationalCode" type="text" maxlength="10"
                                        onkeypress="return event.charCode >=48 && event.charCode <= 57">
                             </div>
 
@@ -380,7 +380,7 @@
         var pas = $("#txtPassword").val();
         var retryPas = $("#txtRetryPassword").val();
         var checkUserName = $("#txtUserName").val();
-        var personalNumber = $("#txtPersonalNumber").val();
+        var nationalCode = $("#txtNationalCode").val();
         var firstName = $("#txtFirstName").val();
         var lastName = $("#txtLastName").val();
         var displayName = $("#txtDisplayName").val();
@@ -414,7 +414,7 @@
                                 dataItem["userId"] = userId;
                                 dataItem["userName"] = $("#txtUserName").val();
                                 dataItem["password"] = $("#txtPassword").val();
-                                dataItem["personalNumber"] = $("#txtPersonalNumber").val();
+                                dataItem["nationalCode"] = $("#txtNationalCode").val();
                                 dataItem["firstName"] = $("#txtFirstName").val();
                                 dataItem["lastName"] = $("#txtLastName").val();
                                 dataItem["displayName"] = $("#txtDisplayName").val();
@@ -457,7 +457,7 @@
                 dataItem["userId"] = userId;
                 dataItem["userName"] = $("#txtUserName").val();
                 dataItem["password"] = $("#txtPassword").val();
-                dataItem["personalNumber"] = $("#txtPersonalNumber").val();
+                dataItem["nationalCode"] = $("#txtNationalCode").val();
                 dataItem["firstName"] = $("#txtFirstName").val();
                 dataItem["lastName"] = $("#txtLastName").val();
                 dataItem["displayName"] = $("#txtDisplayName").val();
@@ -538,7 +538,7 @@
                     $("#txtPassword").val("").prop("disabled", true);
                     $("#txtRetryPassword").val("").prop("disabled", true);
                     $("#txtUserName").val(user.userName).prop("disabled", true);
-                    $("#txtPersonalNumber").val(user.personalNumber);
+                    $("#txtNationalCode").val(user.nationalCode);
                     $("#txtFirstName").val(user.firstName);
                     $("#txtLastName").val(user.lastName);
                     $("#txtDisplayName").val(user.displayName);
@@ -624,7 +624,7 @@
         $("#txtPassword").prop("disabled", false).val("");
         $("#txtRetryPassword").prop("disabled", false).val("");
         $("#txtUserName").prop("disabled", false).val("");
-        $("#txtPersonalNumber").val("");
+        $("#txtNationalCode").val("");
         $("#txtFirstName").val("");
         $("#txtLastName").val("");
         $("#txtDisplayName").val("");

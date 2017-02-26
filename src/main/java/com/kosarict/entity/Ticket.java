@@ -30,6 +30,7 @@ public class Ticket {
     private Complainant complainant;
     private String persnolFirstName;
     private String persnolLastName;
+    private String answer;
     private Integer raiting;
     private TicketStatus ticketStatus;
 
@@ -262,6 +263,17 @@ public class Ticket {
 
     public void setTicketStatus(TicketStatus ticketStatus) {
         this.ticketStatus = ticketStatus;
+    }
+
+
+    @Basic
+    @Column(name = "Answer")
+    public String getAnswer() {
+        return answer;
+    }
+
+    public void setAnswer(String answer) {
+        this.answer = answer;
     }
 
 }

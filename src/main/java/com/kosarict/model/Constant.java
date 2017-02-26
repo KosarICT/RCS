@@ -24,6 +24,7 @@ public class Constant {
     public static short Pending = 1;
     public static short Errand = 2;
     public static short Ended = 3;
+    public static short IsRead = 4;
 
     public static int NotificationTabId = 6;
 

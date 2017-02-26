@@ -89,7 +89,7 @@ public class UserController {
             int userId = jsonObject.getInt("userId");
             String userName = jsonObject.getString("userName");
             String password = jsonObject.getString("password");
-            int personalNumber = jsonObject.getInt("personalNumber");
+            String nationalCode = jsonObject.getString("nationalCode");
             String firstName = jsonObject.getString("firstName");
             String lastName = jsonObject.getString("lastName");
             String displayName = jsonObject.getString("displayName");
@@ -111,7 +111,7 @@ public class UserController {
 
             user.setUserId(userId);
             user.setUserName(userName);
-            user.setPersonalNumber(String.valueOf(personalNumber));
+            user.setNationalCode(nationalCode);
             user.setFirstName(firstName);
             user.setLastName(lastName);
             user.setDisplayName(displayName);
@@ -230,7 +230,7 @@ public class UserController {
                 jsonObject.put("firstName", user.getFirstName());
                 jsonObject.put("lastName", user.getLastName());
                 jsonObject.put("displayName", user.getDisplayName());
-                jsonObject.put("personalNumber", user.getPersonalNumber());
+                jsonObject.put("nationalCode", user.getNationalCode());
                 jsonObject.put("imageName", user.getImageName());
                 jsonObject.put("tel", user.getTel());
                 jsonObject.put("mobile", user.getMobile());
