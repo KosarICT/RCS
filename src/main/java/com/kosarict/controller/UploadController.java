@@ -25,9 +25,9 @@ public class UploadController {
     @RequestMapping(value = "/upload/api/uploadAttachment", method = RequestMethod.POST)
     public
     @ResponseBody
-    String uploadAttachment(@RequestParam("file") MultipartFile file) {
+    String uploadAttachment(@RequestParam("file") MultipartFile[] file) {
         try {
-            String fileName = file.getOriginalFilename();
+            String fileName = file[0].getOriginalFilename();
 
             String uniqFileName = UUID.randomUUID().toString()+fileName;
 
@@ -38,7 +38,7 @@ public class UploadController {
 
 
             if (!"".equalsIgnoreCase(fileName)) {
-                file.transferTo(new File(rootDir.getAbsolutePath() + File.separator + uniqFileName));
+                file[0].transferTo(new File(rootDir.getAbsolutePath() + File.separator + uniqFileName));
             }
 
             JSONObject jsonObject = new JSONObject();

@@ -257,15 +257,19 @@
             </div>
 
             <div class="col s12 m8 l8 file-field input-field left">
-                <div class="btn">
+                <div class="btn" style="width: 48%;float: none">
                     <span>بارگذاری مستندات</span>
                     <input id="complainAttachment" type="file">
                 </div>
-                <div class="file-path-wrapper">
+                <div class="file-path-wrapper" style="width:50%;float: right">
                     <input class="file-path validate" type="text">
                 </div>
+                <div style="width: 2%;float: left">
+                    <a href="#" class="modal-action  waves-effect waves-light white-text" onclick="addAttachement()"
+                       style="margin-top: 17px;margin-right: 14px" ><img src="../static/icon/add.png" style="margin-left: 12px"/></a>
+                </div>
             </div>
-
+            <div id="attachmentDive" ></div>
         </div>
 
         <div class="row">
@@ -547,14 +551,23 @@
             $("#nationalCode").focus();
             Materialize.toast('کد ملی بیمار را وارد کنید', 3000, 'info-toast');
 
-        } else if (sickTel == 0) {
+        } else if(!checkMelliCode(sickNationalCode)){
+            $("#nationalCode").focus();
+            Materialize.toast('کد ملی بیمار را صحیح وارد کنید', 3000, 'info-toast');
+        }  else if (sickTel == 0) {
             $("#telephone").focus();
             Materialize.toast('تلفن ثابت بیمار را وارد کنید', 3000, 'info-toast');
 
+        } else if (sickTel.length ==111){
+            $("#telephone").focus();
+            Materialize.toast('تلفن بیمار را صحیح وارد کنید', 3000, 'info-toast');
         } else if (sickMobile == 0) {
             $("#mobile").focus();
             Materialize.toast('موبایل بیمار را وارد کنید', 3000, 'info-toast');
 
+        }  else if(sickMobile.length!=11 && !isMobile(sickMobile)){
+            $("#mobile").focus();
+            Materialize.toast('موبایل خود را صحیح وارد کنید', 3000, 'info-toast');
         } else if (complaintTypeId == 0) {
             Materialize.toast('نوع شکایت را تعیین کنید', 3000, 'info-toast');
 
@@ -578,7 +591,10 @@
             $("#registerNationalCode").focus();
             Materialize.toast('کد ملی شکایت کننده را وارد کنید', 3000, 'info-toast');
 
-        } else if (complainEmail != "" && !isEmail(complainEmail)) {
+        }else if(compainer == 2 && !checkMelliCode(registerNationalCode)){
+            $("#registerNationalCode").focus();
+            Materialize.toast('کد ملی شکایت کننده را صحیح وارد کنید', 3000, 'info-toast');
+        }  else if (complainEmail != "" && !isEmail(complainEmail)) {
             $("#registerNationalCode").focus();
             Materialize.toast('پست الکترونیکی بدرستی وارد نشده است', 3000, 'info-toast');
 
@@ -648,6 +664,92 @@
                 saveComplaint(dataArray);
             }
         }
+    }
+
+    function addAttachement() {
+        var attachmentDive=$("#attachmentDive");
+        var mainDiv=$("<div>");
+        mainDiv.addClass("col s12 m8 l8 file-field input-field left");
+        var btnDiv=$("<div>");
+        btnDiv.addClass("btn");
+        btnDiv.css("float","none").css("width","48%");
+        var btnSpan=$("<span>");
+        btnSpan.text("بارگذاری مستندات");
+        btnDiv.append(btnSpan);
+        var btnInput=$("<input>");
+        btnInput.attr("type","file");
+        btnDiv.append(btnInput);
+
+        var validationDiv=$("<div>");
+        validationDiv.addClass("file-path-wrapper");
+        validationDiv.css("float","right").css("width","50%");
+        var validationInput=$("<input>");
+        validationInput.attr("type","text");
+        validationInput.addClass("file-path validate");
+        validationDiv.append(validationInput);
+
+        var btnAddDiv=$("<div>").css("width","2%").css("float","left");
+        var btnAdd=$("<a>").css("margin-right","14px").css("margin-top","17px");
+        btnAdd.addClass("modal-action  waves-effect waves-light white-text");
+        btnAdd.attr("href","#");
+        btnAdd.attr("onClick","addAttachement()")
+        var imgbtn=$("<img>").css("margin-left","12px");
+        imgbtn.attr("src","../static/icon/add.png")
+        btnAdd.append(imgbtn);
+        btnAddDiv.append(btnAdd);
+
+        mainDiv.append(btnDiv);
+        mainDiv.append(validationDiv);
+        mainDiv.append(btnAddDiv);
+        attachmentDive.append(mainDiv);
+    }
+
+
+    function checkMelliCode(meli_code){
+        if (meli_code.length == 10)
+        {
+            if(meli_code=="1111111111" ||
+                meli_code=="0000000000" ||
+                meli_code=="2222222222" ||
+                meli_code=="3333333333" ||
+                meli_code=="4444444444" ||
+                meli_code=="5555555555" ||
+                meli_code=="6666666666" ||
+                meli_code=="7777777777" ||
+                meli_code=="8888888888" ||
+                meli_code=="9999999999" )
+            {
+                return false;
+            }
+            var c = parseInt(meli_code.charAt(9));
+            var n = parseInt(meli_code.charAt(0))*10 +
+                parseInt(meli_code.charAt(1))*9 +
+                parseInt(meli_code.charAt(2))*8 +
+                parseInt(meli_code.charAt(3))*7 +
+                parseInt(meli_code.charAt(4))*6 +
+                parseInt(meli_code.charAt(5))*5 +
+                parseInt(meli_code.charAt(6))*4 +
+                parseInt(meli_code.charAt(7))*3 +
+                parseInt(meli_code.charAt(8))*2;
+            var r = n - parseInt(n/11)*11;
+            if ((r == 0 && r == c) || (r == 1 && c == 1) || (r > 1 && c == 11 - r))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    function isMobile(mobile) {
+        var regex=/09(1[0-9]|3[1-9]|2[1-9])-?[0-9]{3}-?[0-9]{4}  /
+        return regex.test(mobile);
     }
 
     function saveComplaint(dataArray) {

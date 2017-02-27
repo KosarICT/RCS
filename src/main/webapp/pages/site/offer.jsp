@@ -147,14 +147,19 @@
             </div>
 
             <div class="col s12 m8 l8 file-field input-field left">
-                <div class="btn">
+                <div class="btn" style="width: 48%;float: none">
                     <span>بارگذاری مستندات</span>
                     <input type="file">
                 </div>
-                <div class="file-path-wrapper">
+                <div class="file-path-wrapper" style="width:50%;float: right">
                     <input class="file-path validate" type="text">
                 </div>
+                <div style="width: 2%;float: left">
+                    <a href="#" class="modal-action  waves-effect waves-light white-text" onclick="addAttachement()"
+                       style="margin-top: 17px;margin-right: 14px" ><img src="../static/icon/add.png" style="margin-left: 12px"/></a>
+                </div>
             </div>
+            <div id="attachmentDive" ></div>
 
         </div>
 
@@ -206,7 +211,7 @@
             </div>
 
             <a class="waves-effect waves-light btn"
-               onclick="showReview()">ثبت پیشنهاد
+               onclick="offerSubmit()">ثبت پیشنهاد
 
             </a>
 
@@ -255,6 +260,7 @@
 
         $("#name, #family, #offerSubject, #offerDescription").farsiInput();
     });
+
 
     function initWindow() {
 
@@ -409,13 +415,22 @@
             Materialize.toast('نام خانوادگی خود را وارد کنید', 3000, 'info-toast');
         } else if (nationalCode == 0) {
             $("#nationalCode").focus();
-            Materialize.toast('کد خود را وارد کنید', 3000, 'info-toast');
-        } else if (tel == 0) {
+            Materialize.toast('کد ملی خود را وارد کنید', 3000, 'info-toast');
+        } else if(!checkMelliCode(nationalCode)){
+            $("#nationalCode").focus();
+            Materialize.toast('کد ملی خود را صحیح وارد کنید', 3000, 'info-toast');
+        }else if (tel == 0) {
             $("#telephone").focus();
             Materialize.toast('تلفن خود را وارد کنید', 3000, 'info-toast');
-        } else if (mobile == 0) {
+        } else if (tel.length ==111){
+            $("#telephone").focus();
+            Materialize.toast('تلفن خود را صحیح وارد کنید', 3000, 'info-toast');
+        }else if (mobile == 0) {
             $("#mobile").focus();
             Materialize.toast('موبایل خود را وارد کنید', 3000, 'info-toast');
+        } else if(mobile.length!=11 && !isMobile(mobile)){
+            $("#mobile").focus();
+            Materialize.toast('موبایل خود را صحیح وارد کنید', 3000, 'info-toast');
         } else if (offerSubject == 0) {
             $("#offerSubject").focus();
             Materialize.toast('موضوع پیشنهاد خود را وارد کنید', 3000, 'info-toast');
@@ -453,10 +468,20 @@
                 oMyForm.append('file', file_data);
                 imageName = file_data.name;
 
+
+                var ajaxData = new FormData();
+                //ajaxData.append( 'action','uploadImages');
+                $.each($("input[type=file]"), function(i, obj) {
+                    $.each(obj.files,function(j, file){
+                        ajaxData.append('file['+j+']', file);
+                    })
+                });
+
+                debugger;
                 $.ajax({
                     dataType: 'json',
                     url: "/upload/api/uploadAttachment",
-                    data: oMyForm,
+                    data: ajaxData,
                     type: "POST",
                     enctype: 'multipart/form-data',
                     processData: false,
@@ -485,7 +510,49 @@
 
         }
     }
-    
+
+    function checkMelliCode(meli_code){
+        if (meli_code.length == 10)
+        {
+            if(meli_code=="1111111111" ||
+            meli_code=="0000000000" ||
+            meli_code=="2222222222" ||
+            meli_code=="3333333333" ||
+            meli_code=="4444444444" ||
+            meli_code=="5555555555" ||
+            meli_code=="6666666666" ||
+            meli_code=="7777777777" ||
+            meli_code=="8888888888" ||
+            meli_code=="9999999999" )
+            {
+                return false;
+            }
+            var c = parseInt(meli_code.charAt(9));
+            var n = parseInt(meli_code.charAt(0))*10 +
+                parseInt(meli_code.charAt(1))*9 +
+                parseInt(meli_code.charAt(2))*8 +
+                parseInt(meli_code.charAt(3))*7 +
+                parseInt(meli_code.charAt(4))*6 +
+                parseInt(meli_code.charAt(5))*5 +
+                parseInt(meli_code.charAt(6))*4 +
+                parseInt(meli_code.charAt(7))*3 +
+                parseInt(meli_code.charAt(8))*2;
+            var r = n - parseInt(n/11)*11;
+            if ((r == 0 && r == c) || (r == 1 && c == 1) || (r > 1 && c == 11 - r))
+            {
+                return true;
+            }
+        else
+            {
+                return false;
+            }
+        }
+        else
+        {
+            return false;
+        }
+    }
+
     function saveOffer(dataArray) {
         $.ajax({
             type: "POST",
@@ -545,6 +612,48 @@
         return regex.test(email);
     }
 
+    function isMobile(mobile) {
+        var regex=/09(1[0-9]|3[1-9]|2[1-9])-?[0-9]{3}-?[0-9]{4}  /
+        return regex.test(mobile);
+    }
+
+    function addAttachement() {
+        var attachmentDive=$("#attachmentDive");
+        var mainDiv=$("<div>");
+        mainDiv.addClass("col s12 m8 l8 file-field input-field left");
+        var btnDiv=$("<div>");
+        btnDiv.addClass("btn");
+        btnDiv.css("float","none").css("width","48%");
+        var btnSpan=$("<span>");
+        btnSpan.text("بارگذاری مستندات");
+        btnDiv.append(btnSpan);
+        var btnInput=$("<input>");
+        btnInput.attr("type","file");
+        btnDiv.append(btnInput);
+
+        var validationDiv=$("<div>");
+        validationDiv.addClass("file-path-wrapper");
+        validationDiv.css("float","right").css("width","50%");
+        var validationInput=$("<input>");
+        validationInput.attr("type","text");
+        validationInput.addClass("file-path validate");
+        validationDiv.append(validationInput);
+
+        var btnAddDiv=$("<div>").css("width","2%").css("float","left");
+        var btnAdd=$("<a>").css("margin-right","14px").css("margin-top","17px");
+        btnAdd.addClass("modal-action  waves-effect waves-light white-text");
+        btnAdd.attr("href","#");
+        btnAdd.attr("onClick","addAttachement()")
+        var imgbtn=$("<img>").css("margin-left","12px");
+        imgbtn.attr("src","../static/icon/add.png")
+        btnAdd.append(imgbtn);
+        btnAddDiv.append(btnAdd);
+
+        mainDiv.append(btnDiv);
+        mainDiv.append(validationDiv);
+        mainDiv.append(btnAddDiv);
+        attachmentDive.append(mainDiv);
+    }
 
     /** captcha code */
     function DrawCaptcha() {
